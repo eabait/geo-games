@@ -35,5 +35,5 @@ export interface RoundResult {
 
 export interface FlagGameSettings {
   soundOn: boolean;
-  continent: string;
+  continent: Continent;
 }
