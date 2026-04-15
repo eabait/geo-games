@@ -40,7 +40,7 @@ interface GameStore {
   startFamily: (difficulty: DifficultyKey, players: Player[]) => void;
   startExplorer: (difficulty: DifficultyKey) => void;
   setRoundData: (flag: Flag, options: Flag[]) => void;
-  recordAnswer: (flag: Flag, correct: boolean, points: number) => void;
+  recordAnswer: (flag: Flag | null, correct: boolean, points: number) => void;
   recordExplorerAnswer: (correct: boolean) => void;
   advancePlayerTurn: () => void;
   setShowHint: (show: boolean) => void;
@@ -117,7 +117,7 @@ export const useGameStore = create<GameStore>()(
         s.usedFlags.push(flag.name);
       }),
 
-    recordAnswer: (flag, correct, points) =>
+    recordAnswer: (flag: Flag | null, correct, points) =>
       set((s) => {
         s.selected = flag;
         s.roundHistory.push({ flag: s.currentFlag!, correct });

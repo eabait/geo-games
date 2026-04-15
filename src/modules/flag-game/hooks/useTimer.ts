@@ -25,6 +25,7 @@ export function useTimer({ seconds, active, onTick, onExpire }: UseTimerOptions)
 
   useEffect(() => {
     if (!active) return;
+    setTimeLeft(seconds);
     const id = setInterval(() => {
       setTimeLeft((v) => {
         if (v <= 1) {
@@ -37,7 +38,7 @@ export function useTimer({ seconds, active, onTick, onExpire }: UseTimerOptions)
       });
     }, 1000);
     return () => clearInterval(id);
-  }, [active]);
+  }, [active, seconds]);
 
   const reset = (newSeconds?: number): void => {
     setTimeLeft(newSeconds ?? seconds);

@@ -65,7 +65,7 @@ export function useGameRound(sfx: (name: string) => void): UseGameRoundResult {
         const pts = correct
           ? (showHint ? diff.points - diff.hintCost : diff.points) + (streak >= 2 ? streak * 2 : 0)
           : 0;
-        recordAnswer(option ?? currentFlag, correct, pts);
+        recordAnswer(option, correct, pts);
         if (correct) sfx(streak >= 2 ? 'streak' : 'correct');
 
         setTimeout(() => {
@@ -88,7 +88,7 @@ export function useGameRound(sfx: (name: string) => void): UseGameRoundResult {
         const pts = correct
           ? (showHint ? diff.points - diff.hintCost : diff.points) + (ns >= 2 ? ns * 2 : 0)
           : 0;
-        recordAnswer(option ?? currentFlag, correct, pts);
+        recordAnswer(option, correct, pts);
         if (correct) sfx(ns >= 3 ? 'streak' : 'correct');
         useGameStore.setState((s) => {
           s.familyStreaks[pid] = ns;
