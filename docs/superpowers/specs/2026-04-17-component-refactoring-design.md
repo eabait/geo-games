@@ -129,3 +129,4 @@ No new props. The 24-node cyclomatic complexity is resolved by extracting inline
 - Cyclomatic complexity violations on `FamilyPlayingScreen` (26), `SoloPlayingScreen` (22), `OptionButton` (24) are resolved.
 - Each extracted component has a single clear purpose and can be understood without reading its callers.
 - No behavioral changes — this is a pure structural refactor.
+- Every extracted component has unit tests covering its core rendering and behavior (correct output for key prop combinations, interaction callbacks fire).
