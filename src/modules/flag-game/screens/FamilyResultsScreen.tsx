@@ -25,6 +25,8 @@ export function FamilyResultsScreen(): React.JSX.Element {
 
   const sorted = [...players].sort((a, b) => (familyScores[b.id] ?? 0) - (familyScores[a.id] ?? 0));
   const winner = sorted[0];
+  const topScore = winner ? (familyScores[winner.id] ?? 0) : 0;
+  const isTie = sorted.filter((p) => (familyScores[p.id] ?? 0) === topScore).length > 1;
   // Podium order: 2nd (index 1), 1st (index 0), 3rd (index 2)
   const podium = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
   const podiumHeights = [100, 150, 80];
@@ -63,15 +65,13 @@ export function FamilyResultsScreen(): React.JSX.Element {
           fontFamily: "'Fredoka', sans-serif",
           fontSize: 30,
           fontWeight: 700,
-          color: winner.color,
+          color: isTie ? ACCENT : winner.color,
           margin: '0 0 4px',
         }}
       >
-        ¡{winner.name} gana!
+        {isTie ? '¡Empate!' : `¡${winner.name} gana!`}
       </h2>
-      <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>
-        {familyScores[winner.id] ?? 0} pts
-      </p>
+      <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>{topScore} pts</p>
       {/* Podium */}
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, marginBottom: 28 }}>
         {podium.map((p, idx) => (

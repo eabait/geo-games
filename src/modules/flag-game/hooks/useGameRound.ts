@@ -92,6 +92,11 @@ export function useGameRound(sfx: (name: string) => void): UseGameRoundResult {
         if (correct) sfx(ns >= 3 ? 'streak' : 'correct');
         useGameStore.setState((s) => {
           s.familyStreaks[pid] = ns;
+          s.familyScores[pid] = (s.familyScores[pid] ?? 0) + pts;
+          s.familyHistory[pid] = [
+            ...(s.familyHistory[pid] ?? []),
+            { flag: s.currentFlag!, correct },
+          ];
         });
 
         setTimeout(() => {
