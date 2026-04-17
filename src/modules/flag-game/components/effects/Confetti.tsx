@@ -1,10 +1,11 @@
+import React from 'react';
 interface ConfettiProps {
   active: boolean;
 }
 
 const COLS = ['#fbbf24', '#ef4444', '#3b82f6', '#22c55e', '#a855f7', '#ec4899', '#f97316'];
 
-export function Confetti({ active }: ConfettiProps): JSX.Element | null {
+export function Confetti({ active }: ConfettiProps): React.JSX.Element | null {
   if (!active) return null;
   return (
     <div

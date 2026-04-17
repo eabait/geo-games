@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { FLAGS } from '../data/flags';
 import { CONTINENTS_LIST } from '../data/constants';
 
@@ -13,7 +15,7 @@ function countForContinent(continent: string): number {
   return FLAGS.filter((f) => f.continent === continent).length;
 }
 
-export function ContinentPicker({ selected, onChange }: ContinentPickerProps): JSX.Element {
+export function ContinentPicker({ selected, onChange }: ContinentPickerProps): React.JSX.Element {
   return (
     <div
       style={{

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMemo } from 'react';
 
 const STAR_COUNT = 80;
@@ -11,7 +12,7 @@ interface Star {
   delay: string;
 }
 
-export function BackgroundStars(): JSX.Element {
+export function BackgroundStars(): React.JSX.Element {
   const stars = useMemo<Star[]>(
     () =>
       Array.from({ length: STAR_COUNT }, (_, i) => ({

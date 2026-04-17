@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
@@ -22,7 +23,7 @@ const PLAY_ROUTE: Record<string, string> = {
   explorer: '/flag-game/explorer/play',
 };
 
-export function DifficultyScreen({ mode }: DifficultyScreenProps): JSX.Element {
+export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Element {
   const navigate = useNavigate();
   const { startSolo, startExplorer } = useGameStore();
 

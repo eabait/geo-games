@@ -1,10 +1,11 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
 
 const ACCENT = '#fbbf24';
 
-export function PassPhoneScreen(): JSX.Element {
+export function PassPhoneScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { players, currentPlayerIdx } = useGameStore();
 

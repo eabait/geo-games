@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
@@ -11,7 +12,7 @@ const CARD = {
   borderRadius: 20,
 };
 
-export function FamilyResultsScreen(): JSX.Element {
+export function FamilyResultsScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { players, familyScores, familyHistory, difficulty, startFamily } = useGameStore();
 

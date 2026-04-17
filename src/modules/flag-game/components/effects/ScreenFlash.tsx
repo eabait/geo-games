@@ -1,9 +1,10 @@
+import React from 'react';
 interface ScreenFlashProps {
   active: boolean;
   correct: boolean;
 }
 
-export function ScreenFlash({ active, correct }: ScreenFlashProps): JSX.Element | null {
+export function ScreenFlash({ active, correct }: ScreenFlashProps): React.JSX.Element | null {
   if (!active) return null;
   return (
     <div

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { BackgroundStars } from '@/shared/components/BackgroundStars';
 
 // NOTE: Layout is shared; do not import flag-game specifics here long-term.
@@ -50,7 +52,7 @@ export function Layout({
   confetti,
   flash,
   emojis,
-}: LayoutProps): JSX.Element {
+}: LayoutProps): React.JSX.Element {
   return (
     <div
       style={{

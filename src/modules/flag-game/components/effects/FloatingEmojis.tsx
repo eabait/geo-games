@@ -1,10 +1,11 @@
+import React from 'react';
 interface FloatingEmojisProps {
   active: boolean;
 }
 
 const EMOJIS = ['🎉', '🏆', '⭐', '🎊', '🌟', '✨'];
 
-export function FloatingEmojis({ active }: FloatingEmojisProps): JSX.Element | null {
+export function FloatingEmojis({ active }: FloatingEmojisProps): React.JSX.Element | null {
   if (!active) return null;
   return (
     <div

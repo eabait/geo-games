@@ -1,3 +1,4 @@
+import React from 'react';
 import { useMemo } from 'react';
 
 import { WORLD_SHAPES } from '../data/worldShapes';
@@ -20,7 +21,7 @@ export function MobileMap({
   correctName,
   selected,
   onSelect,
-}: MobileMapProps): JSX.Element {
+}: MobileMapProps): React.JSX.Element {
   const polygonPoints = useMemo(
     () => WORLD_SHAPES.map((poly) => poly.map(([lng, lat]) => `${toX(lng)},${toY(lat)}`).join(' ')),
     [],

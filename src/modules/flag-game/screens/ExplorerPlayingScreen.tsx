@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +23,7 @@ const CARD = {
   borderRadius: 20,
 };
 
-export function ExplorerPlayingScreen(): JSX.Element {
+export function ExplorerPlayingScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { soundOn, continent } = useSettingsStore();
   const sounds = useSoundEngine(soundOn);

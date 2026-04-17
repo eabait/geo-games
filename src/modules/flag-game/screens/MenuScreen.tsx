@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useSettingsStore } from '../store/settingsStore';
@@ -43,7 +44,7 @@ const ROUTE_MAP: Record<string, string> = {
   'family-setup': '/flag-game/family',
 };
 
-export function MenuScreen(): JSX.Element {
+export function MenuScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { continent, setContinent } = useSettingsStore();
 

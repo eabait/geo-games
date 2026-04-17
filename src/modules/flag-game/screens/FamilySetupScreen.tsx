@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ const CARD = {
   borderRadius: 20,
 };
 
-export function FamilySetupScreen(): JSX.Element {
+export function FamilySetupScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { startFamily } = useGameStore();
 

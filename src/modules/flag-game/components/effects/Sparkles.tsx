@@ -1,8 +1,9 @@
+import React from 'react';
 interface SparklesProps {
   active: boolean;
 }
 
-export function Sparkles({ active }: SparklesProps): JSX.Element | null {
+export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
   if (!active) return null;
   return (
     <div

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,7 +22,7 @@ const CARD = {
   borderRadius: 20,
 };
 
-export function FamilyPlayingScreen(): JSX.Element {
+export function FamilyPlayingScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { soundOn } = useSettingsStore();
   const sounds = useSoundEngine(soundOn);
