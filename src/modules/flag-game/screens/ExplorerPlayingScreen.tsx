@@ -85,6 +85,9 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
       const correct = opt.name === currentFlag.name;
       if (correct) sfx(explorerStreak >= 2 ? 'streak' : 'correct');
       else sfx('wrong');
+      useGameStore.setState((s) => {
+        s.selected = opt;
+      });
       recordExplorerAnswer(correct);
 
       setTimeout(() => {
