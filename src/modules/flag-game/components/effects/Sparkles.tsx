@@ -1,7 +1,17 @@
 import React from 'react';
+
 interface SparklesProps {
   active: boolean;
 }
+
+const SPARKLE_COUNT = 20;
+const SPARKLE_AREA_OFFSET = 10;
+const SPARKLE_AREA_RANGE = 80;
+const SPARKLE_MIN_SIZE = 4;
+const SPARKLE_SIZE_RANGE = 6;
+const SPARKLE_MIN_DURATION = 0.4;
+const SPARKLE_DURATION_RANGE = 0.6;
+const SPARKLE_DELAY_RANGE = 0.4;
 
 export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
   if (!active) return null;
@@ -15,19 +25,19 @@ export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
         overflow: 'hidden',
       }}
     >
-      {Array.from({ length: 20 }, (_, i) => (
+      {Array.from({ length: SPARKLE_COUNT }, (_, i) => (
         <div
           key={i}
           style={{
             position: 'absolute',
-            top: `${Math.random() * 80 + 10}%`,
-            left: `${Math.random() * 80 + 10}%`,
-            width: 4 + Math.random() * 6,
-            height: 4 + Math.random() * 6,
+            top: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
+            left: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
+            width: SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE,
+            height: SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE,
             borderRadius: '50%',
             background: '#fbbf24',
             boxShadow: '0 0 6px 2px #fbbf24',
-            animation: `sparkle ${0.4 + Math.random() * 0.6}s ease-out ${Math.random() * 0.4}s forwards`,
+            animation: `sparkle ${SPARKLE_MIN_DURATION + Math.random() * SPARKLE_DURATION_RANGE}s ease-out ${Math.random() * SPARKLE_DELAY_RANGE}s forwards`,
             opacity: 0,
           }}
         />

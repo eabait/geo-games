@@ -26,17 +26,18 @@ export function useTimer({ seconds, active, onTick, onExpire }: UseTimerOptions)
   useEffect(() => {
     if (!active) return;
     setTimeLeft(seconds);
+    const MS_PER_SECOND = 1000;
     const id = setInterval(() => {
-      setTimeLeft((v) => {
-        if (v <= 1) {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
           clearInterval(id);
           onExpireRef.current();
           return 0;
         }
-        onTickRef.current(v - 1);
-        return v - 1;
+        onTickRef.current(prev - 1);
+        return prev - 1;
       });
-    }, 1000);
+    }, MS_PER_SECOND);
     return () => clearInterval(id);
   }, [active, seconds]);
 

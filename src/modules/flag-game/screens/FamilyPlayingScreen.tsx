@@ -12,7 +12,18 @@ import { Confetti } from '../components/effects/Confetti';
 import { FloatingEmojis } from '../components/effects/FloatingEmojis';
 import { ScreenFlash } from '../components/effects/ScreenFlash';
 import { Sparkles } from '../components/effects/Sparkles';
-import { DIFFICULTY, RPP } from '../data/constants';
+import { OptionButton } from '../components/OptionButton';
+import {
+  DIFFICULTY,
+  RPP,
+  SCORE_POP_DURATION_MS,
+  TICK_THRESHOLD,
+  TICK_URGENT_THRESHOLD,
+  TIMER_PCT_FULL,
+  STREAK_BONUS_THRESHOLD,
+  STREAK_SOUND_THRESHOLD,
+  DEFAULT_ROUND_SECONDS,
+} from '../data/constants';
 import type { Flag } from '../types';
 
 const CARD = {
@@ -56,19 +67,19 @@ export function FamilyPlayingScreen(): React.JSX.Element {
   useEffect(() => {
     if (cpScore > 0) {
       setScorePop(true);
-      const t = setTimeout(() => setScorePop(false), 400);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setScorePop(false), SCORE_POP_DURATION_MS);
+      return () => clearTimeout(timer);
     }
   }, [cpScore]);
 
   const { handleAnswer } = useGameRound(sfx);
 
   const { timeLeft } = useTimer({
-    seconds: diff?.time ?? 15,
+    seconds: diff?.time ?? DEFAULT_ROUND_SECONDS,
     active: !!currentFlag && selected === null,
     onTick: (t) => {
-      if (t <= 5 && t > 2) sfx('tick');
-      else if (t <= 2) sfx('tickUrgent');
+      if (t <= TICK_THRESHOLD && t > TICK_URGENT_THRESHOLD) sfx('tick');
+      else if (t <= TICK_URGENT_THRESHOLD) sfx('tickUrgent');
     },
     onExpire: () => {
       sfx('timeout');
@@ -79,7 +90,7 @@ export function FamilyPlayingScreen(): React.JSX.Element {
   if (!currentFlag || !cp)
     return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>Cargando...</div>;
 
-  const timerPct = diff ? (timeLeft / diff.time) * 100 : 100;
+  const timerPct = diff ? (timeLeft / diff.time) * TIMER_PCT_FULL : TIMER_PCT_FULL;
   const cpStreak = familyStreaks[cp.id] ?? 0;
 
   const onAnswer = (opt: Flag): void => {
@@ -134,7 +145,7 @@ export function FamilyPlayingScreen(): React.JSX.Element {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, position: 'relative' }}>
-            {cpStreak >= 2 && (
+            {cpStreak >= STREAK_BONUS_THRESHOLD && (
               <span
                 style={{
                   fontSize: 12,
@@ -179,7 +190,8 @@ export function FamilyPlayingScreen(): React.JSX.Element {
               background: cp.color,
               borderRadius: 4,
               transition: 'width 1s linear',
-              animation: timeLeft <= 5 && !selected ? 'timerPulse .5s ease infinite' : 'none',
+              animation:
+                timeLeft <= TICK_THRESHOLD && !selected ? 'timerPulse .5s ease infinite' : 'none',
             }}
           />
         </div>
@@ -256,78 +268,16 @@ export function FamilyPlayingScreen(): React.JSX.Element {
             maxWidth: 420,
           }}
         >
-          {options.map((opt, i) => {
-            const isCorrect = opt.name === currentFlag.name;
-            const isSel = selected?.name === opt.name;
-            const bg = selected
-              ? isCorrect
-                ? 'rgba(34,197,94,.18)'
-                : isSel
-                  ? 'rgba(239,68,68,.18)'
-                  : 'rgba(255,255,255,.06)'
-              : 'rgba(255,255,255,.06)';
-            const bc = selected
-              ? isCorrect
-                ? '#22c55e'
-                : isSel
-                  ? '#ef4444'
-                  : 'rgba(255,255,255,.1)'
-              : 'rgba(255,255,255,.1)';
-            return (
-              <button
-                key={opt.name}
-                className="btn"
-                onClick={() => onAnswer(opt)}
-                disabled={selected !== null}
-                style={{
-                  ...CARD,
-                  background: bg,
-                  border: `1.5px solid ${bc}`,
-                  padding: '14px 20px',
-                  color: '#f1f5f9',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  fontFamily: "'Nunito', sans-serif",
-                  cursor: selected ? 'default' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  animation: `optionEnter .4s ease ${0.05 + i * 0.07}s both`,
-                  opacity: selected && !isCorrect && !isSel ? 0.35 : 1,
-                  transition: 'opacity .4s',
-                }}
-              >
-                <span
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background:
-                      selected && isCorrect
-                        ? '#22c55e'
-                        : selected && isSel
-                          ? '#ef4444'
-                          : 'rgba(255,255,255,.08)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 14,
-                    flexShrink: 0,
-                    color: '#fff',
-                    transition: 'all .3s',
-                    transform: selected && (isCorrect || isSel) ? 'scale(1.2)' : 'scale(1)',
-                  }}
-                >
-                  {selected && isCorrect
-                    ? '✓'
-                    : selected && isSel && !isCorrect
-                      ? '✗'
-                      : String.fromCharCode(65 + i)}
-                </span>
-                {opt.name}
-              </button>
-            );
-          })}
+          {options.map((opt, i) => (
+            <OptionButton
+              key={opt.name}
+              opt={opt}
+              index={i}
+              selected={selected}
+              currentFlag={currentFlag}
+              onAnswer={onAnswer}
+            />
+          ))}
         </div>
         {selected && (
           <div
@@ -340,7 +290,7 @@ export function FamilyPlayingScreen(): React.JSX.Element {
             }}
           >
             {selected.name === currentFlag.name
-              ? cpStreak >= 3
+              ? cpStreak >= STREAK_SOUND_THRESHOLD
                 ? '🔥 ¡Imparable!'
                 : '🎉 ¡Correcto!'
               : `❌ Era ${currentFlag.name}`}

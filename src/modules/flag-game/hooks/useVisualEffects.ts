@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { useGameStore } from '../store/gameStore';
+import { STREAK_BONUS_THRESHOLD, STREAK_SOUND_THRESHOLD } from '../data/constants';
 
 interface VisualEffectsResult {
   showConfetti: boolean;
@@ -13,10 +14,10 @@ interface VisualEffectsResult {
 const EFFECT_DURATION_MS = 1200;
 
 export function useVisualEffects(): VisualEffectsResult {
-  const selected = useGameStore((s) => s.selected);
-  const currentFlag = useGameStore((s) => s.currentFlag);
-  const soloStreak = useGameStore((s) => s.streak);
-  const explorerStreak = useGameStore((s) => s.explorerStreak);
+  const selected = useGameStore((state) => state.selected);
+  const currentFlag = useGameStore((state) => state.currentFlag);
+  const soloStreak = useGameStore((state) => state.streak);
+  const explorerStreak = useGameStore((state) => state.explorerStreak);
 
   const [effects, setEffects] = useState<VisualEffectsResult>({
     showConfetti: false,
@@ -45,8 +46,8 @@ export function useVisualEffects(): VisualEffectsResult {
       showScreenFlash: true,
       flashCorrect: correct,
       showConfetti: correct,
-      showFloatingEmojis: correct && streak >= 3,
-      showSparkles: correct && streak >= 2,
+      showFloatingEmojis: correct && streak >= STREAK_SOUND_THRESHOLD,
+      showSparkles: correct && streak >= STREAK_BONUS_THRESHOLD,
     });
 
     const timer = setTimeout(() => {

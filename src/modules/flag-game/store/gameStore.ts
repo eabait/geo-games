@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 import type { Flag, Player, RoundResult } from '../types';
+import {
+  EXPLORER_INITIAL_TIME,
+  EXPLORER_SCORE_PER_CORRECT,
+  EXPLORER_TIME_BONUS,
+} from '../data/constants';
 
 import type { DifficultyKey, GameMode } from '@/shared/types';
 
@@ -81,90 +86,90 @@ export const useGameStore = create<GameStore>()(
     ...initial,
 
     startSolo: (difficulty) =>
-      set((s) => {
-        Object.assign(s, initial);
-        s.mode = 'solo';
-        s.difficulty = difficulty;
+      set((state) => {
+        Object.assign(state, initial);
+        state.mode = 'solo';
+        state.difficulty = difficulty;
       }),
 
     startFamily: (difficulty, players) =>
-      set((s) => {
-        Object.assign(s, initial);
-        s.mode = 'family';
-        s.difficulty = difficulty;
-        s.players = players;
-        players.forEach((p) => {
-          s.familyScores[p.id] = 0;
-          s.familyHistory[p.id] = [];
-          s.familyStreaks[p.id] = 0;
+      set((state) => {
+        Object.assign(state, initial);
+        state.mode = 'family';
+        state.difficulty = difficulty;
+        state.players = players;
+        players.forEach((player) => {
+          state.familyScores[player.id] = 0;
+          state.familyHistory[player.id] = [];
+          state.familyStreaks[player.id] = 0;
         });
       }),
 
     startExplorer: (difficulty) =>
-      set((s) => {
-        Object.assign(s, initial);
-        s.mode = 'explorer';
-        s.difficulty = difficulty;
-        s.explorerTime = 20;
+      set((state) => {
+        Object.assign(state, initial);
+        state.mode = 'explorer';
+        state.difficulty = difficulty;
+        state.explorerTime = EXPLORER_INITIAL_TIME;
       }),
 
     setRoundData: (flag, options) =>
-      set((s) => {
-        s.currentFlag = flag;
-        s.options = options;
-        s.selected = null;
-        s.showHint = false;
-        s.usedFlags.push(flag.name);
+      set((state) => {
+        state.currentFlag = flag;
+        state.options = options;
+        state.selected = null;
+        state.showHint = false;
+        state.usedFlags.push(flag.name);
       }),
 
     recordAnswer: (flag: Flag | null, correct, points) =>
-      set((s) => {
-        s.selected = flag;
-        s.roundHistory.push({ flag: s.currentFlag!, correct });
+      set((state) => {
+        state.selected = flag;
+        state.roundHistory.push({ flag: state.currentFlag!, correct });
         if (correct) {
-          s.score += points;
-          s.streak += 1;
-          s.bestStreak = Math.max(s.bestStreak, s.streak);
+          state.score += points;
+          state.streak += 1;
+          state.bestStreak = Math.max(state.bestStreak, state.streak);
         } else {
-          s.streak = 0;
+          state.streak = 0;
         }
       }),
 
     recordExplorerAnswer: (correct) =>
-      set((s) => {
-        s.explorerTotal += 1;
-        s.explorerHistory.push({ flag: s.currentFlag!, correct });
+      set((state) => {
+        state.explorerTotal += 1;
+        state.explorerHistory.push({ flag: state.currentFlag!, correct });
         if (correct) {
-          s.explorerScore += 20;
-          s.explorerCorrect += 1;
-          s.explorerTime += 3;
-          s.explorerStreak += 1;
-          s.explorerBestStreak = Math.max(s.explorerBestStreak, s.explorerStreak);
+          state.explorerScore += EXPLORER_SCORE_PER_CORRECT;
+          state.explorerCorrect += 1;
+          state.explorerTime += EXPLORER_TIME_BONUS;
+          state.explorerStreak += 1;
+          state.explorerBestStreak = Math.max(state.explorerBestStreak, state.explorerStreak);
         } else {
-          s.explorerStreak = 0;
+          state.explorerStreak = 0;
         }
       }),
 
     advancePlayerTurn: () =>
-      set((s) => {
-        s.currentPlayerIdx += 1;
-        s.playerRound = 0;
-        s.currentFlag = null;
+      set((state) => {
+        state.currentPlayerIdx += 1;
+        state.playerRound = 0;
+        state.currentFlag = null;
       }),
 
     setShowHint: (show) =>
-      set((s) => {
-        s.showHint = show;
+      set((state) => {
+        state.showHint = show;
       }),
 
     tickExplorerTime: () =>
-      set((s) => {
-        s.explorerTime -= 1;
+      set((state) => {
+        state.explorerTime -= 1;
       }),
 
     reset: () =>
-      set((s) => {
-        Object.assign(s, initial);
+      set((state) => {
+        Object.assign(state, initial);
       }),
   })),
 );

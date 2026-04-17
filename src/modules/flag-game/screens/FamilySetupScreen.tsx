@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
-import { DIFFICULTY, PCOLORS, PAVATARS } from '../data/constants';
+import { DIFFICULTY, PCOLORS, PAVATARS, MAX_PLAYERS, MIN_PLAYERS } from '../data/constants';
 import type { Player } from '../types';
 
 import type { DifficultyKey } from '@/shared/types';
@@ -36,12 +36,12 @@ export function FamilySetupScreen(): React.JSX.Element {
   }
 
   function updateName(idx: number, value: string): void {
-    setPlayerNames((prev) => prev.map((n, i) => (i === idx ? value : n)));
+    setPlayerNames((prev) => prev.map((name, i) => (i === idx ? value : name)));
   }
 
   function handleStart(): void {
-    const filled = playerNames.filter((n) => n.trim());
-    if (filled.length < 2) return;
+    const filled = playerNames.filter((name) => name.trim());
+    if (filled.length < MIN_PLAYERS) return;
     const players: Player[] = filled.map((name, i) => ({
       id: `player-${i}`,
       name,
@@ -52,8 +52,8 @@ export function FamilySetupScreen(): React.JSX.Element {
     navigate('/flag-game/family/pass');
   }
 
-  const filledNames = playerNames.filter((n) => n.trim());
-  const canStart = filledNames.length >= 2;
+  const filledNames = playerNames.filter((name) => name.trim());
+  const canStart = filledNames.length >= MIN_PLAYERS;
 
   return (
     <div
@@ -143,7 +143,7 @@ export function FamilySetupScreen(): React.JSX.Element {
                 outline: 'none',
               }}
             />
-            {playerNames.length > 2 && (
+            {playerNames.length > MIN_PLAYERS && (
               <button
                 onClick={() => removePlayer(idx)}
                 style={{
@@ -159,9 +159,9 @@ export function FamilySetupScreen(): React.JSX.Element {
             )}
           </div>
         ))}
-        {playerNames.length < 6 && (
+        {playerNames.length < MAX_PLAYERS && (
           <button
-            onClick={() => setPlayerNames((p) => [...p, ''])}
+            onClick={() => setPlayerNames((prev) => [...prev, ''])}
             style={{
               ...CARD,
               width: '100%',

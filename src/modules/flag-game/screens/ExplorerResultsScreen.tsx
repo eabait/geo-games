@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
+import { RESULT_ROW_ANIM_BASE, RESULT_ROW_ANIM_STEP } from '../data/constants';
 
 const ACCENT = '#fbbf24';
 const BLUE = '#3b82f6';
@@ -115,7 +116,7 @@ export function ExplorerResultsScreen(): React.JSX.Element {
             overflowY: 'auto',
           }}
         >
-          {explorerHistory.map((r, i) => (
+          {explorerHistory.map((result, i) => (
             <div
               key={i}
               style={{
@@ -125,12 +126,12 @@ export function ExplorerResultsScreen(): React.JSX.Element {
                 padding: '7px 0',
                 borderBottom:
                   i < explorerHistory.length - 1 ? '1px solid rgba(255,255,255,.06)' : 'none',
-                animation: `resultRow .4s ease ${0.2 + i * 0.05}s both`,
+                animation: `resultRow .4s ease ${RESULT_ROW_ANIM_BASE + i * RESULT_ROW_ANIM_STEP}s both`,
               }}
             >
-              <span style={{ fontSize: 22 }}>{r.flag.code}</span>
-              <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{r.flag.name}</span>
-              <span>{r.correct ? '✅' : '❌'}</span>
+              <span style={{ fontSize: 22 }}>{result.flag.code}</span>
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{result.flag.name}</span>
+              <span>{result.correct ? '✅' : '❌'}</span>
             </div>
           ))}
         </div>

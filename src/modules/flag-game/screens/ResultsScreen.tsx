@@ -2,7 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
-import { SOLO_R } from '../data/constants';
+import {
+  SOLO_R,
+  TROPHY_GOLD_SCORE,
+  TROPHY_SILVER_SCORE,
+  RESULT_ROW_ANIM_BASE,
+  RESULT_ROW_ANIM_STEP,
+} from '../data/constants';
 
 const ACCENT = '#fbbf24';
 const CARD = {
@@ -23,7 +29,7 @@ export function ResultsScreen(): React.JSX.Element {
     }
   }
 
-  const trophy = score > 200 ? '🏆' : score > 100 ? '🌟' : '🌍';
+  const trophy = score > TROPHY_GOLD_SCORE ? '🏆' : score > TROPHY_SILVER_SCORE ? '🌟' : '🌍';
 
   return (
     <div
@@ -58,7 +64,7 @@ export function ResultsScreen(): React.JSX.Element {
         {score} pts
       </h2>
       <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 4 }}>
-        {roundHistory.filter((r) => r.correct).length}/{SOLO_R} · 🔥{bestStreak}
+        {roundHistory.filter((result) => result.correct).length}/{SOLO_R} · 🔥{bestStreak}
       </p>
       {roundHistory.length > 0 && (
         <div
@@ -73,7 +79,7 @@ export function ResultsScreen(): React.JSX.Element {
             overflowY: 'auto',
           }}
         >
-          {roundHistory.map((r, i) => (
+          {roundHistory.map((result, i) => (
             <div
               key={i}
               style={{
@@ -83,12 +89,12 @@ export function ResultsScreen(): React.JSX.Element {
                 padding: '7px 0',
                 borderBottom:
                   i < roundHistory.length - 1 ? '1px solid rgba(255,255,255,.06)' : 'none',
-                animation: `resultRow .4s ease ${0.2 + i * 0.05}s both`,
+                animation: `resultRow .4s ease ${RESULT_ROW_ANIM_BASE + i * RESULT_ROW_ANIM_STEP}s both`,
               }}
             >
-              <span style={{ fontSize: 22 }}>{r.flag.code}</span>
-              <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{r.flag.name}</span>
-              <span>{r.correct ? '✅' : '❌'}</span>
+              <span style={{ fontSize: 22 }}>{result.flag.code}</span>
+              <span style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{result.flag.name}</span>
+              <span>{result.correct ? '✅' : '❌'}</span>
             </div>
           ))}
         </div>

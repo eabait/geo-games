@@ -92,11 +92,11 @@ export function MenuScreen(): React.JSX.Element {
       <div
         style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 340 }}
       >
-        {MODES.map((m) => (
+        {MODES.map((mode) => (
           <button
-            key={m.key}
+            key={mode.key}
             className="btn"
-            onClick={() => navigate(ROUTE_MAP[m.key])}
+            onClick={() => navigate(ROUTE_MAP[mode.key])}
             style={{
               ...CARD,
               padding: '18px 22px',
@@ -107,8 +107,8 @@ export function MenuScreen(): React.JSX.Element {
               fontSize: 16,
               fontWeight: 700,
               fontFamily: "'Nunito', sans-serif",
-              animation: `menuItem .6s ease ${m.delay}s both`,
-              ...('highlight' in m && m.highlight
+              animation: `menuItem .6s ease ${mode.delay}s both`,
+              ...('highlight' in mode && mode.highlight
                 ? {
                     background: 'linear-gradient(135deg,rgba(59,130,246,.12),rgba(139,92,246,.08))',
                     border: '1.5px solid rgba(59,130,246,.3)',
@@ -116,10 +116,10 @@ export function MenuScreen(): React.JSX.Element {
                 : {}),
             }}
           >
-            <span style={{ fontSize: 32 }}>{m.icon}</span>
+            <span style={{ fontSize: 32 }}>{mode.icon}</span>
             <div style={{ textAlign: 'left', flex: 1 }}>
-              <div>{m.label}</div>
-              <div style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}>{m.sub}</div>
+              <div>{mode.label}</div>
+              <div style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}>{mode.sub}</div>
             </div>
             <span style={{ color: ACCENT, fontSize: 18 }}>→</span>
           </button>

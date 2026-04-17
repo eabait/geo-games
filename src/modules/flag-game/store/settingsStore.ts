@@ -15,7 +15,7 @@ export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
       ...initialState,
-      toggleSound: () => set((s) => ({ soundOn: !s.soundOn })),
+      toggleSound: () => set((state) => ({ soundOn: !state.soundOn })),
       setContinent: (continent) => set({ continent }),
       reset: () => set(initialState),
     }),

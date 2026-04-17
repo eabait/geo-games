@@ -2,7 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
-import { RPP } from '../data/constants';
+import {
+  RPP,
+  PODIUM_SLIDE_BASE,
+  PODIUM_SLIDE_STEP,
+  PODIUM_RISE_BASE,
+  PODIUM_RISE_STEP,
+  PODIUM_HEIGHT_FIRST,
+  PODIUM_HEIGHT_SECOND,
+  PODIUM_HEIGHT_THIRD,
+  PODIUM_BLOCK_WIDTH,
+} from '../data/constants';
 
 const ACCENT = '#fbbf24';
 const CARD = {
@@ -23,13 +33,16 @@ export function FamilyResultsScreen(): React.JSX.Element {
     }
   }
 
-  const sorted = [...players].sort((a, b) => (familyScores[b.id] ?? 0) - (familyScores[a.id] ?? 0));
+  const sorted = [...players].sort(
+    (playerA, playerB) => (familyScores[playerB.id] ?? 0) - (familyScores[playerA.id] ?? 0),
+  );
   const winner = sorted[0];
   const topScore = winner ? (familyScores[winner.id] ?? 0) : 0;
-  const isTie = sorted.filter((p) => (familyScores[p.id] ?? 0) === topScore).length > 1;
+  const isTie = sorted.filter((player) => (familyScores[player.id] ?? 0) === topScore).length > 1;
   // Podium order: 2nd (index 1), 1st (index 0), 3rd (index 2)
-  const podium = [sorted[1], sorted[0], sorted[2]].filter(Boolean);
-  const podiumHeights = [100, 150, 80];
+  const [first, second, third] = sorted;
+  const podium = [second, first, third].filter(Boolean);
+  const podiumHeights = [PODIUM_HEIGHT_SECOND, PODIUM_HEIGHT_FIRST, PODIUM_HEIGHT_THIRD];
   const podiumMedals = ['🥈', '🥇', '🥉'];
 
   if (!winner) return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>...</div>;
@@ -74,33 +87,33 @@ export function FamilyResultsScreen(): React.JSX.Element {
       <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>{topScore} pts</p>
       {/* Podium */}
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, marginBottom: 28 }}>
-        {podium.map((p, idx) => (
+        {podium.map((player, idx) => (
           <div
-            key={p.id}
+            key={player.id}
             style={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              animation: `slideUp .6s ease ${0.5 + idx * 0.2}s both`,
+              animation: `slideUp .6s ease ${PODIUM_SLIDE_BASE + idx * PODIUM_SLIDE_STEP}s both`,
             }}
           >
-            <span style={{ fontSize: 30, marginBottom: 4 }}>{p.avatar}</span>
-            <span style={{ fontSize: 13, fontWeight: 700, color: p.color, marginBottom: 4 }}>
-              {p.name}
+            <span style={{ fontSize: 30, marginBottom: 4 }}>{player.avatar}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: player.color, marginBottom: 4 }}>
+              {player.name}
             </span>
             <div
               style={{
-                width: 76,
+                width: PODIUM_BLOCK_WIDTH,
                 height: podiumHeights[idx],
                 borderRadius: '14px 14px 0 0',
-                background: `linear-gradient(180deg,${p.color}44,${p.color}11)`,
-                border: `1.5px solid ${p.color}55`,
+                background: `linear-gradient(180deg,${player.color}44,${player.color}11)`,
+                border: `1.5px solid ${player.color}55`,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: 4,
-                animation: `podiumRise .6s ease ${0.8 + idx * 0.15}s both`,
+                animation: `podiumRise .6s ease ${PODIUM_RISE_BASE + idx * PODIUM_RISE_STEP}s both`,
                 transformOrigin: 'bottom',
               }}
             >
@@ -110,10 +123,10 @@ export function FamilyResultsScreen(): React.JSX.Element {
                   fontFamily: "'Fredoka', sans-serif",
                   fontSize: 20,
                   fontWeight: 700,
-                  color: p.color,
+                  color: player.color,
                 }}
               >
-                {familyScores[p.id] ?? 0}
+                {familyScores[player.id] ?? 0}
               </span>
             </div>
           </div>
@@ -121,11 +134,13 @@ export function FamilyResultsScreen(): React.JSX.Element {
       </div>
       {/* Scoreboard */}
       <div style={{ ...CARD, padding: 16, width: '100%', maxWidth: 400, marginBottom: 24 }}>
-        {sorted.map((p, i) => {
-          const correct = (familyHistory[p.id] ?? []).filter((r) => r.correct).length;
+        {sorted.map((player, i) => {
+          const correct = (familyHistory[player.id] ?? []).filter(
+            (result) => result.correct,
+          ).length;
           return (
             <div
-              key={p.id}
+              key={player.id}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -145,9 +160,11 @@ export function FamilyResultsScreen(): React.JSX.Element {
               >
                 #{i + 1}
               </span>
-              <span style={{ fontSize: 24 }}>{p.avatar}</span>
+              <span style={{ fontSize: 24 }}>{player.avatar}</span>
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: 15, color: p.color }}>{p.name}</div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: player.color }}>
+                  {player.name}
+                </div>
                 <div style={{ fontSize: 12, color: '#64748b' }}>
                   {correct}/{RPP}
                 </div>
@@ -157,10 +174,10 @@ export function FamilyResultsScreen(): React.JSX.Element {
                   fontFamily: "'Fredoka', sans-serif",
                   fontSize: 20,
                   fontWeight: 700,
-                  color: p.color,
+                  color: player.color,
                 }}
               >
-                {familyScores[p.id] ?? 0}
+                {familyScores[player.id] ?? 0}
               </span>
             </div>
           );

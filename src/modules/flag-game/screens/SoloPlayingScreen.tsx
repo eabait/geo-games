@@ -12,7 +12,20 @@ import { Confetti } from '../components/effects/Confetti';
 import { FloatingEmojis } from '../components/effects/FloatingEmojis';
 import { ScreenFlash } from '../components/effects/ScreenFlash';
 import { Sparkles } from '../components/effects/Sparkles';
-import { DIFFICULTY, SOLO_R } from '../data/constants';
+import { OptionButton } from '../components/OptionButton';
+import {
+  DIFFICULTY,
+  SOLO_R,
+  SCORE_POP_DURATION_MS,
+  TICK_THRESHOLD,
+  TICK_URGENT_THRESHOLD,
+  TIMER_PCT_GREEN,
+  TIMER_PCT_YELLOW,
+  TIMER_PCT_FULL,
+  STREAK_BONUS_THRESHOLD,
+  STREAK_SOUND_THRESHOLD,
+  DEFAULT_ROUND_SECONDS,
+} from '../data/constants';
 import type { Flag } from '../types';
 
 const ACCENT = '#fbbf24';
@@ -37,25 +50,25 @@ export function SoloPlayingScreen(): React.JSX.Element {
 
   const { currentFlag, options, selected, showHint, round, score, streak, setShowHint } =
     useGameStore();
-  const diff = DIFFICULTY[useGameStore((s) => s.difficulty ?? 'easy')];
+  const diff = DIFFICULTY[useGameStore((state) => state.difficulty ?? 'easy')];
 
   const [scorePop, setScorePop] = useState(false);
   useEffect(() => {
     if (score > 0) {
       setScorePop(true);
-      const t = setTimeout(() => setScorePop(false), 400);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setScorePop(false), SCORE_POP_DURATION_MS);
+      return () => clearTimeout(timer);
     }
   }, [score]);
 
   const { handleAnswer } = useGameRound(sfx);
 
   const { timeLeft } = useTimer({
-    seconds: diff?.time ?? 15,
+    seconds: diff?.time ?? DEFAULT_ROUND_SECONDS,
     active: !!currentFlag && selected === null,
     onTick: (t) => {
-      if (t <= 5 && t > 2) sfx('tick');
-      else if (t <= 2) sfx('tickUrgent');
+      if (t <= TICK_THRESHOLD && t > TICK_URGENT_THRESHOLD) sfx('tick');
+      else if (t <= TICK_URGENT_THRESHOLD) sfx('tickUrgent');
     },
     onExpire: () => {
       sfx('timeout');
@@ -66,8 +79,9 @@ export function SoloPlayingScreen(): React.JSX.Element {
   if (!currentFlag)
     return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>Cargando...</div>;
 
-  const timerPct = diff ? (timeLeft / diff.time) * 100 : 100;
-  const timerColor = timerPct > 50 ? '#22c55e' : timerPct > 25 ? '#eab308' : '#ef4444';
+  const timerPct = diff ? (timeLeft / diff.time) * TIMER_PCT_FULL : TIMER_PCT_FULL;
+  const timerColor =
+    timerPct > TIMER_PCT_GREEN ? '#22c55e' : timerPct > TIMER_PCT_YELLOW ? '#eab308' : '#ef4444';
 
   const onAnswer = (opt: Flag): void => {
     handleAnswer(opt);
@@ -120,7 +134,7 @@ export function SoloPlayingScreen(): React.JSX.Element {
             </span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, position: 'relative' }}>
-            {streak >= 2 && (
+            {streak >= STREAK_BONUS_THRESHOLD && (
               <span
                 style={{
                   fontSize: 12,
@@ -165,7 +179,8 @@ export function SoloPlayingScreen(): React.JSX.Element {
               background: timerColor,
               borderRadius: 4,
               transition: 'width 1s linear',
-              animation: timeLeft <= 5 && !selected ? 'timerPulse .5s ease infinite' : 'none',
+              animation:
+                timeLeft <= TICK_THRESHOLD && !selected ? 'timerPulse .5s ease infinite' : 'none',
             }}
           />
         </div>
@@ -242,78 +257,16 @@ export function SoloPlayingScreen(): React.JSX.Element {
             maxWidth: 420,
           }}
         >
-          {options.map((opt, i) => {
-            const isCorrect = opt.name === currentFlag.name;
-            const isSel = selected?.name === opt.name;
-            const bg = selected
-              ? isCorrect
-                ? 'rgba(34,197,94,.18)'
-                : isSel
-                  ? 'rgba(239,68,68,.18)'
-                  : 'rgba(255,255,255,.06)'
-              : 'rgba(255,255,255,.06)';
-            const bc = selected
-              ? isCorrect
-                ? '#22c55e'
-                : isSel
-                  ? '#ef4444'
-                  : 'rgba(255,255,255,.1)'
-              : 'rgba(255,255,255,.1)';
-            return (
-              <button
-                key={opt.name}
-                className="btn"
-                onClick={() => onAnswer(opt)}
-                disabled={selected !== null}
-                style={{
-                  ...CARD,
-                  background: bg,
-                  border: `1.5px solid ${bc}`,
-                  padding: '14px 20px',
-                  color: '#f1f5f9',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  fontFamily: "'Nunito', sans-serif",
-                  cursor: selected ? 'default' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 12,
-                  animation: `optionEnter .4s ease ${0.05 + i * 0.07}s both`,
-                  opacity: selected && !isCorrect && !isSel ? 0.35 : 1,
-                  transition: 'opacity .4s',
-                }}
-              >
-                <span
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: '50%',
-                    background:
-                      selected && isCorrect
-                        ? '#22c55e'
-                        : selected && isSel
-                          ? '#ef4444'
-                          : 'rgba(255,255,255,.08)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 14,
-                    flexShrink: 0,
-                    color: '#fff',
-                    transition: 'all .3s',
-                    transform: selected && (isCorrect || isSel) ? 'scale(1.2)' : 'scale(1)',
-                  }}
-                >
-                  {selected && isCorrect
-                    ? '✓'
-                    : selected && isSel && !isCorrect
-                      ? '✗'
-                      : String.fromCharCode(65 + i)}
-                </span>
-                {opt.name}
-              </button>
-            );
-          })}
+          {options.map((opt, i) => (
+            <OptionButton
+              key={opt.name}
+              opt={opt}
+              index={i}
+              selected={selected}
+              currentFlag={currentFlag}
+              onAnswer={onAnswer}
+            />
+          ))}
         </div>
         {selected && (
           <div
@@ -326,7 +279,7 @@ export function SoloPlayingScreen(): React.JSX.Element {
             }}
           >
             {selected.name === currentFlag.name
-              ? streak >= 3
+              ? streak >= STREAK_SOUND_THRESHOLD
                 ? '🔥 ¡Imparable!'
                 : '🎉 ¡Correcto!'
               : `❌ Era ${currentFlag.name}`}

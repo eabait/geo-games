@@ -13,8 +13,11 @@ interface MobileMapProps {
 
 // WORLD_SHAPES entries are [lng, lat]. Flag.pos is [lat, lng].
 // viewBox is 0 0 360 180: longitude → x (offset +180), latitude → y (flipped).
-const toX = (lng: number): number => lng + 180;
-const toY = (lat: number): number => 90 - lat;
+const MAP_LNG_OFFSET = 180;
+const MAP_LAT_OFFSET = 90;
+
+const toX = (lng: number): number => lng + MAP_LNG_OFFSET;
+const toY = (lat: number): number => MAP_LAT_OFFSET - lat;
 
 export function MobileMap({
   options,
@@ -27,7 +30,7 @@ export function MobileMap({
     [],
   );
 
-  const correctFlag = options.find((f) => f.name === correctName) ?? null;
+  const correctFlag = options.find((flag) => flag.name === correctName) ?? null;
   const dotX = correctFlag !== null ? toX(correctFlag.pos[1]) : null;
   const dotY = correctFlag !== null ? toY(correctFlag.pos[0]) : null;
 

@@ -12,7 +12,7 @@ const ACCENT = '#fbbf24';
 
 function countForContinent(continent: string): number {
   if (continent === 'Todos') return FLAGS.length;
-  return FLAGS.filter((f) => f.continent === continent).length;
+  return FLAGS.filter((flag) => flag.continent === continent).length;
 }
 
 export function ContinentPicker({ selected, onChange }: ContinentPickerProps): React.JSX.Element {
@@ -26,12 +26,12 @@ export function ContinentPicker({ selected, onChange }: ContinentPickerProps): R
         marginBottom: 18,
       }}
     >
-      {CONTINENTS_LIST.map((c) => {
-        const isSelected = selected === c;
+      {CONTINENTS_LIST.map((continent) => {
+        const isSelected = selected === continent;
         return (
           <button
-            key={c}
-            onClick={() => onChange(c)}
+            key={continent}
+            onClick={() => onChange(continent)}
             style={{
               padding: '6px 12px',
               borderRadius: 20,
@@ -44,7 +44,7 @@ export function ContinentPicker({ selected, onChange }: ContinentPickerProps): R
               color: isSelected ? ACCENT : '#94a3b8',
             }}
           >
-            {`${c} (${countForContinent(c)})`}
+            {`${continent} (${countForContinent(continent)})`}
           </button>
         );
       })}

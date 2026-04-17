@@ -10,7 +10,13 @@ import { Confetti } from '../components/effects/Confetti';
 import { FloatingEmojis } from '../components/effects/FloatingEmojis';
 import { ScreenFlash } from '../components/effects/ScreenFlash';
 import { MobileMap } from '../components/MobileMap';
-import { DIFFICULTY } from '../data/constants';
+import {
+  DIFFICULTY,
+  EXPLORER_STREAK_THRESHOLD,
+  EXPLORER_NEXT_DELAY_MS,
+  EXPLORER_TIMER_RED,
+  EXPLORER_TIMER_YELLOW,
+} from '../data/constants';
 import { FLAGS } from '../data/flags';
 import { shuffle, pickRandom } from '../data/utils';
 import type { Flag } from '../types';
@@ -58,9 +64,10 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
   // Set up new round when currentFlag is cleared
   useEffect(() => {
     if (currentFlag || !difficulty) return;
-    const base = continent === 'Todos' ? FLAGS : FLAGS.filter((f) => f.continent === continent);
-    const pool = base.filter((f) => f.tier <= diff.maxTier);
-    const available = pool.filter((f) => !usedFlags.includes(f.name));
+    const base =
+      continent === 'Todos' ? FLAGS : FLAGS.filter((flag) => flag.continent === continent);
+    const pool = base.filter((flag) => flag.tier <= diff.maxTier);
+    const available = pool.filter((flag) => !usedFlags.includes(flag.name));
     const pickFrom = available.length >= diff.options ? available : pool;
     const flag = pickFrom[Math.floor(Math.random() * pickFrom.length)];
     const wrong = pickRandom(pool.length >= diff.options ? pool : FLAGS, diff.options - 1, [flag]);
@@ -75,7 +82,7 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
     }
     const id = setInterval(() => {
       tickExplorerTime();
-    }, 1000);
+    }, EXPLORER_NEXT_DELAY_MS);
     return () => clearInterval(id);
   }, [explorerTime, tickExplorerTime, navigate]);
 
@@ -83,20 +90,20 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
     (opt: Flag): void => {
       if (selected !== null || !currentFlag) return;
       const correct = opt.name === currentFlag.name;
-      if (correct) sfx(explorerStreak >= 2 ? 'streak' : 'correct');
+      if (correct) sfx(explorerStreak >= EXPLORER_STREAK_THRESHOLD ? 'streak' : 'correct');
       else sfx('wrong');
-      useGameStore.setState((s) => {
-        s.selected = opt;
+      useGameStore.setState((state) => {
+        state.selected = opt;
       });
       recordExplorerAnswer(correct);
 
       setTimeout(() => {
-        useGameStore.setState((s) => {
-          s.currentFlag = null;
-          s.selected = null;
-          s.showHint = false;
+        useGameStore.setState((state) => {
+          state.currentFlag = null;
+          state.selected = null;
+          state.showHint = false;
         });
-      }, 1000);
+      }, EXPLORER_NEXT_DELAY_MS);
     },
     [selected, currentFlag, sfx, explorerStreak, recordExplorerAnswer],
   );
@@ -146,7 +153,7 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
             >
               🏠
             </button>
-            {explorerStreak >= 2 && (
+            {explorerStreak >= EXPLORER_STREAK_THRESHOLD && (
               <span
                 style={{
                   fontSize: 12,
@@ -176,8 +183,13 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
                 fontFamily: "'Fredoka', sans-serif",
                 fontSize: 22,
                 fontWeight: 700,
-                color: explorerTime <= 5 ? '#ef4444' : explorerTime <= 10 ? '#eab308' : ACCENT,
-                animation: explorerTime <= 5 ? 'pulse .5s infinite' : 'none',
+                color:
+                  explorerTime <= EXPLORER_TIMER_RED
+                    ? '#ef4444'
+                    : explorerTime <= EXPLORER_TIMER_YELLOW
+                      ? '#eab308'
+                      : ACCENT,
+                animation: explorerTime <= EXPLORER_TIMER_RED ? 'pulse .5s infinite' : 'none',
               }}
             >
               {explorerTime}s

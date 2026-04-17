@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
-import { DIFFICULTY } from '../data/constants';
+import { DIFFICULTY, DIFFICULTY_ANIM_BASE, DIFFICULTY_ANIM_STEP } from '../data/constants';
 
 import type { DifficultyKey } from '@/shared/types';
 
@@ -27,9 +27,9 @@ export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Ele
   const navigate = useNavigate();
   const { startSolo, startExplorer } = useGameStore();
 
-  function handleSelect(d: DifficultyKey): void {
-    if (mode === 'solo') startSolo(d);
-    else startExplorer(d);
+  function handleSelect(key: DifficultyKey): void {
+    if (mode === 'solo') startSolo(key);
+    else startExplorer(key);
     navigate(PLAY_ROUTE[mode]);
   }
 
@@ -79,7 +79,7 @@ export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Ele
                 fontSize: 16,
                 fontWeight: 700,
                 fontFamily: "'Nunito', sans-serif",
-                animation: `menuItem .6s ease ${i * 0.1 + 0.1}s both`,
+                animation: `menuItem .6s ease ${DIFFICULTY_ANIM_BASE + i * DIFFICULTY_ANIM_STEP}s both`,
               }}
             >
               <span style={{ fontSize: 32 }}>{cfg.emoji}</span>

@@ -2,12 +2,14 @@ import type { Continent, DifficultyKey, GameMode } from '@/shared/types';
 
 export type { GameMode, DifficultyKey, Continent };
 
+export type Tier = 1 | 2 | 3;
+
 export interface Flag {
   code: string;
   name: string;
   continent: Continent;
   hint: string;
-  tier: 1 | 2 | 3;
+  tier: Tier;
   pos: [lat: number, lng: number];
 }
 
@@ -18,7 +20,7 @@ export interface DifficultyConfig {
   time: number;
   points: number;
   hintCost: number;
-  maxTier: 1 | 2 | 3;
+  maxTier: Tier;
 }
 
 export interface Player {

@@ -14,6 +14,143 @@ type SoundName =
   | 'bonus';
 
 type Sounds = Record<SoundName, () => void>;
+type ToneFn = (
+  ctx: AudioContext,
+  freq: number,
+  dur: number,
+  wave?: string,
+  vol?: number,
+  startAt?: number,
+) => void;
+type PlayFn = (fn: (ctx: AudioContext) => void) => void;
+
+// Module-level frequency arrays (Hz)
+const FREQS_CORRECT = [523.25, 659.25, 783.99, 1046.5] as const;
+const FREQS_WRONG = [200, 180] as const;
+const FREQ_TICK = 880;
+const FREQ_TICK_URGENT = 1200;
+const FREQ_TIMEOUT_START = 500;
+const FREQ_TIMEOUT_END = 150;
+const FREQS_HINT = [660, 880] as const;
+const FREQ_TAP = 600;
+const FREQS_VICTORY = [523.25, 659.25, 783.99, 659.25, 783.99, 1046.5] as const;
+const FREQS_READY = [440, 554.37, 659.25] as const;
+const FREQS_STREAK = [783.99, 987.77, 1174.66, 1318.51] as const;
+const FREQS_BONUS = [880, 1108.73] as const;
+
+// Tone synthesis constants
+const FADE_TO_SILENCE = 0.001;
+const OSC_STOP_MARGIN = 0.05;
+const DEFAULT_GAIN = 0.3;
+
+// Per-sound timing and volume
+const CORRECT_DUR = 0.3;
+const CORRECT_VOL = 0.25;
+const CORRECT_STEP = 0.08;
+const WRONG_DUR = 0.25;
+const WRONG_VOL = 0.18;
+const WRONG_STEP = 0.15;
+const TICK_DUR = 0.06;
+const TICK_VOL = 0.15;
+const TICK_URGENT_DUR = 0.05;
+const TICK_URGENT_VOL = 0.18;
+const TICK_URGENT_STEP = 0.07;
+const TIMEOUT_DUR = 0.5;
+const TIMEOUT_VOL = 0.2;
+const TIMEOUT_STOP = 0.55;
+const HINT_DUR = 0.2;
+const HINT_VOL = 0.18;
+const HINT_STEP = 0.1;
+const TAP_DUR = 0.05;
+const TAP_VOL = 0.1;
+const VICTORY_DUR = 0.35;
+const VICTORY_VOL = 0.22;
+const VICTORY_STEP = 0.12;
+const VICTORY_WAVE_SWITCH = 3;
+const READY_DUR = 0.25;
+const READY_VOL = 0.2;
+const READY_STEP = 0.12;
+const STREAK_DUR = 0.2;
+const STREAK_VOL = 0.18;
+const STREAK_STEP = 0.06;
+const BONUS_DUR = 0.15;
+const BONUS_VOL = 0.12;
+const BONUS_STEP = 0.08;
+
+function buildSounds(play: PlayFn, tone: ToneFn): Sounds {
+  return {
+    correct: () =>
+      play((ctx) => {
+        FREQS_CORRECT.forEach((freq, i) =>
+          tone(ctx, freq, CORRECT_DUR, 'sine', CORRECT_VOL, i * CORRECT_STEP),
+        );
+      }),
+    wrong: () =>
+      play((ctx) => {
+        FREQS_WRONG.forEach((freq, i) =>
+          tone(ctx, freq, WRONG_DUR, 'square', WRONG_VOL, i * WRONG_STEP),
+        );
+      }),
+    tick: () => play((ctx) => tone(ctx, FREQ_TICK, TICK_DUR, 'sine', TICK_VOL)),
+    tickUrgent: () =>
+      play((ctx) => {
+        tone(ctx, FREQ_TICK_URGENT, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL);
+        tone(ctx, FREQ_TICK_URGENT, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL, TICK_URGENT_STEP);
+      }),
+    timeout: () =>
+      play((ctx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(FREQ_TIMEOUT_START, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(FREQ_TIMEOUT_END, ctx.currentTime + TIMEOUT_DUR);
+        gain.gain.setValueAtTime(TIMEOUT_VOL, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(FADE_TO_SILENCE, ctx.currentTime + TIMEOUT_DUR);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + TIMEOUT_STOP);
+      }),
+    hint: () =>
+      play((ctx) => {
+        FREQS_HINT.forEach((freq, i) =>
+          tone(ctx, freq, HINT_DUR, 'triangle', HINT_VOL, i * HINT_STEP),
+        );
+      }),
+    tap: () => play((ctx) => tone(ctx, FREQ_TAP, TAP_DUR, 'sine', TAP_VOL)),
+    victory: () =>
+      play((ctx) => {
+        FREQS_VICTORY.forEach((freq, i) =>
+          tone(
+            ctx,
+            freq,
+            VICTORY_DUR,
+            i < VICTORY_WAVE_SWITCH ? 'sine' : 'triangle',
+            VICTORY_VOL,
+            i * VICTORY_STEP,
+          ),
+        );
+      }),
+    ready: () =>
+      play((ctx) => {
+        FREQS_READY.forEach((freq, i) =>
+          tone(ctx, freq, READY_DUR, 'triangle', READY_VOL, i * READY_STEP),
+        );
+      }),
+    streak: () =>
+      play((ctx) => {
+        FREQS_STREAK.forEach((freq, i) =>
+          tone(ctx, freq, STREAK_DUR, 'sine', STREAK_VOL, i * STREAK_STEP),
+        );
+      }),
+    bonus: () =>
+      play((ctx) => {
+        FREQS_BONUS.forEach((freq, i) =>
+          tone(ctx, freq, BONUS_DUR, 'sine', BONUS_VOL, i * BONUS_STEP),
+        );
+      }),
+  };
+}
 
 export function useSoundEngine(enabled: boolean): React.MutableRefObject<Sounds> {
   const ctxRef = useRef<AudioContext | null>(null);
@@ -42,17 +179,24 @@ export function useSoundEngine(enabled: boolean): React.MutableRefObject<Sounds>
   );
 
   const tone = useCallback(
-    (c: AudioContext, f: number, d: number, t = 'sine', v = 0.3, s = 0): void => {
-      const o = c.createOscillator();
-      const g = c.createGain();
-      o.type = t as OscillatorType;
-      o.frequency.value = f;
-      g.gain.setValueAtTime(v, c.currentTime + s);
-      g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + s + d);
-      o.connect(g);
-      g.connect(c.destination);
-      o.start(c.currentTime + s);
-      o.stop(c.currentTime + s + d + 0.05);
+    (
+      ctx: AudioContext,
+      freq: number,
+      dur: number,
+      wave = 'sine',
+      vol = DEFAULT_GAIN,
+      startAt = 0,
+    ): void => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = wave as OscillatorType;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(vol, ctx.currentTime + startAt);
+      gain.gain.exponentialRampToValueAtTime(FADE_TO_SILENCE, ctx.currentTime + startAt + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + startAt);
+      osc.stop(ctx.currentTime + startAt + dur + OSC_STOP_MARGIN);
     },
     [],
   );
@@ -60,78 +204,22 @@ export function useSoundEngine(enabled: boolean): React.MutableRefObject<Sounds>
   const sounds = useRef<Sounds>({} as Sounds);
 
   useEffect(() => {
-    sounds.current = {
-      correct: () =>
-        play((c) => {
-          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
-            tone(c, f, 0.3, 'sine', 0.25, i * 0.08),
-          );
-        }),
-      wrong: () =>
-        play((c) => {
-          [200, 180].forEach((f, i) => tone(c, f, 0.25, 'square', 0.18, i * 0.15));
-        }),
-      tick: () => play((c) => tone(c, 880, 0.06, 'sine', 0.15)),
-      tickUrgent: () =>
-        play((c) => {
-          tone(c, 1200, 0.05, 'square', 0.18);
-          tone(c, 1200, 0.05, 'square', 0.18, 0.07);
-        }),
-      timeout: () =>
-        play((c) => {
-          const o = c.createOscillator();
-          const g = c.createGain();
-          o.type = 'sawtooth';
-          o.frequency.setValueAtTime(500, c.currentTime);
-          o.frequency.exponentialRampToValueAtTime(150, c.currentTime + 0.5);
-          g.gain.setValueAtTime(0.2, c.currentTime);
-          g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
-          o.connect(g);
-          g.connect(c.destination);
-          o.start();
-          o.stop(c.currentTime + 0.55);
-        }),
-      hint: () =>
-        play((c) => {
-          [660, 880].forEach((f, i) => tone(c, f, 0.2, 'triangle', 0.18, i * 0.1));
-        }),
-      tap: () => play((c) => tone(c, 600, 0.05, 'sine', 0.1)),
-      victory: () =>
-        play((c) => {
-          [523.25, 659.25, 783.99, 659.25, 783.99, 1046.5].forEach((f, i) =>
-            tone(c, f, 0.35, i < 3 ? 'sine' : 'triangle', 0.22, i * 0.12),
-          );
-        }),
-      ready: () =>
-        play((c) => {
-          [440, 554.37, 659.25].forEach((f, i) => tone(c, f, 0.25, 'triangle', 0.2, i * 0.12));
-        }),
-      streak: () =>
-        play((c) => {
-          [783.99, 987.77, 1174.66, 1318.51].forEach((f, i) =>
-            tone(c, f, 0.2, 'sine', 0.18, i * 0.06),
-          );
-        }),
-      bonus: () =>
-        play((c) => {
-          [880, 1108.73].forEach((f, i) => tone(c, f, 0.15, 'sine', 0.12, i * 0.08));
-        }),
-    };
+    sounds.current = buildSounds(play, tone);
   }, [play, tone]);
 
   useEffect(() => {
-    const w = (): void => {
+    const warmUp = (): void => {
       try {
         getCtx();
       } catch {
         // AudioContext may not be available in all environments
       }
     };
-    document.addEventListener('touchstart', w, { once: true });
-    document.addEventListener('click', w, { once: true });
+    document.addEventListener('touchstart', warmUp, { once: true });
+    document.addEventListener('click', warmUp, { once: true });
     return () => {
-      document.removeEventListener('touchstart', w);
-      document.removeEventListener('click', w);
+      document.removeEventListener('touchstart', warmUp);
+      document.removeEventListener('click', warmUp);
     };
   }, [getCtx]);
 
