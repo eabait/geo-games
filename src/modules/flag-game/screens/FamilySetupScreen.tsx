@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
+import { PlayerInput } from '../components/PlayerInput';
 import { DIFFICULTY, PCOLORS, PAVATARS, MAX_PLAYERS, MIN_PLAYERS } from '../data/constants';
 import type { Player } from '../types';
 
@@ -31,16 +32,8 @@ export function FamilySetupScreen(): React.JSX.Element {
     setInputValue('');
   }
 
-  function removePlayer(idx: number): void {
-    setPlayerNames((prev) => prev.filter((_, i) => i !== idx));
-  }
-
-  function updateName(idx: number, value: string): void {
-    setPlayerNames((prev) => prev.map((name, i) => (i === idx ? value : name)));
-  }
-
   function handleStart(): void {
-    const filled = playerNames.filter((name) => name.trim());
+    const filled = playerNames.filter((n) => n.trim());
     if (filled.length < MIN_PLAYERS) return;
     const players: Player[] = filled.map((name, i) => ({
       id: `player-${i}`,
@@ -52,7 +45,7 @@ export function FamilySetupScreen(): React.JSX.Element {
     navigate('/flag-game/family/pass');
   }
 
-  const filledNames = playerNames.filter((name) => name.trim());
+  const filledNames = playerNames.filter((n) => n.trim());
   const canStart = filledNames.length >= MIN_PLAYERS;
 
   return (
@@ -83,7 +76,6 @@ export function FamilySetupScreen(): React.JSX.Element {
       </h2>
       <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>Configurá la partida</p>
 
-      {/* Difficulty */}
       <div style={{ width: '100%', maxWidth: 320, marginBottom: 20 }}>
         <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 8, textAlign: 'left' }}>
           Dificultad
@@ -118,46 +110,22 @@ export function FamilySetupScreen(): React.JSX.Element {
         </div>
       </div>
 
-      {/* Players */}
       <div style={{ width: '100%', maxWidth: 320, marginBottom: 20 }}>
         <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 8, textAlign: 'left' }}>
           Jugadores (mínimo 2)
         </p>
         {playerNames.map((name, idx) => (
-          <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
-            <span style={{ fontSize: 20 }}>{PAVATARS[idx % PAVATARS.length]}</span>
-            <input
-              value={name}
-              onChange={(e) => updateName(idx, e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && idx === playerNames.length - 1 && addPlayer()}
-              placeholder={`Jugador ${idx + 1}`}
-              style={{
-                flex: 1,
-                padding: '10px 14px',
-                borderRadius: 12,
-                fontSize: 14,
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: '#f1f5f9',
-                fontFamily: "'Nunito', sans-serif",
-                outline: 'none',
-              }}
-            />
-            {playerNames.length > MIN_PLAYERS && (
-              <button
-                onClick={() => removePlayer(idx)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#64748b',
-                  cursor: 'pointer',
-                  fontSize: 18,
-                }}
-              >
-                ✕
-              </button>
-            )}
-          </div>
+          <PlayerInput
+            key={idx}
+            index={idx}
+            value={name}
+            avatar={PAVATARS[idx % PAVATARS.length]}
+            isLast={idx === playerNames.length - 1}
+            showRemove={playerNames.length > MIN_PLAYERS}
+            onChange={(val) => setPlayerNames((prev) => prev.map((n, i) => (i === idx ? val : n)))}
+            onRemove={() => setPlayerNames((prev) => prev.filter((_, i) => i !== idx))}
+            onEnter={addPlayer}
+          />
         ))}
         {playerNames.length < MAX_PLAYERS && (
           <button
