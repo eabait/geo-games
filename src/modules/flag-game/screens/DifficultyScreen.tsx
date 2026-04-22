@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
+import { DifficultyButton } from '../components/DifficultyButton';
 import { DIFFICULTY, DIFFICULTY_ANIM_BASE, DIFFICULTY_ANIM_STEP } from '../data/constants';
 
 import type { DifficultyKey } from '@/shared/types';
@@ -11,12 +12,6 @@ interface DifficultyScreenProps {
 }
 
 const ACCENT = '#fbbf24';
-const CARD = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 20,
-};
 
 const PLAY_ROUTE: Record<string, string> = {
   solo: '/flag-game/solo/play',
@@ -65,32 +60,14 @@ export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Ele
       >
         {(Object.entries(DIFFICULTY) as [DifficultyKey, (typeof DIFFICULTY)[string]][]).map(
           ([key, cfg], i) => (
-            <button
+            <DifficultyButton
               key={key}
-              className="btn"
+              emoji={cfg.emoji}
+              label={cfg.label}
+              description={`${cfg.options} opciones · ${cfg.time}s · ${cfg.points} pts`}
+              delay={DIFFICULTY_ANIM_BASE + i * DIFFICULTY_ANIM_STEP}
               onClick={() => handleSelect(key)}
-              style={{
-                ...CARD,
-                padding: '18px 22px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 14,
-                color: '#f1f5f9',
-                fontSize: 16,
-                fontWeight: 700,
-                fontFamily: "'Nunito', sans-serif",
-                animation: `menuItem .6s ease ${DIFFICULTY_ANIM_BASE + i * DIFFICULTY_ANIM_STEP}s both`,
-              }}
-            >
-              <span style={{ fontSize: 32 }}>{cfg.emoji}</span>
-              <div style={{ textAlign: 'left', flex: 1 }}>
-                <div>{cfg.label}</div>
-                <div style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}>
-                  {cfg.options} opciones · {cfg.time}s · {cfg.points} pts
-                </div>
-              </div>
-              <span style={{ color: ACCENT, fontSize: 18 }}>→</span>
-            </button>
+            />
           ),
         )}
       </div>
