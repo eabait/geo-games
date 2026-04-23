@@ -6,7 +6,7 @@ import { ContinentPicker } from '../components/ContinentPicker';
 import { ModeButton } from '../components/ModeButton';
 import { FLAGS } from '../data/flags';
 
-const ACCENT = '#fbbf24';
+import styles from './MenuScreen.module.css';
 
 const MODES = [
   {
@@ -46,49 +46,12 @@ export function MenuScreen(): React.JSX.Element {
   const { continent, setContinent } = useSettingsStore();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: 24,
-        textAlign: 'center',
-        position: 'relative',
-        zIndex: 1,
-      }}
-    >
-      <div
-        style={{
-          fontSize: 80,
-          animation: 'float 3s ease-in-out infinite, spinIn 0.8s ease both',
-          marginBottom: 8,
-        }}
-      >
-        🌍
-      </div>
-      <h1
-        style={{
-          fontFamily: "'Fredoka', sans-serif",
-          fontSize: 'clamp(28px,6vw,44px)',
-          fontWeight: 700,
-          background: `linear-gradient(135deg,${ACCENT},#f97316,#ef4444)`,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          margin: '0 0 4px',
-          animation: 'breathe 4s ease-in-out infinite',
-        }}
-      >
-        ¿Qué bandera es?
-      </h1>
-      <p style={{ color: '#94a3b8', fontSize: 15, marginBottom: 16 }}>
-        {FLAGS.length} países del mundo
-      </p>
+    <div className={styles.screen}>
+      <div className={styles.hero}>🌍</div>
+      <h1 className={styles.title}>¿Qué bandera es?</h1>
+      <p className={styles.subtitle}>{FLAGS.length} países del mundo</p>
       <ContinentPicker selected={continent} onChange={setContinent} />
-      <div
-        style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 340 }}
-      >
+      <div className={styles.modes}>
         {MODES.map((mode) => (
           <ModeButton
             key={mode.key}

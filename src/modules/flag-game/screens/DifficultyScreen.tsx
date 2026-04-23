@@ -5,13 +5,13 @@ import { useGameStore } from '../store/gameStore';
 import { DifficultyButton } from '../components/DifficultyButton';
 import { DIFFICULTY, DIFFICULTY_ANIM_BASE, DIFFICULTY_ANIM_STEP } from '../data/constants';
 
+import styles from './DifficultyScreen.module.css';
+
 import type { DifficultyKey } from '@/shared/types';
 
 interface DifficultyScreenProps {
   mode: 'solo' | 'explorer';
 }
-
-const ACCENT = '#fbbf24';
 
 const PLAY_ROUTE: Record<string, string> = {
   solo: '/flag-game/solo/play',
@@ -29,35 +29,11 @@ export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Ele
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: 24,
-        textAlign: 'center',
-        position: 'relative',
-        zIndex: 1,
-      }}
-    >
-      <div style={{ fontSize: 60, marginBottom: 12 }}>{mode === 'solo' ? '🎮' : '🗺️'}</div>
-      <h2
-        style={{
-          fontFamily: "'Fredoka', sans-serif",
-          fontSize: 'clamp(22px,5vw,34px)',
-          fontWeight: 700,
-          color: ACCENT,
-          margin: '0 0 8px',
-        }}
-      >
-        {mode === 'solo' ? 'Jugar solo' : 'Explorador'}
-      </h2>
-      <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 28 }}>Elegí una dificultad</p>
-      <div
-        style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '100%', maxWidth: 320 }}
-      >
+    <div className={styles.screen}>
+      <div className={styles.emoji}>{mode === 'solo' ? '🎮' : '🗺️'}</div>
+      <h2 className={styles.title}>{mode === 'solo' ? 'Jugar solo' : 'Explorador'}</h2>
+      <p className={styles.subtitle}>Elegí una dificultad</p>
+      <div className={styles.options}>
         {(Object.entries(DIFFICULTY) as [DifficultyKey, (typeof DIFFICULTY)[string]][]).map(
           ([key, cfg], i) => (
             <DifficultyButton
@@ -71,18 +47,7 @@ export function DifficultyScreen({ mode }: DifficultyScreenProps): React.JSX.Ele
           ),
         )}
       </div>
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginTop: 24,
-          background: 'none',
-          border: 'none',
-          color: '#64748b',
-          fontSize: 14,
-          cursor: 'pointer',
-          fontFamily: "'Nunito', sans-serif",
-        }}
-      >
+      <button className={styles.backButton} onClick={() => navigate(-1)} type="button">
         ← Volver
       </button>
     </div>

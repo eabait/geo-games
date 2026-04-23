@@ -34,4 +34,17 @@ describe('MenuScreen', () => {
     expect(screen.getByText(/explorador/i)).toBeInTheDocument();
     expect(screen.getByText(/familiar/i)).toBeInTheDocument();
   });
+
+  it('uses class-based styling for the static screen shell', () => {
+    renderMenu();
+
+    const heading = screen.getByRole('heading', { level: 1, name: /qué bandera es/i });
+    const screenShell = heading.parentElement;
+
+    expect(screenShell).not.toBeNull();
+    expect(screenShell).not.toHaveAttribute('style');
+    expect(screenShell?.className).toBeTruthy();
+    expect(heading).not.toHaveAttribute('style');
+    expect(heading.className).toBeTruthy();
+  });
 });

@@ -1,0 +1,48 @@
+.screen {
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.emoji {
+  font-size: 60px;
+  margin-bottom: 12px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 5vw, 34px);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.subtitle {
+  margin: 0 0 28px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.backButton {
+  margin-top: 24px;
+  background: none;
+  border: none;
+  color: var(--color-text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: var(--font-body);
+}

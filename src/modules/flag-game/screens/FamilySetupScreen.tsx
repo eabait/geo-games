@@ -7,15 +7,9 @@ import { PlayerInput } from '../components/PlayerInput';
 import { DIFFICULTY, PCOLORS, PAVATARS, MAX_PLAYERS, MIN_PLAYERS } from '../data/constants';
 import type { Player } from '../types';
 
-import type { DifficultyKey } from '@/shared/types';
+import styles from './FamilySetupScreen.module.css';
 
-const ACCENT = '#fbbf24';
-const CARD = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 20,
-};
+import type { DifficultyKey } from '@/shared/types';
 
 export function FamilySetupScreen(): React.JSX.Element {
   const navigate = useNavigate();
@@ -49,59 +43,26 @@ export function FamilySetupScreen(): React.JSX.Element {
   const canStart = filledNames.length >= MIN_PLAYERS;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: 24,
-        textAlign: 'center',
-        position: 'relative',
-        zIndex: 1,
-      }}
-    >
-      <div style={{ fontSize: 60, marginBottom: 12 }}>👨‍👩‍👧‍👦</div>
-      <h2
-        style={{
-          fontFamily: "'Fredoka', sans-serif",
-          fontSize: 'clamp(22px,5vw,34px)',
-          fontWeight: 700,
-          color: ACCENT,
-          margin: '0 0 8px',
-        }}
-      >
-        Desafío familiar
-      </h2>
-      <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 24 }}>Configurá la partida</p>
+    <div className={styles.screen}>
+      <div className={styles.emoji}>👨‍👩‍👧‍👦</div>
+      <h2 className={styles.title}>Desafío familiar</h2>
+      <p className={styles.subtitle}>Configurá la partida</p>
 
-      <div style={{ width: '100%', maxWidth: 320, marginBottom: 20 }}>
-        <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 8, textAlign: 'left' }}>
-          Dificultad
-        </p>
-        <div style={{ display: 'flex', gap: 8 }}>
+      <div className={styles.section}>
+        <p className={styles.sectionLabel}>Dificultad</p>
+        <div className={styles.difficultyGrid}>
           {(Object.entries(DIFFICULTY) as [DifficultyKey, (typeof DIFFICULTY)[string]][]).map(
             ([key, cfg]) => (
               <button
+                className={[
+                  styles.difficultyButton,
+                  difficulty === key ? styles.difficultyButtonSelected : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
                 key={key}
                 onClick={() => setDifficulty(key)}
-                style={{
-                  flex: 1,
-                  padding: '10px 8px',
-                  borderRadius: 12,
-                  cursor: 'pointer',
-                  fontFamily: "'Nunito', sans-serif",
-                  fontSize: 13,
-                  fontWeight: 700,
-                  border:
-                    difficulty === key
-                      ? `1.5px solid ${ACCENT}`
-                      : '1px solid rgba(255,255,255,0.1)',
-                  background:
-                    difficulty === key ? 'rgba(251,191,36,0.15)' : 'rgba(255,255,255,0.04)',
-                  color: difficulty === key ? ACCENT : '#94a3b8',
-                }}
+                type="button"
               >
                 {cfg.emoji} {cfg.label}
               </button>
@@ -110,10 +71,8 @@ export function FamilySetupScreen(): React.JSX.Element {
         </div>
       </div>
 
-      <div style={{ width: '100%', maxWidth: 320, marginBottom: 20 }}>
-        <p style={{ color: '#94a3b8', fontSize: 13, marginBottom: 8, textAlign: 'left' }}>
-          Jugadores (mínimo 2)
-        </p>
+      <div className={styles.section}>
+        <p className={styles.sectionLabel}>Jugadores (mínimo 2)</p>
         {playerNames.map((name, idx) => (
           <PlayerInput
             key={idx}
@@ -129,17 +88,9 @@ export function FamilySetupScreen(): React.JSX.Element {
         ))}
         {playerNames.length < MAX_PLAYERS && (
           <button
+            className={styles.addPlayerButton}
             onClick={() => setPlayerNames((prev) => [...prev, ''])}
-            style={{
-              ...CARD,
-              width: '100%',
-              padding: '10px',
-              fontSize: 13,
-              color: '#64748b',
-              fontFamily: "'Nunito', sans-serif",
-              cursor: 'pointer',
-              marginTop: 4,
-            }}
+            type="button"
           >
             + Agregar jugador
           </button>
@@ -147,38 +98,19 @@ export function FamilySetupScreen(): React.JSX.Element {
       </div>
 
       <button
-        onClick={handleStart}
+        className={[
+          'btn',
+          styles.startButton,
+          canStart ? styles.startButtonEnabled : styles.startButtonDisabled,
+        ].join(' ')}
         disabled={!canStart}
-        className="btn"
-        style={{
-          ...CARD,
-          padding: '16px 40px',
-          fontSize: 16,
-          fontWeight: 700,
-          fontFamily: "'Nunito', sans-serif",
-          color: canStart ? '#0f172a' : '#64748b',
-          background: canStart
-            ? `linear-gradient(135deg,${ACCENT},#f97316)`
-            : 'rgba(255,255,255,0.06)',
-          border: 'none',
-          cursor: canStart ? 'pointer' : 'not-allowed',
-        }}
+        onClick={handleStart}
+        type="button"
       >
         ¡Jugar!
       </button>
 
-      <button
-        onClick={() => navigate(-1)}
-        style={{
-          marginTop: 16,
-          background: 'none',
-          border: 'none',
-          color: '#64748b',
-          fontSize: 14,
-          cursor: 'pointer',
-          fontFamily: "'Nunito', sans-serif",
-        }}
-      >
+      <button className={styles.backButton} onClick={() => navigate(-1)} type="button">
         ← Volver
       </button>
     </div>

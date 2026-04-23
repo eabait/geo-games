@@ -1,0 +1,42 @@
+.screen {
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero {
+  font-size: 80px;
+  margin-bottom: 8px;
+  animation: float 3s ease-in-out infinite, spinIn 0.8s ease both;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-size: clamp(28px, 6vw, 44px);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-accent), #f97316, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.subtitle {
+  margin: 0 0 16px;
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 340px;
+}
