@@ -18,6 +18,33 @@ interface OptionButtonProps {
   onAnswer: (opt: Flag) => void;
 }
 
+type OptionState = 'correct' | 'wrong' | 'dimmed' | 'default';
+
+function getOptionState(selected: Flag | null, option: Flag, currentFlag: Flag): OptionState {
+  if (!selected) return 'default';
+  if (option.name === currentFlag.name) return 'correct';
+  return selected.name === option.name ? 'wrong' : 'dimmed';
+}
+
+function getStateClassName(state: OptionState): string {
+  switch (state) {
+    case 'correct':
+      return styles.correct;
+    case 'wrong':
+      return styles.wrong;
+    case 'dimmed':
+      return styles.dimmed;
+    default:
+      return '';
+  }
+}
+
+function getBadgeLabel(state: OptionState, index: number): string {
+  if (state === 'correct') return '✓';
+  if (state === 'wrong') return '✗';
+  return String.fromCharCode(CHAR_CODE_A + index);
+}
+
 export function OptionButton({
   opt,
   index,
@@ -25,20 +52,13 @@ export function OptionButton({
   currentFlag,
   onAnswer,
 }: OptionButtonProps): React.JSX.Element {
-  const isCorrect = opt.name === currentFlag.name;
-  const isSel = selected?.name === opt.name;
-  const stateClassName = selected
-    ? isCorrect
-      ? styles.correct
-      : isSel
-        ? styles.wrong
-        : styles.dimmed
-    : '';
+  const state = getOptionState(selected, opt, currentFlag);
+  const stateClassName = getStateClassName(state);
   const buttonClassName = ['btn', styles.button, stateClassName].filter(Boolean).join(' ');
   const badgeClassName = [
     styles.badge,
-    selected && isCorrect ? styles.badgeCorrect : '',
-    selected && isSel && !isCorrect ? styles.badgeWrong : '',
+    state === 'correct' ? styles.badgeCorrect : '',
+    state === 'wrong' ? styles.badgeWrong : '',
   ]
     .filter(Boolean)
     .join(' ');
@@ -46,7 +66,7 @@ export function OptionButton({
   return (
     <button
       className={buttonClassName}
-      data-state={selected ? (isCorrect ? 'correct' : isSel ? 'wrong' : 'dimmed') : 'default'}
+      data-state={state}
       onClick={() => onAnswer(opt)}
       disabled={selected !== null}
       style={
@@ -57,13 +77,7 @@ export function OptionButton({
       }
       type="button"
     >
-      <span className={badgeClassName}>
-        {selected && isCorrect
-          ? '✓'
-          : selected && isSel && !isCorrect
-            ? '✗'
-            : String.fromCharCode(CHAR_CODE_A + index)}
-      </span>
+      <span className={badgeClassName}>{getBadgeLabel(state, index)}</span>
       {opt.name}
     </button>
   );

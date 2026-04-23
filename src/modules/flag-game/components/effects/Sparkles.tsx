@@ -14,6 +14,7 @@ const SPARKLE_SIZE_RANGE = 6;
 const SPARKLE_MIN_DURATION = 0.4;
 const SPARKLE_DURATION_RANGE = 0.6;
 const SPARKLE_DELAY_RANGE = 0.4;
+const FULL_CIRCLE_DEGREES = 360;
 
 export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
   if (!active) return null;
@@ -25,7 +26,7 @@ export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
           key={i}
           style={
             {
-              '--angle': `${Math.random() * 360}deg`,
+              '--angle': `${Math.random() * FULL_CIRCLE_DEGREES}deg`,
               '--sparkle-size': `${SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE}px`,
               '--sparkle-duration': `${SPARKLE_MIN_DURATION + Math.random() * SPARKLE_DURATION_RANGE}s`,
               '--sparkle-delay': `${Math.random() * SPARKLE_DELAY_RANGE}s`,

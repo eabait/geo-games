@@ -76,16 +76,16 @@ export default tseslint.config(
           'newlines-between': 'always',
         },
       ],
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
           rules: [
-            { from: 'app', allow: ['router', 'shared'] },
-            { from: 'router', allow: ['module', 'shared'] },
-            { from: 'module', allow: ['shared'] },
-            { from: 'shared', allow: ['shared'] },
-            { from: 'main', allow: ['app', 'shared'] },
+            { from: { type: 'app' }, allow: { to: { type: ['router', 'shared'] } } },
+            { from: { type: 'router' }, allow: { to: { type: ['module', 'shared'] } } },
+            { from: { type: 'module' }, allow: { to: { type: 'shared' } } },
+            { from: { type: 'shared' }, allow: { to: { type: 'shared' } } },
+            { from: { type: 'main' }, allow: { to: { type: ['app', 'shared'] } } },
           ],
         },
       ],
@@ -94,7 +94,10 @@ export default tseslint.config(
   // Pure data files — numeric literals are geographic coordinates or flag data, not magic numbers
   {
     files: ['src/modules/flag-game/data/flags.ts', 'src/modules/flag-game/data/worldShapes.ts'],
-    rules: { '@typescript-eslint/no-magic-numbers': 'off' },
+    rules: {
+      '@typescript-eslint/no-magic-numbers': 'off',
+      'max-lines': 'off',
+    },
   },
   // Test files — numeric literals in test assertions are expected and intentional
   {

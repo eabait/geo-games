@@ -4,71 +4,47 @@ import userEvent from '@testing-library/user-event';
 
 import { DifficultyButton } from './DifficultyButton';
 
+const defaultProps = {
+  emoji: '😊',
+  label: 'Fácil',
+  description: '3 opciones · 20s',
+  delay: 0.1,
+};
+
+function renderDifficultyButton(overrides: Partial<typeof defaultProps> = {}): {
+  onClick: ReturnType<typeof vi.fn>;
+} {
+  const onClick = vi.fn();
+
+  render(<DifficultyButton {...defaultProps} {...overrides} onClick={onClick} />);
+
+  return { onClick };
+}
+
 describe('DifficultyButton', () => {
   it('renders the emoji', () => {
-    render(
-      <DifficultyButton
-        emoji="😊"
-        label="Fácil"
-        description="3 opciones · 20s"
-        delay={0.1}
-        onClick={vi.fn()}
-      />,
-    );
+    renderDifficultyButton();
     expect(screen.getByText('😊')).toBeInTheDocument();
   });
 
   it('renders the label', () => {
-    render(
-      <DifficultyButton
-        emoji="😊"
-        label="Fácil"
-        description="3 opciones · 20s"
-        delay={0.1}
-        onClick={vi.fn()}
-      />,
-    );
+    renderDifficultyButton();
     expect(screen.getByText('Fácil')).toBeInTheDocument();
   });
 
   it('renders the description', () => {
-    render(
-      <DifficultyButton
-        emoji="😊"
-        label="Fácil"
-        description="3 opciones · 20s"
-        delay={0.1}
-        onClick={vi.fn()}
-      />,
-    );
+    renderDifficultyButton();
     expect(screen.getByText('3 opciones · 20s')).toBeInTheDocument();
   });
 
   it('calls onClick when clicked', async () => {
-    const onClick = vi.fn();
-    render(
-      <DifficultyButton
-        emoji="😊"
-        label="Fácil"
-        description="3 opciones · 20s"
-        delay={0.1}
-        onClick={onClick}
-      />,
-    );
+    const { onClick } = renderDifficultyButton();
     await userEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledOnce();
   });
 
   it('passes the animation delay through a CSS custom property', () => {
-    render(
-      <DifficultyButton
-        emoji="😊"
-        label="Fácil"
-        description="3 opciones · 20s"
-        delay={0.1}
-        onClick={vi.fn()}
-      />,
-    );
+    renderDifficultyButton();
     expect(screen.getByRole('button')).toHaveStyle({ '--item-delay': '0.1s' });
   });
 });

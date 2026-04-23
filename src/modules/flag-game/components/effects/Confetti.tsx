@@ -15,6 +15,8 @@ const CONFETTI_HEIGHT_RATIO = 0.6;
 const CONFETTI_MIN_DURATION = 1.2;
 const CONFETTI_DELAY_RANGE = 0.5;
 const CONFETTI_SPREAD_PCT = 100;
+const CONFETTI_DRIFT_CENTER = 0.5;
+const CONFETTI_DRIFT_RANGE = 80;
 
 export function Confetti({ active }: ConfettiProps): React.JSX.Element | null {
   if (!active) return null;
@@ -26,7 +28,7 @@ export function Confetti({ active }: ConfettiProps): React.JSX.Element | null {
           key={i}
           style={
             {
-              '--drift': `${(Math.random() - 0.5) * 80}px`,
+              '--drift': `${(Math.random() - CONFETTI_DRIFT_CENTER) * CONFETTI_DRIFT_RANGE}px`,
               '--piece-width': `${CONFETTI_MIN_SIZE + Math.random() * CONFETTI_SIZE_RANGE}px`,
               '--piece-height': `${(CONFETTI_MIN_SIZE + Math.random() * CONFETTI_SIZE_RANGE) * CONFETTI_HEIGHT_RATIO}px`,
               '--piece-color': COLS[i % COLS.length],

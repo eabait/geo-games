@@ -1,6 +1,6 @@
-import { useRef, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-type SoundName =
+export type SoundName =
   | 'correct'
   | 'wrong'
   | 'tick'
@@ -14,36 +14,49 @@ type SoundName =
   | 'bonus';
 
 type Sounds = Record<SoundName, () => void>;
+type ToneWave = OscillatorType;
 type ToneFn = (
   ctx: AudioContext,
   freq: number,
   dur: number,
-  wave?: string,
+  wave?: ToneWave,
   vol?: number,
   startAt?: number,
 ) => void;
 type PlayFn = (fn: (ctx: AudioContext) => void) => void;
 
-// Module-level frequency arrays (Hz)
-const FREQS_CORRECT = [523.25, 659.25, 783.99, 1046.5] as const;
-const FREQS_WRONG = [200, 180] as const;
-const FREQ_TICK = 880;
-const FREQ_TICK_URGENT = 1200;
-const FREQ_TIMEOUT_START = 500;
-const FREQ_TIMEOUT_END = 150;
-const FREQS_HINT = [660, 880] as const;
-const FREQ_TAP = 600;
-const FREQS_VICTORY = [523.25, 659.25, 783.99, 659.25, 783.99, 1046.5] as const;
-const FREQS_READY = [440, 554.37, 659.25] as const;
-const FREQS_STREAK = [783.99, 987.77, 1174.66, 1318.51] as const;
-const FREQS_BONUS = [880, 1108.73] as const;
+const NOTE_A4 = 440;
+const NOTE_C5 = 523.25;
+const NOTE_CS5 = 554.37;
+const NOTE_E5 = 659.25;
+const NOTE_G5 = 783.99;
+const NOTE_A5 = 880;
+const NOTE_B5 = 987.77;
+const NOTE_C6 = 1046.5;
+const NOTE_CS6 = 1108.73;
+const NOTE_D6 = 1174.66;
+const NOTE_E6 = 1318.51;
 
-// Tone synthesis constants
+const LOW_WRONG_NOTE = 200;
+const LOWER_WRONG_NOTE = 180;
+const HINT_START_NOTE = 660;
+const TIMEOUT_START_NOTE = 500;
+const TIMEOUT_END_NOTE = 150;
+const TICK_URGENT_NOTE = 1200;
+const TAP_NOTE = 600;
+
+const FREQS_CORRECT = [NOTE_C5, NOTE_E5, NOTE_G5, NOTE_C6] as const;
+const FREQS_WRONG = [LOW_WRONG_NOTE, LOWER_WRONG_NOTE] as const;
+const FREQS_HINT = [HINT_START_NOTE, NOTE_A5] as const;
+const FREQS_VICTORY = [NOTE_C5, NOTE_E5, NOTE_G5, NOTE_E5, NOTE_G5, NOTE_C6] as const;
+const FREQS_READY = [NOTE_A4, NOTE_CS5, NOTE_E5] as const;
+const FREQS_STREAK = [NOTE_G5, NOTE_B5, NOTE_D6, NOTE_E6] as const;
+const FREQS_BONUS = [NOTE_A5, NOTE_CS6] as const;
+
 const FADE_TO_SILENCE = 0.001;
 const OSC_STOP_MARGIN = 0.05;
 const DEFAULT_GAIN = 0.3;
 
-// Per-sound timing and volume
 const CORRECT_DUR = 0.3;
 const CORRECT_VOL = 0.25;
 const CORRECT_STEP = 0.08;
@@ -77,92 +90,174 @@ const BONUS_DUR = 0.15;
 const BONUS_VOL = 0.12;
 const BONUS_STEP = 0.08;
 
-function buildSounds(play: PlayFn, tone: ToneFn): Sounds {
+const USER_GESTURE_EVENTS = ['touchstart', 'click'] as const;
+
+function playSequence(
+  play: PlayFn,
+  tone: ToneFn,
+  freqs: readonly number[],
+  config: { dur: number; wave: ToneWave; vol: number; step: number },
+): () => void {
+  return () =>
+    play((ctx) => {
+      freqs.forEach((freq, index) => {
+        tone(ctx, freq, config.dur, config.wave, config.vol, index * config.step);
+      });
+    });
+}
+
+function playTimeout(play: PlayFn): () => void {
+  return () =>
+    play((ctx) => {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = 'sawtooth';
+      oscillator.frequency.setValueAtTime(TIMEOUT_START_NOTE, ctx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(
+        TIMEOUT_END_NOTE,
+        ctx.currentTime + TIMEOUT_DUR,
+      );
+      gain.gain.setValueAtTime(TIMEOUT_VOL, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(FADE_TO_SILENCE, ctx.currentTime + TIMEOUT_DUR);
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start();
+      oscillator.stop(ctx.currentTime + TIMEOUT_STOP);
+    });
+}
+
+function buildStandardSounds(
+  play: PlayFn,
+  tone: ToneFn,
+): Omit<Sounds, 'timeout' | 'tickUrgent' | 'victory'> {
   return {
-    correct: () =>
-      play((ctx) => {
-        FREQS_CORRECT.forEach((freq, i) =>
-          tone(ctx, freq, CORRECT_DUR, 'sine', CORRECT_VOL, i * CORRECT_STEP),
-        );
-      }),
-    wrong: () =>
-      play((ctx) => {
-        FREQS_WRONG.forEach((freq, i) =>
-          tone(ctx, freq, WRONG_DUR, 'square', WRONG_VOL, i * WRONG_STEP),
-        );
-      }),
-    tick: () => play((ctx) => tone(ctx, FREQ_TICK, TICK_DUR, 'sine', TICK_VOL)),
+    correct: playSequence(play, tone, FREQS_CORRECT, {
+      dur: CORRECT_DUR,
+      wave: 'sine',
+      vol: CORRECT_VOL,
+      step: CORRECT_STEP,
+    }),
+    wrong: playSequence(play, tone, FREQS_WRONG, {
+      dur: WRONG_DUR,
+      wave: 'square',
+      vol: WRONG_VOL,
+      step: WRONG_STEP,
+    }),
+    tick: () => play((ctx) => tone(ctx, NOTE_A5, TICK_DUR, 'sine', TICK_VOL)),
+    hint: playSequence(play, tone, FREQS_HINT, {
+      dur: HINT_DUR,
+      wave: 'triangle',
+      vol: HINT_VOL,
+      step: HINT_STEP,
+    }),
+    tap: () => play((ctx) => tone(ctx, TAP_NOTE, TAP_DUR, 'sine', TAP_VOL)),
+    ready: playSequence(play, tone, FREQS_READY, {
+      dur: READY_DUR,
+      wave: 'triangle',
+      vol: READY_VOL,
+      step: READY_STEP,
+    }),
+    streak: playSequence(play, tone, FREQS_STREAK, {
+      dur: STREAK_DUR,
+      wave: 'sine',
+      vol: STREAK_VOL,
+      step: STREAK_STEP,
+    }),
+    bonus: playSequence(play, tone, FREQS_BONUS, {
+      dur: BONUS_DUR,
+      wave: 'sine',
+      vol: BONUS_VOL,
+      step: BONUS_STEP,
+    }),
+  };
+}
+
+function buildSpecialSounds(
+  play: PlayFn,
+  tone: ToneFn,
+): Pick<Sounds, 'timeout' | 'tickUrgent' | 'victory'> {
+  return {
+    timeout: playTimeout(play),
     tickUrgent: () =>
       play((ctx) => {
-        tone(ctx, FREQ_TICK_URGENT, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL);
-        tone(ctx, FREQ_TICK_URGENT, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL, TICK_URGENT_STEP);
+        tone(ctx, TICK_URGENT_NOTE, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL);
+        tone(ctx, TICK_URGENT_NOTE, TICK_URGENT_DUR, 'square', TICK_URGENT_VOL, TICK_URGENT_STEP);
       }),
-    timeout: () =>
-      play((ctx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(FREQ_TIMEOUT_START, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(FREQ_TIMEOUT_END, ctx.currentTime + TIMEOUT_DUR);
-        gain.gain.setValueAtTime(TIMEOUT_VOL, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(FADE_TO_SILENCE, ctx.currentTime + TIMEOUT_DUR);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + TIMEOUT_STOP);
-      }),
-    hint: () =>
-      play((ctx) => {
-        FREQS_HINT.forEach((freq, i) =>
-          tone(ctx, freq, HINT_DUR, 'triangle', HINT_VOL, i * HINT_STEP),
-        );
-      }),
-    tap: () => play((ctx) => tone(ctx, FREQ_TAP, TAP_DUR, 'sine', TAP_VOL)),
     victory: () =>
       play((ctx) => {
-        FREQS_VICTORY.forEach((freq, i) =>
-          tone(
-            ctx,
-            freq,
-            VICTORY_DUR,
-            i < VICTORY_WAVE_SWITCH ? 'sine' : 'triangle',
-            VICTORY_VOL,
-            i * VICTORY_STEP,
-          ),
-        );
+        FREQS_VICTORY.forEach((freq, index) => {
+          const wave = index < VICTORY_WAVE_SWITCH ? 'sine' : 'triangle';
+          tone(ctx, freq, VICTORY_DUR, wave, VICTORY_VOL, index * VICTORY_STEP);
+        });
       }),
-    ready: () =>
-      play((ctx) => {
-        FREQS_READY.forEach((freq, i) =>
-          tone(ctx, freq, READY_DUR, 'triangle', READY_VOL, i * READY_STEP),
-        );
-      }),
-    streak: () =>
-      play((ctx) => {
-        FREQS_STREAK.forEach((freq, i) =>
-          tone(ctx, freq, STREAK_DUR, 'sine', STREAK_VOL, i * STREAK_STEP),
-        );
-      }),
-    bonus: () =>
-      play((ctx) => {
-        FREQS_BONUS.forEach((freq, i) =>
-          tone(ctx, freq, BONUS_DUR, 'sine', BONUS_VOL, i * BONUS_STEP),
-        );
-      }),
+  };
+}
+
+function buildSounds(play: PlayFn, tone: ToneFn): Sounds {
+  return {
+    ...buildStandardSounds(play, tone),
+    ...buildSpecialSounds(play, tone),
+  };
+}
+
+function createAudioContext(): AudioContext {
+  return new (
+    window.AudioContext ||
+    (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  )();
+}
+
+function useAudioWarmUp(getCtx: () => AudioContext): void {
+  useEffect(() => {
+    const warmUp = (): void => {
+      try {
+        getCtx();
+      } catch {
+        // AudioContext may not be available in all environments
+      }
+    };
+
+    USER_GESTURE_EVENTS.forEach((eventName) => {
+      document.addEventListener(eventName, warmUp, { once: true });
+    });
+
+    return () => {
+      USER_GESTURE_EVENTS.forEach((eventName) => {
+        document.removeEventListener(eventName, warmUp);
+      });
+    };
+  }, [getCtx]);
+}
+
+function createSilentSounds(): Sounds {
+  const noop = (): void => {};
+
+  return {
+    correct: noop,
+    wrong: noop,
+    tick: noop,
+    tickUrgent: noop,
+    timeout: noop,
+    hint: noop,
+    tap: noop,
+    victory: noop,
+    ready: noop,
+    streak: noop,
+    bonus: noop,
   };
 }
 
 export function useSoundEngine(enabled: boolean): React.MutableRefObject<Sounds> {
   const ctxRef = useRef<AudioContext | null>(null);
+  const sounds = useRef<Sounds>(createSilentSounds());
 
   const getCtx = useCallback((): AudioContext => {
     if (!ctxRef.current || ctxRef.current.state === 'closed') {
-      ctxRef.current = new (
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      )();
+      ctxRef.current = createAudioContext();
     }
-    if (ctxRef.current.state === 'suspended') ctxRef.current.resume();
+    if (ctxRef.current.state === 'suspended') {
+      void ctxRef.current.resume();
+    }
     return ctxRef.current;
   }, []);
 
@@ -178,50 +273,27 @@ export function useSoundEngine(enabled: boolean): React.MutableRefObject<Sounds>
     [enabled, getCtx],
   );
 
-  const tone = useCallback(
-    (
-      ctx: AudioContext,
-      freq: number,
-      dur: number,
-      wave = 'sine',
-      vol = DEFAULT_GAIN,
-      startAt = 0,
-    ): void => {
-      const osc = ctx.createOscillator();
+  const tone = useCallback<ToneFn>(
+    (ctx, freq, dur, wave = 'sine', vol = DEFAULT_GAIN, startAt = 0): void => {
+      const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = wave as OscillatorType;
-      osc.frequency.value = freq;
+      oscillator.type = wave;
+      oscillator.frequency.value = freq;
       gain.gain.setValueAtTime(vol, ctx.currentTime + startAt);
       gain.gain.exponentialRampToValueAtTime(FADE_TO_SILENCE, ctx.currentTime + startAt + dur);
-      osc.connect(gain);
+      oscillator.connect(gain);
       gain.connect(ctx.destination);
-      osc.start(ctx.currentTime + startAt);
-      osc.stop(ctx.currentTime + startAt + dur + OSC_STOP_MARGIN);
+      oscillator.start(ctx.currentTime + startAt);
+      oscillator.stop(ctx.currentTime + startAt + dur + OSC_STOP_MARGIN);
     },
     [],
   );
-
-  const sounds = useRef<Sounds>({} as Sounds);
 
   useEffect(() => {
     sounds.current = buildSounds(play, tone);
   }, [play, tone]);
 
-  useEffect(() => {
-    const warmUp = (): void => {
-      try {
-        getCtx();
-      } catch {
-        // AudioContext may not be available in all environments
-      }
-    };
-    document.addEventListener('touchstart', warmUp, { once: true });
-    document.addEventListener('click', warmUp, { once: true });
-    return () => {
-      document.removeEventListener('touchstart', warmUp);
-      document.removeEventListener('click', warmUp);
-    };
-  }, [getCtx]);
+  useAudioWarmUp(getCtx);
 
   return sounds;
 }

@@ -3,8 +3,31 @@ import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
 import { RESULT_ROW_ANIM_BASE, RESULT_ROW_ANIM_STEP } from '../data/constants';
+import type { RoundResult } from '../types';
 
 import styles from './ExplorerResultsScreen.module.css';
+
+function renderHistoryRows(explorerHistory: RoundResult[]): React.JSX.Element {
+  return (
+    <div className={styles.historyCard}>
+      {explorerHistory.map((result, index) => (
+        <div
+          className={styles.resultRow}
+          key={`${result.flag.name}-${index}`}
+          style={
+            {
+              '--row-delay': `${RESULT_ROW_ANIM_BASE + index * RESULT_ROW_ANIM_STEP}s`,
+            } as React.CSSProperties
+          }
+        >
+          <span className={styles.flag}>{result.flag.code}</span>
+          <span className={styles.resultName}>{result.flag.name}</span>
+          <span>{result.correct ? '✅' : '❌'}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function ExplorerResultsScreen(): React.JSX.Element {
   const navigate = useNavigate();
@@ -44,25 +67,7 @@ export function ExplorerResultsScreen(): React.JSX.Element {
           <div className={styles.statLabel}>🔥</div>
         </div>
       </div>
-      {explorerHistory.length > 0 && (
-        <div className={styles.historyCard}>
-          {explorerHistory.map((result, i) => (
-            <div
-              className={styles.resultRow}
-              key={i}
-              style={
-                {
-                  '--row-delay': `${RESULT_ROW_ANIM_BASE + i * RESULT_ROW_ANIM_STEP}s`,
-                } as React.CSSProperties
-              }
-            >
-              <span className={styles.flag}>{result.flag.code}</span>
-              <span className={styles.resultName}>{result.flag.name}</span>
-              <span>{result.correct ? '✅' : '❌'}</span>
-            </div>
-          ))}
-        </div>
-      )}
+      {explorerHistory.length > 0 && renderHistoryRows(explorerHistory)}
       <div className={styles.actions}>
         <button
           className={['btn', styles.primaryButton].join(' ')}

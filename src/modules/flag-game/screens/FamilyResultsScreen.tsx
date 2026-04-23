@@ -4,8 +4,52 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import { Podium } from '../components/game/Podium';
 import { RPP } from '../data/constants';
+import type { Player } from '../types';
 
 import styles from './FamilyResultsScreen.module.css';
+
+interface RankedPlayer extends Player {
+  correctAnswers: number;
+  score: number;
+}
+
+function buildRankedPlayers(
+  players: Player[],
+  familyScores: Record<string, number>,
+  familyHistory: Record<string, { correct: boolean }[]>,
+): RankedPlayer[] {
+  return [...players]
+    .map((player) => ({
+      ...player,
+      correctAnswers: (familyHistory[player.id] ?? []).filter((result) => result.correct).length,
+      score: familyScores[player.id] ?? 0,
+    }))
+    .sort((firstPlayer, secondPlayer) => secondPlayer.score - firstPlayer.score);
+}
+
+function renderRankingRows(rankedPlayers: RankedPlayer[]): React.JSX.Element {
+  return (
+    <div className={styles.summaryCard}>
+      {rankedPlayers.map((player, index) => (
+        <div
+          className={styles.rankingRow}
+          key={player.id}
+          style={{ '--player-color': player.color } as React.CSSProperties}
+        >
+          <span className={styles.rankIndex}>#{index + 1}</span>
+          <span className={styles.rankAvatar}>{player.avatar}</span>
+          <div className={styles.rankMeta}>
+            <div className={styles.rankName}>{player.name}</div>
+            <div className={styles.rankStats}>
+              {player.correctAnswers}/{RPP}
+            </div>
+          </div>
+          <span className={styles.rankScore}>{player.score}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function FamilyResultsScreen(): React.JSX.Element {
   const navigate = useNavigate();
@@ -18,10 +62,11 @@ export function FamilyResultsScreen(): React.JSX.Element {
     }
   }
 
-  const sorted = [...players].sort((a, b) => (familyScores[b.id] ?? 0) - (familyScores[a.id] ?? 0));
-  const winner = sorted[0];
-  const topScore = winner ? (familyScores[winner.id] ?? 0) : 0;
-  const isTie = sorted.filter((p) => (familyScores[p.id] ?? 0) === topScore).length > 1;
+  const rankedPlayers = buildRankedPlayers(players, familyScores, familyHistory);
+  const winner = rankedPlayers[0];
+  const topScore = winner?.score ?? 0;
+  const tiedPlayers = rankedPlayers.filter((player) => player.score === topScore);
+  const isTie = tiedPlayers.length > 1;
 
   if (!winner) return <div className={styles.emptyState}>...</div>;
 
@@ -40,29 +85,8 @@ export function FamilyResultsScreen(): React.JSX.Element {
         {isTie ? '¡Empate!' : `¡${winner.name} gana!`}
       </h2>
       <p className={styles.subtitle}>{topScore} pts</p>
-      <Podium sorted={sorted} scores={familyScores} />
-      <div className={styles.summaryCard}>
-        {sorted.map((player, i) => {
-          const correct = (familyHistory[player.id] ?? []).filter((r) => r.correct).length;
-          return (
-            <div
-              className={styles.rankingRow}
-              key={player.id}
-              style={{ '--player-color': player.color } as React.CSSProperties}
-            >
-              <span className={styles.rankIndex}>#{i + 1}</span>
-              <span className={styles.rankAvatar}>{player.avatar}</span>
-              <div className={styles.rankMeta}>
-                <div className={styles.rankName}>{player.name}</div>
-                <div className={styles.rankStats}>
-                  {correct}/{RPP}
-                </div>
-              </div>
-              <span className={styles.rankScore}>{familyScores[player.id] ?? 0}</span>
-            </div>
-          );
-        })}
-      </div>
+      <Podium sorted={rankedPlayers} scores={familyScores} />
+      {renderRankingRows(rankedPlayers)}
       <div className={styles.actions}>
         <button
           className={['btn', styles.primaryButton].join(' ')}

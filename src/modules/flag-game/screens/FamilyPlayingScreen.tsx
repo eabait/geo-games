@@ -1,197 +1,67 @@
 import React from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { useGameStore } from '../store/gameStore';
-import { useSettingsStore } from '../store/settingsStore';
-import { useSoundEngine } from '../hooks/useSoundEngine';
-import { useGameRound } from '../hooks/useGameRound';
-import { useTimer } from '../hooks/useTimer';
-import { useVisualEffects } from '../hooks/useVisualEffects';
-import { Confetti } from '../components/effects/Confetti';
-import { FloatingEmojis } from '../components/effects/FloatingEmojis';
-import { ScreenFlash } from '../components/effects/ScreenFlash';
+import { ClassicPlayingLayout } from '../components/game/ClassicPlayingLayout';
+import { PlayingEffects } from '../components/game/PlayingEffects';
 import { Sparkles } from '../components/effects/Sparkles';
-import { OptionButton } from '../components/OptionButton';
-import {
-  DIFFICULTY,
-  RPP,
-  SCORE_POP_DURATION_MS,
-  TICK_THRESHOLD,
-  TICK_URGENT_THRESHOLD,
-  TIMER_PCT_FULL,
-  STREAK_BONUS_THRESHOLD,
-  STREAK_SOUND_THRESHOLD,
-  DEFAULT_ROUND_SECONDS,
-} from '../data/constants';
-import type { Flag } from '../types';
+import { STREAK_BONUS_THRESHOLD } from '../data/constants';
+import { useFamilyPlayingState } from '../hooks/useFamilyPlayingState';
 
 import styles from './FamilyPlayingScreen.module.css';
 
 export function FamilyPlayingScreen(): React.JSX.Element {
-  const navigate = useNavigate();
-  const { soundOn } = useSettingsStore();
-  const sounds = useSoundEngine(soundOn);
-  const sfx = useCallback(
-    (name: string) => sounds.current[name as keyof typeof sounds.current]?.(),
-    [sounds],
-  );
+  const state = useFamilyPlayingState();
 
-  const { showConfetti, showFloatingEmojis, showScreenFlash, flashCorrect, showSparkles } =
-    useVisualEffects();
-
-  const {
-    currentFlag,
-    options,
-    selected,
-    showHint,
-    players,
-    currentPlayerIdx,
-    playerRound,
-    familyScores,
-    familyStreaks,
-    difficulty,
-    setShowHint,
-  } = useGameStore();
-
-  const diff = DIFFICULTY[difficulty ?? 'easy'];
-  const cp = players[currentPlayerIdx] ?? null;
-
-  const [scorePop, setScorePop] = useState(false);
-  const cpScore = cp ? (familyScores[cp.id] ?? 0) : 0;
-  useEffect(() => {
-    if (cpScore > 0) {
-      setScorePop(true);
-      const timer = setTimeout(() => setScorePop(false), SCORE_POP_DURATION_MS);
-      return () => clearTimeout(timer);
-    }
-  }, [cpScore]);
-
-  const { handleAnswer } = useGameRound(sfx);
-
-  const { timeLeft } = useTimer({
-    seconds: diff?.time ?? DEFAULT_ROUND_SECONDS,
-    active: !!currentFlag && selected === null,
-    onTick: (t) => {
-      if (t <= TICK_THRESHOLD && t > TICK_URGENT_THRESHOLD) sfx('tick');
-      else if (t <= TICK_URGENT_THRESHOLD) sfx('tickUrgent');
-    },
-    onExpire: () => {
-      sfx('timeout');
-      handleAnswer(null);
-    },
-  });
-
-  if (!currentFlag || !cp) return <div className={styles.loadingState}>Cargando...</div>;
-
-  const timerPct = diff ? (timeLeft / diff.time) * TIMER_PCT_FULL : TIMER_PCT_FULL;
-  const cpStreak = familyStreaks[cp.id] ?? 0;
-  const scoreClassName = [styles.scoreValue, scorePop ? styles.scorePop : '']
-    .filter(Boolean)
-    .join(' ');
-  const timerClassName = [
-    styles.timerFill,
-    timeLeft <= TICK_THRESHOLD && !selected ? styles.timerUrgent : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
-  const feedbackClassName = [
-    styles.feedbackPanel,
-    selected?.name === currentFlag.name ? styles.feedbackCorrect : styles.feedbackWrong,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  const onAnswer = (opt: Flag): void => {
-    handleAnswer(opt);
-  };
+  if (!state.currentFlag || !state.currentPlayer) {
+    return <div className={styles.loadingState}>Cargando...</div>;
+  }
 
   return (
     <>
-      <Confetti active={showConfetti} />
-      <FloatingEmojis active={showFloatingEmojis} />
-      <ScreenFlash active={showScreenFlash} correct={flashCorrect} />
-      <div className={styles.screen} style={{ '--accent-color': cp.color } as React.CSSProperties}>
-        <nav className={styles.header}>
-          <div className={styles.headerLeft}>
+      <PlayingEffects {...state.visualEffects} />
+      <ClassicPlayingLayout
+        currentFlag={state.currentFlag}
+        feedbackText={state.feedbackText}
+        headerLeft={
+          <>
             <button
               className={styles.homeButton}
-              onClick={() => navigate('/flag-game')}
+              onClick={() => state.navigate('/flag-game')}
               type="button"
             >
               🏠
             </button>
-            <span className={styles.playerAvatar}>{cp.avatar}</span>
-            <span className={styles.playerName}>{cp.name}</span>
-            <span className={styles.playerRound}>
-              {playerRound + 1}/{RPP}
-            </span>
-          </div>
-          <div className={styles.headerRight}>
-            {cpStreak >= STREAK_BONUS_THRESHOLD && (
-              <span className={styles.streakBadge}>🔥x{cpStreak}</span>
+            <span className={styles.playerAvatar}>{state.currentPlayer.avatar}</span>
+            <span className={styles.playerName}>{state.currentPlayer.name}</span>
+            <span className={styles.playerRound}>{state.playerRoundLabel}</span>
+          </>
+        }
+        headerRight={
+          <>
+            {state.streak >= STREAK_BONUS_THRESHOLD && (
+              <span className={styles.streakBadge}>🔥x{state.streak}</span>
             )}
-            <Sparkles active={showSparkles} />
-            <span className={scoreClassName}>{cpScore}</span>
-          </div>
-        </nav>
-        <div className={styles.timerTrack}>
-          <div
-            className={timerClassName}
-            style={
-              {
-                '--timer-width': `${timerPct}%`,
-                '--timer-color': cp.color,
-              } as React.CSSProperties
-            }
-          />
-        </div>
-        <div className={styles.flagCard}>
-          <div className={styles.flagEmoji}>{currentFlag.code}</div>
-        </div>
-        <div className={styles.continentPill}>{currentFlag.continent}</div>
-        {!showHint && !selected && (
-          <nav className={styles.hintNav}>
-            <button
-              className={styles.hintButton}
-              onClick={() => {
-                sfx('hint');
-                setShowHint(true);
-              }}
-              type="button"
+            <Sparkles active={state.sparklesActive} />
+            <span
+              className={[styles.scoreValue, state.scorePop ? styles.scorePop : '']
+                .filter(Boolean)
+                .join(' ')}
             >
-              💡 Pista (-{diff?.hintCost} pts)
-            </button>
-          </nav>
-        )}
-        {showHint && <p className={styles.hintText}>💡 {currentFlag.hint}</p>}
-        <div className={styles.answerSection}>
-          {options.map((opt, i) => (
-            <OptionButton
-              key={opt.name}
-              opt={opt}
-              index={i}
-              selected={selected}
-              currentFlag={currentFlag}
-              onAnswer={onAnswer}
-            />
-          ))}
-        </div>
-        {selected && (
-          <div className={feedbackClassName}>
-            {selected.name === currentFlag.name
-              ? cpStreak >= STREAK_SOUND_THRESHOLD
-                ? '🔥 ¡Imparable!'
-                : '🎉 ¡Correcto!'
-              : `❌ Era ${currentFlag.name}`}
-          </div>
-        )}
-        {!selected && timeLeft === 0 && (
-          <div className={[styles.feedbackPanel, styles.feedbackWrong].join(' ')}>
-            ⏱️ ¡Tiempo! Era {currentFlag.name}
-          </div>
-        )}
-      </div>
+              {state.currentPlayerScore}
+            </span>
+          </>
+        }
+        hintLabel={state.hintLabel}
+        onAnswer={state.onAnswer}
+        onRevealHint={state.onRevealHint}
+        options={state.options}
+        rootStyle={{ '--accent-color': state.currentPlayer.color } as React.CSSProperties}
+        selected={state.selected}
+        showHint={state.showHint}
+        styles={styles}
+        timerColor={state.currentPlayer.color}
+        timerPct={state.timerPct}
+        timerUrgent={state.timerUrgent}
+      />
     </>
   );
 }

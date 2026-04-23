@@ -81,38 +81,52 @@ const initial = {
   explorerBestStreak: 0,
 };
 
-export const useGameStore = create<GameStore>()(
-  immer((set) => ({
-    ...initial,
+function resetState(state: typeof initial): void {
+  Object.assign(state, initial);
+}
 
+function initializeFamilyPlayers(state: typeof initial, players: Player[]): void {
+  state.players = players;
+  players.forEach((player) => {
+    state.familyScores[player.id] = 0;
+    state.familyHistory[player.id] = [];
+    state.familyStreaks[player.id] = 0;
+  });
+}
+
+function createStartActions(
+  set: (recipe: (state: typeof initial) => void) => void,
+): Pick<GameStore, 'startExplorer' | 'startFamily' | 'startSolo'> {
+  return {
     startSolo: (difficulty) =>
       set((state) => {
-        Object.assign(state, initial);
+        resetState(state);
         state.mode = 'solo';
         state.difficulty = difficulty;
       }),
 
     startFamily: (difficulty, players) =>
       set((state) => {
-        Object.assign(state, initial);
+        resetState(state);
         state.mode = 'family';
         state.difficulty = difficulty;
-        state.players = players;
-        players.forEach((player) => {
-          state.familyScores[player.id] = 0;
-          state.familyHistory[player.id] = [];
-          state.familyStreaks[player.id] = 0;
-        });
+        initializeFamilyPlayers(state, players);
       }),
 
     startExplorer: (difficulty) =>
       set((state) => {
-        Object.assign(state, initial);
+        resetState(state);
         state.mode = 'explorer';
         state.difficulty = difficulty;
         state.explorerTime = EXPLORER_INITIAL_TIME;
       }),
+  };
+}
 
+function createRoundActions(
+  set: (recipe: (state: typeof initial) => void) => void,
+): Pick<GameStore, 'advancePlayerTurn' | 'recordAnswer' | 'recordExplorerAnswer' | 'setRoundData'> {
+  return {
     setRoundData: (flag, options) =>
       set((state) => {
         state.currentFlag = flag;
@@ -122,7 +136,7 @@ export const useGameStore = create<GameStore>()(
         state.usedFlags.push(flag.name);
       }),
 
-    recordAnswer: (flag: Flag | null, correct, points) =>
+    recordAnswer: (flag, correct, points) =>
       set((state) => {
         state.selected = flag;
         state.roundHistory.push({ flag: state.currentFlag!, correct });
@@ -156,7 +170,13 @@ export const useGameStore = create<GameStore>()(
         state.playerRound = 0;
         state.currentFlag = null;
       }),
+  };
+}
 
+function createUtilityActions(
+  set: (recipe: (state: typeof initial) => void) => void,
+): Pick<GameStore, 'reset' | 'setShowHint' | 'tickExplorerTime'> {
+  return {
     setShowHint: (show) =>
       set((state) => {
         state.showHint = show;
@@ -169,7 +189,24 @@ export const useGameStore = create<GameStore>()(
 
     reset: () =>
       set((state) => {
-        Object.assign(state, initial);
+        resetState(state);
       }),
+  };
+}
+
+function createActions(
+  set: (recipe: (state: typeof initial) => void) => void,
+): Omit<GameStore, keyof typeof initial> {
+  return {
+    ...createStartActions(set),
+    ...createRoundActions(set),
+    ...createUtilityActions(set),
+  };
+}
+
+export const useGameStore = create<GameStore>()(
+  immer((set) => ({
+    ...initial,
+    ...createActions(set),
   })),
 );

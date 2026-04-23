@@ -11,6 +11,91 @@ import styles from './FamilySetupScreen.module.css';
 
 import type { DifficultyKey } from '@/shared/types';
 
+type DifficultyEntry = [DifficultyKey, (typeof DIFFICULTY)[DifficultyKey]];
+
+const difficultyOptions = Object.entries(DIFFICULTY) as DifficultyEntry[];
+
+function getFilledNames(playerNames: string[]): string[] {
+  return playerNames.filter((playerName) => playerName.trim());
+}
+
+function buildPlayers(names: string[]): Player[] {
+  return names.map((name, index) => ({
+    id: `player-${index}`,
+    name,
+    color: PCOLORS[index % PCOLORS.length],
+    avatar: PAVATARS[index % PAVATARS.length],
+  }));
+}
+
+function replacePlayerName(
+  playerNames: string[],
+  playerIndex: number,
+  nextValue: string,
+): string[] {
+  return playerNames.map((playerName, index) => (index === playerIndex ? nextValue : playerName));
+}
+
+function renderDifficultyButtons(
+  difficulty: DifficultyKey,
+  setDifficulty: (difficulty: DifficultyKey) => void,
+): React.JSX.Element {
+  return (
+    <div className={styles.difficultyGrid}>
+      {difficultyOptions.map(([key, config]) => (
+        <button
+          className={[
+            styles.difficultyButton,
+            difficulty === key ? styles.difficultyButtonSelected : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+          key={key}
+          onClick={() => setDifficulty(key)}
+          type="button"
+        >
+          {config.emoji} {config.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function renderPlayerInputs(
+  addPlayer: () => void,
+  playerNames: string[],
+  setPlayerNames: React.Dispatch<React.SetStateAction<string[]>>,
+): React.JSX.Element {
+  return (
+    <>
+      {playerNames.map((name, idx) => (
+        <PlayerInput
+          key={idx}
+          index={idx}
+          value={name}
+          avatar={PAVATARS[idx % PAVATARS.length]}
+          isLast={idx === playerNames.length - 1}
+          showRemove={playerNames.length > MIN_PLAYERS}
+          onChange={(nextValue) =>
+            setPlayerNames((previousNames) => replacePlayerName(previousNames, idx, nextValue))
+          }
+          onRemove={() => setPlayerNames((prev) => prev.filter((_, i) => i !== idx))}
+          onEnter={addPlayer}
+        />
+      ))}
+      {playerNames.length < MAX_PLAYERS && (
+        <button
+          className={styles.addPlayerButton}
+          onClick={() => setPlayerNames((prev) => [...prev, ''])}
+          type="button"
+        >
+          + Agregar jugador
+        </button>
+      )}
+    </>
+  );
+}
+
 export function FamilySetupScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { startFamily } = useGameStore();
@@ -27,19 +112,14 @@ export function FamilySetupScreen(): React.JSX.Element {
   }
 
   function handleStart(): void {
-    const filled = playerNames.filter((n) => n.trim());
-    if (filled.length < MIN_PLAYERS) return;
-    const players: Player[] = filled.map((name, i) => ({
-      id: `player-${i}`,
-      name,
-      color: PCOLORS[i % PCOLORS.length],
-      avatar: PAVATARS[i % PAVATARS.length],
-    }));
+    const filledNames = getFilledNames(playerNames);
+    if (filledNames.length < MIN_PLAYERS) return;
+    const players = buildPlayers(filledNames);
     startFamily(difficulty, players);
     navigate('/flag-game/family/pass');
   }
 
-  const filledNames = playerNames.filter((n) => n.trim());
+  const filledNames = getFilledNames(playerNames);
   const canStart = filledNames.length >= MIN_PLAYERS;
 
   return (
@@ -50,51 +130,12 @@ export function FamilySetupScreen(): React.JSX.Element {
 
       <div className={styles.section}>
         <p className={styles.sectionLabel}>Dificultad</p>
-        <div className={styles.difficultyGrid}>
-          {(Object.entries(DIFFICULTY) as [DifficultyKey, (typeof DIFFICULTY)[string]][]).map(
-            ([key, cfg]) => (
-              <button
-                className={[
-                  styles.difficultyButton,
-                  difficulty === key ? styles.difficultyButtonSelected : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                key={key}
-                onClick={() => setDifficulty(key)}
-                type="button"
-              >
-                {cfg.emoji} {cfg.label}
-              </button>
-            ),
-          )}
-        </div>
+        {renderDifficultyButtons(difficulty, setDifficulty)}
       </div>
 
       <div className={styles.section}>
         <p className={styles.sectionLabel}>Jugadores (mínimo 2)</p>
-        {playerNames.map((name, idx) => (
-          <PlayerInput
-            key={idx}
-            index={idx}
-            value={name}
-            avatar={PAVATARS[idx % PAVATARS.length]}
-            isLast={idx === playerNames.length - 1}
-            showRemove={playerNames.length > MIN_PLAYERS}
-            onChange={(val) => setPlayerNames((prev) => prev.map((n, i) => (i === idx ? val : n)))}
-            onRemove={() => setPlayerNames((prev) => prev.filter((_, i) => i !== idx))}
-            onEnter={addPlayer}
-          />
-        ))}
-        {playerNames.length < MAX_PLAYERS && (
-          <button
-            className={styles.addPlayerButton}
-            onClick={() => setPlayerNames((prev) => [...prev, ''])}
-            type="button"
-          >
-            + Agregar jugador
-          </button>
-        )}
+        {renderPlayerInputs(addPlayer, playerNames, setPlayerNames)}
       </div>
 
       <button
