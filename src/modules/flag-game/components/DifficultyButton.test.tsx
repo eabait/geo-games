@@ -58,4 +58,17 @@ describe('DifficultyButton', () => {
     await userEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  it('passes the animation delay through a CSS custom property', () => {
+    render(
+      <DifficultyButton
+        emoji="😊"
+        label="Fácil"
+        description="3 opciones · 20s"
+        delay={0.1}
+        onClick={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole('button')).toHaveStyle({ '--item-delay': '0.1s' });
+  });
 });

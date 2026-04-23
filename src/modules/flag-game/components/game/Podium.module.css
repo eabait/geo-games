@@ -1,0 +1,52 @@
+.root {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--player-color);
+  animation: slideUp 0.6s ease var(--slide-delay) both;
+}
+
+.avatar {
+  font-size: 30px;
+  margin-bottom: 4px;
+}
+
+.name {
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--player-color);
+}
+
+.block {
+  width: var(--block-width);
+  height: var(--block-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 14px 14px 0 0;
+  background: linear-gradient(180deg, var(--block-background-start), var(--block-background-end));
+  border: 1.5px solid var(--block-border-color);
+  transform-origin: bottom;
+  animation: podiumRise 0.6s ease var(--rise-delay) both;
+}
+
+.medal {
+  font-size: 26px;
+}
+
+.score {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--player-color);
+}

@@ -1,0 +1,18 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 200;
+}
+
+.piece {
+  position: absolute;
+  top: 40%;
+  width: var(--piece-width);
+  height: var(--piece-height);
+  border-radius: 2px;
+  background: var(--piece-color);
+  opacity: 0;
+  animation: confettiFall var(--fall-duration) ease-out var(--fall-delay) forwards;
+}

@@ -1,0 +1,15 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 200;
+}
+
+.emoji {
+  position: absolute;
+  bottom: -10%;
+  font-size: var(--emoji-size);
+  opacity: 0;
+  animation: emojiFloat var(--float-duration) ease-out var(--float-delay) forwards;
+}

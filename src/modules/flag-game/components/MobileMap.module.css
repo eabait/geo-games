@@ -1,0 +1,56 @@
+.root {
+  width: 100%;
+}
+
+.map {
+  display: block;
+  width: 100%;
+  background: transparent;
+}
+
+.polygon {
+  fill: none;
+  stroke: #334155;
+  stroke-width: 0.5;
+  opacity: 0.6;
+}
+
+.dot {
+  fill: var(--color-accent);
+  filter: drop-shadow(0 0 4px var(--color-accent));
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+.optionButton {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(30, 41, 59, 0.8);
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.optionButton:disabled {
+  cursor: default;
+}
+
+.correct {
+  border-color: #22c55e;
+  background: rgba(22, 163, 74, 0.2);
+  color: #4ade80;
+}
+
+.wrong {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}

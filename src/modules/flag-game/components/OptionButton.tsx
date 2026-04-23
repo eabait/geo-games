@@ -8,6 +8,8 @@ import {
 } from '../data/constants';
 import type { Flag } from '../types';
 
+import styles from './OptionButton.module.css';
+
 interface OptionButtonProps {
   opt: Flag;
   index: number;
@@ -15,13 +17,6 @@ interface OptionButtonProps {
   currentFlag: Flag;
   onAnswer: (opt: Flag) => void;
 }
-
-const CARD = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 20,
-};
 
 export function OptionButton({
   opt,
@@ -32,65 +27,37 @@ export function OptionButton({
 }: OptionButtonProps): React.JSX.Element {
   const isCorrect = opt.name === currentFlag.name;
   const isSel = selected?.name === opt.name;
-  const bg = selected
+  const stateClassName = selected
     ? isCorrect
-      ? 'rgba(34,197,94,.18)'
+      ? styles.correct
       : isSel
-        ? 'rgba(239,68,68,.18)'
-        : 'rgba(255,255,255,.06)'
-    : 'rgba(255,255,255,.06)';
-  const bc = selected
-    ? isCorrect
-      ? '#22c55e'
-      : isSel
-        ? '#ef4444'
-        : 'rgba(255,255,255,.1)'
-    : 'rgba(255,255,255,.1)';
+        ? styles.wrong
+        : styles.dimmed
+    : '';
+  const buttonClassName = ['btn', styles.button, stateClassName].filter(Boolean).join(' ');
+  const badgeClassName = [
+    styles.badge,
+    selected && isCorrect ? styles.badgeCorrect : '',
+    selected && isSel && !isCorrect ? styles.badgeWrong : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <button
-      className="btn"
+      className={buttonClassName}
+      data-state={selected ? (isCorrect ? 'correct' : isSel ? 'wrong' : 'dimmed') : 'default'}
       onClick={() => onAnswer(opt)}
       disabled={selected !== null}
-      style={{
-        ...CARD,
-        background: bg,
-        border: `1.5px solid ${bc}`,
-        padding: '14px 20px',
-        color: '#f1f5f9',
-        fontSize: 16,
-        fontWeight: 600,
-        fontFamily: "'Nunito', sans-serif",
-        cursor: selected ? 'default' : 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 12,
-        animation: `optionEnter .4s ease ${OPTION_ANIM_BASE_DELAY + index * OPTION_ANIM_STEP_DELAY}s both`,
-        opacity: selected && !isCorrect && !isSel ? OPTION_FADE_OPACITY : 1,
-        transition: 'opacity .4s',
-      }}
+      style={
+        {
+          '--item-delay': `${OPTION_ANIM_BASE_DELAY + index * OPTION_ANIM_STEP_DELAY}s`,
+          '--option-fade-opacity': OPTION_FADE_OPACITY,
+        } as React.CSSProperties
+      }
+      type="button"
     >
-      <span
-        style={{
-          width: 28,
-          height: 28,
-          borderRadius: '50%',
-          background:
-            selected && isCorrect
-              ? '#22c55e'
-              : selected && isSel
-                ? '#ef4444'
-                : 'rgba(255,255,255,.08)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 14,
-          flexShrink: 0,
-          color: '#fff',
-          transition: 'all .3s',
-          transform: selected && (isCorrect || isSel) ? 'scale(1.2)' : 'scale(1)',
-        }}
-      >
+      <span className={badgeClassName}>
         {selected && isCorrect
           ? '✓'
           : selected && isSel && !isCorrect

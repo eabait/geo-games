@@ -20,10 +20,12 @@ describe('ContinentPicker', () => {
     expect(onChange).toHaveBeenCalledWith('Europa');
   });
 
-  it('gives the selected chip a distinct border color', () => {
+  it('marks the selected chip with aria-pressed', () => {
     render(<ContinentPicker selected="Europa" onChange={vi.fn()} />);
     const europaBtn = screen.getByRole('button', { name: /europa/i });
-    // Selected chip uses amber (#fbbf24); unselected chips use rgba(255,255,255,0.1)
-    expect(europaBtn).toHaveStyle({ borderColor: '#fbbf24' });
+    const asiaBtn = screen.getByRole('button', { name: /asia/i });
+
+    expect(europaBtn).toHaveAttribute('aria-pressed', 'true');
+    expect(asiaBtn).toHaveAttribute('aria-pressed', 'false');
   });
 });

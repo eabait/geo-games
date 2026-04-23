@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.avatar {
+  font-size: 20px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  font-size: 18px;
+}

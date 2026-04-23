@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './DifficultyButton.module.css';
+
 interface DifficultyButtonProps {
   emoji: string;
   label: string;
@@ -8,14 +10,6 @@ interface DifficultyButtonProps {
   onClick: () => void;
 }
 
-const ACCENT = '#fbbf24';
-const CARD = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 20,
-};
-
 export function DifficultyButton({
   emoji,
   label,
@@ -23,29 +17,21 @@ export function DifficultyButton({
   delay,
   onClick,
 }: DifficultyButtonProps): React.JSX.Element {
+  const className = ['btn', styles.button].join(' ');
+
   return (
     <button
-      className="btn"
+      className={className}
       onClick={onClick}
-      style={{
-        ...CARD,
-        padding: '18px 22px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 14,
-        color: '#f1f5f9',
-        fontSize: 16,
-        fontWeight: 700,
-        fontFamily: "'Nunito', sans-serif",
-        animation: `menuItem .6s ease ${delay}s both`,
-      }}
+      style={{ '--item-delay': `${delay}s` } as React.CSSProperties}
+      type="button"
     >
-      <span style={{ fontSize: 32 }}>{emoji}</span>
-      <div style={{ textAlign: 'left', flex: 1 }}>
+      <span className={styles.emoji}>{emoji}</span>
+      <div className={styles.content}>
         <div>{label}</div>
-        <div style={{ fontSize: 11, color: '#64748b', fontWeight: 400 }}>{description}</div>
+        <div className={styles.description}>{description}</div>
       </div>
-      <span style={{ color: ACCENT, fontSize: 18 }}>→</span>
+      <span className={styles.arrow}>→</span>
     </button>
   );
 }

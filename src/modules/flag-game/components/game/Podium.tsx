@@ -12,6 +12,8 @@ import {
 } from '../../data/constants';
 import type { Player } from '../../types';
 
+import styles from './Podium.module.css';
+
 interface PodiumProps {
   sorted: Player[];
   scores: Record<string, number>;
@@ -25,48 +27,35 @@ export function Podium({ sorted, scores }: PodiumProps): React.JSX.Element {
   const podium = [second, first, third].filter(Boolean) as Player[];
 
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, marginBottom: 28 }}>
+    <div className={styles.root}>
       {podium.map((player, idx) => (
         <div
+          className={styles.item}
           key={player.id}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            animation: `slideUp .6s ease ${PODIUM_SLIDE_BASE + idx * PODIUM_SLIDE_STEP}s both`,
-          }}
+          style={
+            {
+              '--player-color': player.color,
+              '--slide-delay': `${PODIUM_SLIDE_BASE + idx * PODIUM_SLIDE_STEP}s`,
+            } as React.CSSProperties
+          }
         >
-          <span style={{ fontSize: 30, marginBottom: 4 }}>{player.avatar}</span>
-          <span style={{ fontSize: 13, fontWeight: 700, color: player.color, marginBottom: 4 }}>
-            {player.name}
-          </span>
+          <span className={styles.avatar}>{player.avatar}</span>
+          <span className={styles.name}>{player.name}</span>
           <div
-            style={{
-              width: PODIUM_BLOCK_WIDTH,
-              height: HEIGHTS[idx],
-              borderRadius: '14px 14px 0 0',
-              background: `linear-gradient(180deg,${player.color}44,${player.color}11)`,
-              border: `1.5px solid ${player.color}55`,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 4,
-              animation: `podiumRise .6s ease ${PODIUM_RISE_BASE + idx * PODIUM_RISE_STEP}s both`,
-              transformOrigin: 'bottom',
-            }}
+            className={styles.block}
+            style={
+              {
+                '--block-width': `${PODIUM_BLOCK_WIDTH}px`,
+                '--block-height': `${HEIGHTS[idx]}px`,
+                '--block-background-start': `${player.color}44`,
+                '--block-background-end': `${player.color}11`,
+                '--block-border-color': `${player.color}55`,
+                '--rise-delay': `${PODIUM_RISE_BASE + idx * PODIUM_RISE_STEP}s`,
+              } as React.CSSProperties
+            }
           >
-            <span style={{ fontSize: 26 }}>{MEDALS[idx]}</span>
-            <span
-              style={{
-                fontFamily: "'Fredoka', sans-serif",
-                fontSize: 20,
-                fontWeight: 700,
-                color: player.color,
-              }}
-            >
-              {scores[player.id] ?? 0}
-            </span>
+            <span className={styles.medal}>{MEDALS[idx]}</span>
+            <span className={styles.score}>{scores[player.id] ?? 0}</span>
           </div>
         </div>
       ))}

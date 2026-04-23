@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './Sparkles.module.css';
+
 interface SparklesProps {
   active: boolean;
 }
@@ -16,30 +18,21 @@ const SPARKLE_DELAY_RANGE = 0.4;
 export function Sparkles({ active }: SparklesProps): React.JSX.Element | null {
   if (!active) return null;
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 210,
-        overflow: 'hidden',
-      }}
-    >
+    <div className={styles.overlay}>
       {Array.from({ length: SPARKLE_COUNT }, (_, i) => (
         <div
+          className={styles.sparkle}
           key={i}
-          style={{
-            position: 'absolute',
-            top: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
-            left: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
-            width: SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE,
-            height: SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE,
-            borderRadius: '50%',
-            background: '#fbbf24',
-            boxShadow: '0 0 6px 2px #fbbf24',
-            animation: `sparkle ${SPARKLE_MIN_DURATION + Math.random() * SPARKLE_DURATION_RANGE}s ease-out ${Math.random() * SPARKLE_DELAY_RANGE}s forwards`,
-            opacity: 0,
-          }}
+          style={
+            {
+              '--angle': `${Math.random() * 360}deg`,
+              '--sparkle-size': `${SPARKLE_MIN_SIZE + Math.random() * SPARKLE_SIZE_RANGE}px`,
+              '--sparkle-duration': `${SPARKLE_MIN_DURATION + Math.random() * SPARKLE_DURATION_RANGE}s`,
+              '--sparkle-delay': `${Math.random() * SPARKLE_DELAY_RANGE}s`,
+              top: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
+              left: `${Math.random() * SPARKLE_AREA_RANGE + SPARKLE_AREA_OFFSET}%`,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>

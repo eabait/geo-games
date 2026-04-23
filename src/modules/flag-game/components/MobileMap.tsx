@@ -4,6 +4,8 @@ import { useMemo } from 'react';
 import { WORLD_SHAPES } from '../data/worldShapes';
 import type { Flag } from '../types';
 
+import styles from './MobileMap.module.css';
+
 interface MobileMapProps {
   options: Flag[];
   correctName: string;
@@ -37,77 +39,45 @@ export function MobileMap({
   const answered = selected !== null;
 
   return (
-    <div>
-      <svg
-        viewBox="0 0 360 180"
-        style={{ width: '100%', display: 'block', background: 'transparent' }}
-        aria-hidden="true"
-      >
+    <div className={styles.root}>
+      <svg viewBox="0 0 360 180" className={styles.map} aria-hidden="true">
         {polygonPoints.map((points, i) => (
-          <polygon
-            key={i}
-            points={points}
-            fill="none"
-            stroke="#334155"
-            strokeWidth="0.5"
-            opacity="0.6"
-          />
+          <polygon key={i} points={points} className={styles.polygon} />
         ))}
         {dotX !== null && dotY !== null && (
-          <circle
-            cx={dotX}
-            cy={dotY}
-            r="3"
-            fill="#fbbf24"
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-          />
+          <circle cx={dotX} cy={dotY} r="3" className={styles.dot} />
         )}
       </svg>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 6,
-          padding: '0 4px',
-        }}
-      >
+      <div className={styles.optionsGrid}>
         {options.map((flag) => {
           const isCorrect = flag.name === correctName;
           const isWrongSelection = answered && selected.name === flag.name && !isCorrect;
-
-          let borderColor = 'rgba(255,255,255,0.08)';
-          let color = '#cbd5e1';
-          let background = 'rgba(30,41,59,0.8)';
-
-          if (answered) {
-            if (isCorrect) {
-              borderColor = '#22c55e';
-              color = '#4ade80';
-              background = 'rgba(22,163,74,0.2)';
-            } else if (isWrongSelection) {
-              borderColor = '#ef4444';
-              color = '#f87171';
-              background = 'rgba(239,68,68,0.15)';
-            }
-          }
+          const stateClassName = answered
+            ? isCorrect
+              ? styles.correct
+              : isWrongSelection
+                ? styles.wrong
+                : ''
+            : '';
+          const className = [styles.optionButton, stateClassName].filter(Boolean).join(' ');
 
           return (
             <button
               key={flag.name}
+              className={className}
+              data-state={
+                answered
+                  ? isCorrect
+                    ? 'correct'
+                    : isWrongSelection
+                      ? 'wrong'
+                      : 'default'
+                  : 'default'
+              }
               disabled={answered}
               onClick={() => onSelect(flag)}
-              style={{
-                border: `1.5px solid ${borderColor}`,
-                borderRadius: 10,
-                padding: '10px',
-                color,
-                background,
-                fontSize: 13,
-                fontWeight: 600,
-                cursor: answered ? 'default' : 'pointer',
-                fontFamily: "'Nunito', sans-serif",
-              }}
+              type="button"
             >
               {flag.name}
             </button>

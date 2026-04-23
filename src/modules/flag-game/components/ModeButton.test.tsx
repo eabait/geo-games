@@ -26,4 +26,9 @@ describe('ModeButton', () => {
     await userEvent.click(screen.getByRole('button'));
     expect(onClick).toHaveBeenCalledOnce();
   });
+
+  it('passes the animation delay through a CSS custom property', () => {
+    render(<ModeButton icon="🎮" label="Solo" sub="10 rounds" delay={0.1} onClick={vi.fn()} />);
+    expect(screen.getByRole('button')).toHaveStyle({ '--item-delay': '0.1s' });
+  });
 });
