@@ -1,0 +1,19 @@
+:root {
+  --color-bg: #0f172a;
+  --color-bg-mid: #1e293b;
+  --color-text: #f1f5f9;
+  --color-text-muted: #94a3b8;
+  --color-text-dim: #64748b;
+  --color-accent: #fbbf24;
+
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --card-radius: 20px;
+  --card-blur: 12px;
+
+  --font-body: 'Nunito', sans-serif;
+  --font-display: 'Fredoka', sans-serif;
+
+  --z-overlay: 50;
+  --z-fixed: 100;
+}

@@ -1,0 +1,29 @@
+@import './tokens.css';
+@import './animations.css';
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg) 0%,
+    var(--color-bg-mid) 50%,
+    var(--color-bg) 100%
+  );
+  color: var(--color-text);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+* {
+  box-sizing: border-box;
+}
