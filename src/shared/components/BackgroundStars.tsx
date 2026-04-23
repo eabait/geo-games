@@ -1,6 +1,8 @@
 import React from 'react';
 import { useMemo } from 'react';
 
+import styles from '@/shared/components/BackgroundStars.module.css';
+
 const STAR_COUNT = 80;
 
 interface Star {
@@ -27,28 +29,21 @@ export function BackgroundStars(): React.JSX.Element {
   );
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        pointerEvents: 'none',
-        zIndex: 0,
-        overflow: 'hidden',
-      }}
-    >
+    <div className={styles.stars}>
       {stars.map((s) => (
         <div
           key={s.id}
-          style={{
-            position: 'absolute',
-            top: s.top,
-            left: s.left,
-            width: s.size,
-            height: s.size,
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.8)',
-            animation: `twinkle ${s.duration} ease-in-out ${s.delay} infinite`,
-          }}
+          className={styles.star}
+          style={
+            {
+              top: s.top,
+              left: s.left,
+              width: `${s.size}px`,
+              height: `${s.size}px`,
+              '--star-duration': s.duration,
+              '--star-delay': s.delay,
+            } as React.CSSProperties
+          }
         />
       ))}
     </div>

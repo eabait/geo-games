@@ -1,0 +1,14 @@
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  animation: twinkle var(--star-duration) ease-in-out var(--star-delay) infinite;
+}
