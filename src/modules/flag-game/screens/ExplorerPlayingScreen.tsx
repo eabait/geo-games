@@ -21,13 +21,7 @@ import { FLAGS } from '../data/flags';
 import { shuffle, pickRandom } from '../data/utils';
 import type { Flag } from '../types';
 
-const ACCENT = '#fbbf24';
-const CARD = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(12px)',
-  border: '1px solid rgba(255,255,255,0.1)',
-  borderRadius: 20,
-};
+import styles from './ExplorerPlayingScreen.module.css';
 
 export function ExplorerPlayingScreen(): React.JSX.Element {
   const navigate = useNavigate();
@@ -108,141 +102,80 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
     [selected, currentFlag, sfx, explorerStreak, recordExplorerAnswer],
   );
 
-  if (!currentFlag)
-    return <div style={{ color: '#fff', padding: 40, textAlign: 'center' }}>Cargando...</div>;
+  if (!currentFlag) return <div className={styles.loadingState}>Cargando...</div>;
+
+  const timerColor =
+    explorerTime <= EXPLORER_TIMER_RED
+      ? '#ef4444'
+      : explorerTime <= EXPLORER_TIMER_YELLOW
+        ? '#eab308'
+        : '#fbbf24';
+  const timerClassName = [
+    styles.timerValue,
+    explorerTime <= EXPLORER_TIMER_RED ? styles.timerCritical : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const feedbackClassName = [
+    styles.feedbackPanel,
+    selected?.name === currentFlag.name ? styles.feedbackCorrect : styles.feedbackWrong,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <>
       <Confetti active={showConfetti} />
       <FloatingEmojis active={showFloatingEmojis} />
       <ScreenFlash active={showScreenFlash} correct={flashCorrect} />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '14px 12px',
-          minHeight: '100vh',
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        {/* Header */}
-        <nav
-          style={{
-            width: '100%',
-            maxWidth: 420,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 6,
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <div className={styles.screen}>
+        <nav className={styles.header}>
+          <div className={styles.headerLeft}>
             <button
+              className={styles.homeButton}
               onClick={() => navigate('/flag-game')}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#64748b',
-                fontSize: 18,
-                cursor: 'pointer',
-                padding: '4px',
-                marginRight: 4,
-              }}
+              type="button"
             >
               🏠
             </button>
             {explorerStreak >= EXPLORER_STREAK_THRESHOLD && (
-              <span
-                style={{
-                  fontSize: 12,
-                  color: '#f97316',
-                  fontWeight: 700,
-                  animation: 'pulse 1s infinite',
-                }}
-              >
-                🔥x{explorerStreak}
-              </span>
+              <span className={styles.streakBadge}>🔥x{explorerStreak}</span>
             )}
-            <span style={{ fontSize: 13, color: '#94a3b8' }}>{explorerCorrect} acertadas</span>
+            <span className={styles.correctCount}>{explorerCorrect} acertadas</span>
           </div>
-          <div
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              borderRadius: 12,
-              padding: '4px 14px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 4,
-            }}
-          >
-            <span style={{ fontSize: 14 }}>⏱️</span>
+          <div className={styles.timerPill}>
+            <span className={styles.timerIcon}>⏱️</span>
             <span
-              style={{
-                fontFamily: "'Fredoka', sans-serif",
-                fontSize: 22,
-                fontWeight: 700,
-                color:
-                  explorerTime <= EXPLORER_TIMER_RED
-                    ? '#ef4444'
-                    : explorerTime <= EXPLORER_TIMER_YELLOW
-                      ? '#eab308'
-                      : ACCENT,
-                animation: explorerTime <= EXPLORER_TIMER_RED ? 'pulse .5s infinite' : 'none',
-              }}
+              className={timerClassName}
+              style={{ '--timer-color': timerColor } as React.CSSProperties}
             >
               {explorerTime}s
             </span>
           </div>
         </nav>
-        {/* Flag */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            marginBottom: 6,
-            animation: 'flagEnter .5s cubic-bezier(.34,1.56,.64,1) both',
-          }}
-        >
-          <span style={{ fontSize: 50, lineHeight: 1 }}>{currentFlag.code}</span>
+        <div className={styles.flagPrompt}>
+          <span className={styles.flagEmoji}>{currentFlag.code}</span>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 700 }}>¿Dónde queda?</div>
-            <div style={{ fontSize: 12, color: '#64748b' }}>{currentFlag.continent}</div>
+            <div className={styles.promptTitle}>¿Dónde queda?</div>
+            <div className={styles.promptContinent}>{currentFlag.continent}</div>
           </div>
         </div>
-        {/* Hint */}
         {!showHint && selected === null && (
-          <nav>
+          <nav className={styles.hintNav}>
             <button
+              className={styles.hintButton}
               onClick={() => {
                 sfx('hint');
                 setShowHint(true);
               }}
-              style={{
-                background: 'none',
-                border: '1px solid rgba(255,255,255,.1)',
-                color: '#94a3b8',
-                padding: '3px 12px',
-                borderRadius: 10,
-                fontSize: 12,
-                cursor: 'pointer',
-                marginBottom: 4,
-                fontFamily: "'Nunito', sans-serif",
-              }}
+              type="button"
             >
               💡 Pista
             </button>
           </nav>
         )}
-        {showHint && (
-          <div style={{ fontSize: 12, color: ACCENT, marginBottom: 4, fontStyle: 'italic' }}>
-            💡 {currentFlag.hint}
-          </div>
-        )}
-        {/* Map */}
-        <div style={{ width: '100%', maxWidth: 420, marginBottom: 6 }}>
+        {showHint && <p className={styles.hintText}>💡 {currentFlag.hint}</p>}
+        <div className={styles.mapWrap}>
           <MobileMap
             options={options}
             correctName={currentFlag.name}
@@ -251,65 +184,26 @@ export function ExplorerPlayingScreen(): React.JSX.Element {
           />
         </div>
         {selected !== null && (
-          <div
-            style={{
-              fontSize: 14,
-              fontWeight: 700,
-              animation: 'popIn .3s ease',
-              color: selected?.name === currentFlag.name ? '#22c55e' : '#ef4444',
-            }}
-          >
-            {selected?.name === currentFlag.name ? '🎉 ¡Correcto! +3s' : `❌ ${currentFlag.name}`}
+          <div className={feedbackClassName}>
+            {selected.name === currentFlag.name ? '🎉 ¡Correcto! +3s' : `❌ ${currentFlag.name}`}
           </div>
         )}
-        {/* Stats bar */}
-        <div
-          style={{
-            ...CARD,
-            padding: '8px 20px',
-            marginTop: 4,
-            width: '100%',
-            maxWidth: 420,
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}
-        >
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 10, color: '#64748b' }}>Puntos</div>
-            <div
-              style={{
-                fontFamily: "'Fredoka', sans-serif",
-                fontSize: 18,
-                fontWeight: 700,
-                color: ACCENT,
-              }}
-            >
+        <div className={styles.statsCard}>
+          <div className={styles.statsItem}>
+            <div className={styles.statsLabel}>Puntos</div>
+            <div className={[styles.statsValue, styles.statsValueScore].join(' ')}>
               {explorerScore}
             </div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 10, color: '#64748b' }}>Aciertos</div>
-            <div
-              style={{
-                fontFamily: "'Fredoka', sans-serif",
-                fontSize: 18,
-                fontWeight: 700,
-                color: '#22c55e',
-              }}
-            >
+          <div className={styles.statsItem}>
+            <div className={styles.statsLabel}>Aciertos</div>
+            <div className={[styles.statsValue, styles.statsValueCorrect].join(' ')}>
               {explorerCorrect}/{explorerTotal}
             </div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: 10, color: '#64748b' }}>Racha</div>
-            <div
-              style={{
-                fontFamily: "'Fredoka', sans-serif",
-                fontSize: 18,
-                fontWeight: 700,
-                color: '#f97316',
-              }}
-            >
+          <div className={styles.statsItem}>
+            <div className={styles.statsLabel}>Racha</div>
+            <div className={[styles.statsValue, styles.statsValueStreak].join(' ')}>
               🔥{explorerBestStreak}
             </div>
           </div>
