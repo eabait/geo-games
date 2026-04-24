@@ -83,3 +83,178 @@ describe('gameStore — explorer mode', () => {
     expect(useGameStore.getState().explorerTime).toBeGreaterThan(timeBefore);
   });
 });
+
+const duelPlayers = [
+  { id: 'p1', name: 'Ana', color: '#f97316', avatar: '🦁' },
+  { id: 'p2', name: 'Bob', color: '#3b82f6', avatar: '🐯' },
+];
+const wrongFlag = FLAGS[1];
+
+describe('gameStore — duel mode setup', () => {
+  it('startDuel initializes duel state', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+
+    const s = useGameStore.getState();
+    expect(s.mode).toBe('duel');
+    expect(s.difficulty).toBe('medium');
+    expect(s.duelPlayers).toEqual(duelPlayers);
+    expect(s.duelRound).toBe(0);
+    expect(s.duelScores).toEqual({ p1: 0, p2: 0 });
+    expect(s.duelHistory).toEqual([]);
+    expect(s.duelResolution).toBeNull();
+  });
+});
+
+describe('gameStore — duel scoring', () => {
+  it('correct duel answer awards points to answering player and ignores later answers after resolution', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+
+    useGameStore.getState().recordDuelAnswer('p1', mockFlag);
+    useGameStore.getState().recordDuelAnswer('p2', wrongFlag);
+
+    const s = useGameStore.getState();
+    expect(s.duelScores).toEqual({ p1: 20, p2: 0 });
+    expect(s.duelAnsweringPlayerId).toBe('p1');
+    expect(s.duelResolvedBy).toBe('p1');
+    expect(s.duelResolution).toBe('correct');
+    expect(s.duelSelectedFlag).toEqual(mockFlag);
+    expect(s.duelHistory).toHaveLength(1);
+    expect(s.duelHistory[0]).toMatchObject({
+      flag: mockFlag,
+      winnerId: 'p1',
+      loserId: 'p2',
+      resolution: 'correct',
+      answeringPlayerId: 'p1',
+    });
+  });
+
+  it('wrong first tap awards points to the opponent and records duelAnsweringPlayerId', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+
+    useGameStore.getState().recordDuelAnswer('p1', wrongFlag);
+
+    const s = useGameStore.getState();
+    expect(s.duelScores).toEqual({ p1: 0, p2: 20 });
+    expect(s.duelAnsweringPlayerId).toBe('p1');
+    expect(s.duelResolvedBy).toBe('p2');
+    expect(s.duelResolution).toBe('opponent-awarded');
+    expect(s.duelSelectedFlag).toEqual(wrongFlag);
+    expect(s.duelHistory).toHaveLength(1);
+    expect(s.duelHistory[0]).toMatchObject({
+      flag: mockFlag,
+      winnerId: 'p2',
+      loserId: 'p1',
+      resolution: 'opponent-awarded',
+      answeringPlayerId: 'p1',
+    });
+  });
+
+  it('recordDuelAnswer no-ops for unknown duel player ids', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+
+    useGameStore.getState().recordDuelAnswer('p3', wrongFlag);
+
+    const s = useGameStore.getState();
+    expect(s.duelScores).toEqual({ p1: 0, p2: 0 });
+    expect(s.duelAnsweringPlayerId).toBeNull();
+    expect(s.duelSelectedFlag).toBeNull();
+    expect(s.duelResolvedBy).toBeNull();
+    expect(s.duelResolution).toBeNull();
+    expect(s.duelHistory).toEqual([]);
+  });
+});
+
+describe('gameStore — duel round progression', () => {
+  it('timeout records no score change and appends timeout history', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+
+    useGameStore.getState().recordDuelTimeout();
+
+    const s = useGameStore.getState();
+    expect(s.duelScores).toEqual({ p1: 0, p2: 0 });
+    expect(s.duelAnsweringPlayerId).toBeNull();
+    expect(s.duelResolvedBy).toBeNull();
+    expect(s.duelResolution).toBe('timeout');
+    expect(s.duelSelectedFlag).toBeNull();
+    expect(s.duelHistory).toHaveLength(1);
+    expect(s.duelHistory[0]).toMatchObject({
+      flag: mockFlag,
+      winnerId: null,
+      loserId: null,
+      resolution: 'timeout',
+      answeringPlayerId: null,
+    });
+  });
+
+  it('advanceDuelRound no-ops outside duel mode', () => {
+    useGameStore.getState().startSolo('easy');
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+
+    useGameStore.getState().advanceDuelRound();
+
+    const s = useGameStore.getState();
+    expect(s.mode).toBe('solo');
+    expect(s.duelRound).toBe(0);
+    expect(s.currentFlag).toEqual(mockFlag);
+    expect(s.options).toEqual([mockFlag, wrongFlag]);
+    expect(s.duelAnsweringPlayerId).toBeNull();
+    expect(s.duelSelectedFlag).toBeNull();
+    expect(s.duelResolvedBy).toBeNull();
+    expect(s.duelResolution).toBeNull();
+  });
+
+  it('advanceDuelRound increments duelRound and clears round-scoped duel state', () => {
+    useGameStore.getState().startDuel('medium', duelPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+    useGameStore.getState().setShowHint(true);
+    useGameStore.getState().recordDuelAnswer('p1', mockFlag);
+
+    useGameStore.getState().advanceDuelRound();
+
+    const s = useGameStore.getState();
+    expect(s.duelRound).toBe(1);
+    expect(s.currentFlag).toBeNull();
+    expect(s.options).toEqual([]);
+    expect(s.selected).toBeNull();
+    expect(s.showHint).toBe(false);
+    expect(s.duelAnsweringPlayerId).toBeNull();
+    expect(s.duelSelectedFlag).toBeNull();
+    expect(s.duelResolvedBy).toBeNull();
+    expect(s.duelResolution).toBeNull();
+  });
+});
+
+describe('gameStore — duel restarts', () => {
+  it('startDuel resets duel collections across restarts', () => {
+    const firstPlayers = [
+      { id: 'p1', name: 'Ana', color: '#f97316', avatar: '🦁' },
+      { id: 'p2', name: 'Bob', color: '#3b82f6', avatar: '🐯' },
+    ];
+    const secondPlayers = [
+      { id: 'p3', name: 'Caro', color: '#ef4444', avatar: '🦊' },
+      { id: 'p4', name: 'Dani', color: '#10b981', avatar: '🐸' },
+    ];
+
+    useGameStore.getState().startDuel('medium', firstPlayers);
+    useGameStore.getState().setRoundData(mockFlag, [mockFlag, wrongFlag]);
+    useGameStore.getState().recordDuelAnswer('p1', mockFlag);
+
+    useGameStore.getState().startDuel('easy', secondPlayers);
+
+    const s = useGameStore.getState();
+    expect(s.mode).toBe('duel');
+    expect(s.difficulty).toBe('easy');
+    expect(s.duelPlayers).toEqual(secondPlayers);
+    expect(s.duelScores).toEqual({ p3: 0, p4: 0 });
+    expect(s.duelHistory).toEqual([]);
+    expect(s.duelRound).toBe(0);
+    expect(s.duelAnsweringPlayerId).toBeNull();
+    expect(s.duelSelectedFlag).toBeNull();
+    expect(s.duelResolvedBy).toBeNull();
+    expect(s.duelResolution).toBeNull();
+  });
+});

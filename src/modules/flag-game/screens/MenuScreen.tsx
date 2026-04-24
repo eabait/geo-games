@@ -33,12 +33,21 @@ const MODES = [
     delay: 0.3,
     highlight: false,
   },
+  {
+    key: 'duel-setup',
+    icon: '⚔️',
+    label: 'Duelo 1v1',
+    sub: 'Ambos juegan a la vez · 10 rondas',
+    delay: 0.4,
+    highlight: false,
+  },
 ] as const;
 
 const ROUTE_MAP: Record<string, string> = {
   'solo-diff': '/flag-game/solo',
   'explorer-diff': '/flag-game/explorer',
   'family-setup': '/flag-game/family',
+  'duel-setup': '/flag-game/duel',
 };
 
 export function MenuScreen(): React.JSX.Element {

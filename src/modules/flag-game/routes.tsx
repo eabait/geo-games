@@ -4,12 +4,15 @@ import type { RouteObject } from 'react-router-dom';
 import { MenuScreen } from './screens/MenuScreen';
 import { DifficultyScreen } from './screens/DifficultyScreen';
 import { FamilySetupScreen } from './screens/FamilySetupScreen';
+import { DuelSetupScreen } from './screens/DuelSetupScreen';
 import { PassPhoneScreen } from './screens/PassPhoneScreen';
 import { SoloPlayingScreen } from './screens/SoloPlayingScreen';
 import { ExplorerPlayingScreen } from './screens/ExplorerPlayingScreen';
+import { DuelPlayingScreen } from './screens/DuelPlayingScreen';
 import { FamilyPlayingScreen } from './screens/FamilyPlayingScreen';
 import { ResultsScreen } from './screens/ResultsScreen';
 import { ExplorerResultsScreen } from './screens/ExplorerResultsScreen';
+import { DuelResultsScreen } from './screens/DuelResultsScreen';
 import { FamilyResultsScreen } from './screens/FamilyResultsScreen';
 
 export const flagGameRoutes: RouteObject = {
@@ -26,6 +29,9 @@ export const flagGameRoutes: RouteObject = {
     { path: 'family/pass', element: <PassPhoneScreen /> },
     { path: 'family/play', element: <FamilyPlayingScreen /> },
     { path: 'family/results', element: <FamilyResultsScreen /> },
+    { path: 'duel', element: <DuelSetupScreen /> },
+    { path: 'duel/play', element: <DuelPlayingScreen /> },
+    { path: 'duel/results', element: <DuelResultsScreen /> },
     { path: '*', element: <Navigate to="/flag-game" replace /> },
   ],
 };

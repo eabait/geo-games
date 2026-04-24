@@ -28,6 +28,7 @@ export const CONTINENTS_LIST = ['Todos', 'América', 'Europa', 'África', 'Asia'
 
 export const RPP = 5; // rounds per player (family mode)
 export const SOLO_R = 10; // rounds in solo mode
+export const DUEL_R = 10; // rounds in duel mode
 
 // Game timing (milliseconds)
 export const ANSWER_DELAY_MS = 1600;

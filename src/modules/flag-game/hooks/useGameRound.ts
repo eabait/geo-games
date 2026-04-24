@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
-import { FLAGS } from '../data/flags';
+import { buildNextRound } from '../data/rounds';
 import {
   ANSWER_DELAY_MS,
   DIFFICULTY,
@@ -13,7 +13,6 @@ import {
   STREAK_BONUS_THRESHOLD,
   STREAK_SOUND_THRESHOLD,
 } from '../data/constants';
-import { pickRandom, shuffle } from '../data/utils';
 import type { Flag, Player } from '../types';
 
 interface UseGameRoundResult {
@@ -25,32 +24,6 @@ interface AnswerConfig {
   showHint: boolean;
   correct: boolean;
   option: Flag | null;
-}
-
-function getPool(maxTier: number, continent: string): Flag[] {
-  const baseFlags =
-    continent === 'Todos' ? FLAGS : FLAGS.filter((flag) => flag.continent === continent);
-  return baseFlags.filter((flag) => flag.tier <= maxTier);
-}
-
-function buildNextRound(
-  difficulty: keyof typeof DIFFICULTY,
-  continent: string,
-  usedFlags: string[],
-): { flag: Flag; options: Flag[] } {
-  const diff = DIFFICULTY[difficulty];
-  const pool = getPool(diff.maxTier, continent);
-  const availableFlags = pool.filter((flag) => !usedFlags.includes(flag.name));
-  const candidateFlags = availableFlags.length >= diff.options ? availableFlags : pool;
-  const flag = candidateFlags[Math.floor(Math.random() * candidateFlags.length)];
-  const wrongOptions = pickRandom(pool.length >= diff.options ? pool : FLAGS, diff.options - 1, [
-    flag,
-  ]);
-
-  return {
-    flag,
-    options: shuffle([flag, ...wrongOptions]),
-  };
 }
 
 function getSoloPoints(config: AnswerConfig, streak: number): number {
@@ -134,7 +107,7 @@ function useRoundBootstrap(): void {
   const { continent } = useSettingsStore();
 
   useEffect(() => {
-    if (currentFlag || !difficulty || mode === 'explorer') return;
+    if (currentFlag || !difficulty || mode === 'explorer' || mode === 'duel') return;
 
     const nextRound = buildNextRound(difficulty, continent, usedFlags);
     setRoundData(nextRound.flag, nextRound.options);

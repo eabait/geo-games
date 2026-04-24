@@ -6,6 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { FLAGS } from '../data/flags';
 import { useGameStore } from '../store/gameStore';
 
+import { DuelResultsScreen } from './DuelResultsScreen';
 import { ExplorerResultsScreen } from './ExplorerResultsScreen';
 import { FamilyResultsScreen } from './FamilyResultsScreen';
 import { ResultsScreen } from './ResultsScreen';
@@ -33,6 +34,14 @@ function renderExplorerResultsScreen(): void {
   render(
     <MemoryRouter>
       <ExplorerResultsScreen />
+    </MemoryRouter>,
+  );
+}
+
+function renderDuelResultsScreen(): void {
+  render(
+    <MemoryRouter>
+      <DuelResultsScreen />
     </MemoryRouter>,
   );
 }
@@ -203,5 +212,131 @@ describe('FamilyResultsScreen', () => {
     expect(rematchButton.className).toBeTruthy();
     expect(menuButton).not.toHaveAttribute('style');
     expect(menuButton.className).toBeTruthy();
+  });
+});
+
+describe('DuelResultsScreen winner summary', () => {
+  it('renders the duel winner, both scores, and a compact history summary', () => {
+    const players = [
+      { id: 'player-0', name: 'Ana', color: '#f59e0b', avatar: '🦁' },
+      { id: 'player-1', name: 'Luis', color: '#3b82f6', avatar: '🐯' },
+    ];
+
+    useGameStore.getState().startDuel('hard', players);
+    useGameStore.setState({
+      duelScores: {
+        'player-0': 90,
+        'player-1': 60,
+      },
+      duelHistory: [
+        {
+          flag: FLAGS[0],
+          winnerId: 'player-0',
+          loserId: 'player-1',
+          resolution: 'correct',
+          answeringPlayerId: 'player-0',
+        },
+        {
+          flag: FLAGS[1],
+          winnerId: 'player-1',
+          loserId: 'player-0',
+          resolution: 'opponent-awarded',
+          answeringPlayerId: 'player-0',
+        },
+      ],
+    });
+
+    renderDuelResultsScreen();
+
+    expect(screen.getByRole('heading', { level: 2, name: /ana gana/i })).toBeInTheDocument();
+    expect(screen.getByText('Ana')).toBeInTheDocument();
+    expect(screen.getByText('Luis')).toBeInTheDocument();
+    expect(screen.getByText('90 pts')).toBeInTheDocument();
+    expect(screen.getByText('60 pts')).toBeInTheDocument();
+    expect(screen.getByText(/ronda 1/i)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(FLAGS[0].name, 'i'))).toBeInTheDocument();
+  });
+});
+
+describe('DuelResultsScreen tie summary', () => {
+  it('renders the duel tie state when both players finish with the same score', () => {
+    const players = [
+      { id: 'player-0', name: 'Ana', color: '#f59e0b', avatar: '🦁' },
+      { id: 'player-1', name: 'Luis', color: '#3b82f6', avatar: '🐯' },
+    ];
+
+    useGameStore.getState().startDuel('medium', players);
+    useGameStore.setState({
+      duelScores: {
+        'player-0': 40,
+        'player-1': 40,
+      },
+      duelHistory: [
+        {
+          flag: FLAGS[2],
+          winnerId: null,
+          loserId: null,
+          resolution: 'timeout',
+          answeringPlayerId: null,
+        },
+      ],
+    });
+
+    renderDuelResultsScreen();
+
+    expect(screen.getByRole('heading', { level: 2, name: /empate/i })).toBeInTheDocument();
+    expect(screen.getAllByText('40 pts')).toHaveLength(2);
+  });
+});
+
+describe('DuelResultsScreen actions', () => {
+  it('restarts the duel with saved players and difficulty and navigates to the duel play screen', async () => {
+    const user = userEvent.setup();
+    const players = [
+      { id: 'player-0', name: 'Ana', color: '#f59e0b', avatar: '🦁' },
+      { id: 'player-1', name: 'Luis', color: '#3b82f6', avatar: '🐯' },
+    ];
+
+    useGameStore.getState().startDuel('easy', players);
+    useGameStore.setState({
+      duelScores: {
+        'player-0': 20,
+        'player-1': 10,
+      },
+      duelHistory: [
+        {
+          flag: FLAGS[3],
+          winnerId: 'player-0',
+          loserId: 'player-1',
+          resolution: 'correct',
+          answeringPlayerId: 'player-0',
+        },
+      ],
+    });
+
+    renderDuelResultsScreen();
+
+    await user.click(screen.getByRole('button', { name: /revancha/i }));
+
+    const state = useGameStore.getState();
+
+    expect(state.mode).toBe('duel');
+    expect(state.difficulty).toBe('easy');
+    expect(state.duelPlayers).toEqual(players);
+    expect(state.duelScores).toEqual({
+      'player-0': 0,
+      'player-1': 0,
+    });
+    expect(state.duelHistory).toEqual([]);
+    expect(navigateMock).toHaveBeenCalledWith('/flag-game/duel/play');
+  });
+});
+
+describe('DuelResultsScreen fallback', () => {
+  it('renders a fallback state when duel results are missing', () => {
+    renderDuelResultsScreen();
+
+    expect(screen.getByRole('heading', { level: 2, name: /sin resultados/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /menú/i })).toBeInTheDocument();
   });
 });

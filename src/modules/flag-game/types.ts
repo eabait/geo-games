@@ -35,6 +35,16 @@ export interface RoundResult {
   correct: boolean;
 }
 
+export type DuelRoundResolution = 'correct' | 'opponent-awarded' | 'timeout';
+
+export interface DuelRoundResult {
+  flag: Flag;
+  winnerId: string | null;
+  loserId: string | null;
+  resolution: DuelRoundResolution;
+  answeringPlayerId: string | null;
+}
+
 export interface FlagGameSettings {
   soundOn: boolean;
   continent: Continent;

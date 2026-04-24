@@ -15,6 +15,10 @@ const screenFiles = [
     path: './FamilyPlayingScreen.tsx',
     cssImport: "import styles from './FamilyPlayingScreen.module.css';",
   },
+  {
+    path: './DuelPlayingScreen.tsx',
+    cssImport: "import styles from './DuelPlayingScreen.module.css';",
+  },
 ] as const;
 
 describe('playing screen styling architecture', () => {
