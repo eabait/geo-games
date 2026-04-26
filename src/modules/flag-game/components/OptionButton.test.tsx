@@ -75,15 +75,18 @@ describe('OptionButton revealed state', () => {
     expect(screen.getByText('✗')).toBeInTheDocument();
   });
 
-  it('sets data-state to wrong for wrong option regardless of isLoser', () => {
-    const button = renderOptionButton({
-      option: wrongFlag,
-      selected: wrongFlag,
-      isLoser: true,
-    });
+  it.each([true, false])(
+    'sets data-state to wrong for wrong option when isLoser is %s',
+    (isLoser) => {
+      const button = renderOptionButton({
+        option: wrongFlag,
+        selected: wrongFlag,
+        isLoser,
+      });
 
-    expect(button).toHaveAttribute('data-state', 'wrong');
-  });
+      expect(button).toHaveAttribute('data-state', 'wrong');
+    },
+  );
 
   it('sets data-state to default before any selection', () => {
     const button = renderOptionButton({
