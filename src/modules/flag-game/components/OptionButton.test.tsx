@@ -1,77 +1,97 @@
-import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 
-import { FLAGS } from '../data/flags';
+import type { Flag } from '../types';
 
 import { OptionButton } from './OptionButton';
 
-function renderOptionButton(
-  selected: (typeof FLAGS)[number] | null,
-  opt: (typeof FLAGS)[number],
-): void {
+const flag = (name: string): Flag => ({
+  name,
+  code: '🏴',
+  continent: 'Europe',
+  hint: '',
+  tier: 1,
+  pos: [0, 0],
+});
+
+const currentFlag = flag('France');
+const wrongFlag = flag('Germany');
+
+interface RenderOptionButtonProps {
+  option: Flag;
+  selected: Flag | null;
+  isLoser: boolean;
+  index?: number;
+}
+
+function renderOptionButton({
+  option,
+  selected,
+  isLoser,
+  index = 0,
+}: RenderOptionButtonProps): HTMLElement {
   render(
     <OptionButton
-      currentFlag={FLAGS[0]}
-      index={0}
+      currentFlag={currentFlag}
+      index={index}
+      isLoser={isLoser}
       onAnswer={vi.fn()}
-      opt={opt}
+      opt={option}
       selected={selected}
     />,
   );
+
+  return screen.getByRole('button', { name: new RegExp(option.name, 'i') });
 }
 
-describe('OptionButton default state', () => {
-  it('renders the default state and answers when clicked', async () => {
-    const user = userEvent.setup();
-    const onAnswer = vi.fn();
-    const option = FLAGS[1];
+describe('OptionButton revealed state', () => {
+  it('sets data-state to revealed when player is loser and option is correct answer', () => {
+    const button = renderOptionButton({
+      option: currentFlag,
+      selected: wrongFlag,
+      isLoser: true,
+    });
 
-    render(
-      <OptionButton
-        currentFlag={FLAGS[0]}
-        index={0}
-        onAnswer={onAnswer}
-        opt={option}
-        selected={null}
-      />,
-    );
-
-    const button = screen.getByRole('button', { name: new RegExp(option.name, 'i') });
-
-    await user.click(button);
-
-    expect(button).toHaveAttribute('data-state', 'default');
-    expect(button).toBeEnabled();
-    expect(onAnswer).toHaveBeenCalledWith(option);
+    expect(button).toHaveAttribute('data-state', 'revealed');
   });
-});
 
-describe('OptionButton answered state', () => {
-  it('marks the correct option after an answer is selected', () => {
-    renderOptionButton(FLAGS[0], FLAGS[0]);
-
-    const button = screen.getByRole('button', { name: new RegExp(FLAGS[0].name, 'i') });
+  it('sets data-state to correct when player is winner and option is correct answer', () => {
+    const button = renderOptionButton({
+      option: currentFlag,
+      selected: currentFlag,
+      isLoser: false,
+    });
 
     expect(button).toHaveAttribute('data-state', 'correct');
-    expect(button).toBeDisabled();
   });
 
-  it('marks the chosen wrong option with a cross badge', () => {
-    renderOptionButton(FLAGS[1], FLAGS[1]);
+  it('shows a cross badge for revealed option', () => {
+    renderOptionButton({
+      option: currentFlag,
+      selected: wrongFlag,
+      isLoser: true,
+    });
 
-    const button = screen.getByRole('button', { name: new RegExp(FLAGS[1].name, 'i') });
+    expect(screen.getByText('✗')).toBeInTheDocument();
+  });
+
+  it('sets data-state to wrong for wrong option regardless of isLoser', () => {
+    const button = renderOptionButton({
+      option: wrongFlag,
+      selected: wrongFlag,
+      isLoser: true,
+    });
 
     expect(button).toHaveAttribute('data-state', 'wrong');
-    expect(button).toBeDisabled();
   });
 
-  it('dims the non-selected wrong options once an answer was chosen', () => {
-    renderOptionButton(FLAGS[1], FLAGS[2]);
+  it('sets data-state to default before any selection', () => {
+    const button = renderOptionButton({
+      option: currentFlag,
+      selected: null,
+      isLoser: true,
+    });
 
-    const button = screen.getByRole('button', { name: new RegExp(FLAGS[2].name, 'i') });
-
-    expect(button).toHaveAttribute('data-state', 'dimmed');
-    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('data-state', 'default');
   });
 });

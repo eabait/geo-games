@@ -16,13 +16,23 @@ interface OptionButtonProps {
   selected: Flag | null;
   currentFlag: Flag;
   onAnswer: (opt: Flag) => void;
+  isLoser: boolean;
 }
 
-type OptionState = 'correct' | 'wrong' | 'dimmed' | 'default';
+type OptionButtonInputProps = Omit<OptionButtonProps, 'isLoser'> & {
+  isLoser?: boolean;
+};
 
-function getOptionState(selected: Flag | null, option: Flag, currentFlag: Flag): OptionState {
+type OptionState = 'correct' | 'wrong' | 'revealed' | 'dimmed' | 'default';
+
+function getOptionState(
+  selected: Flag | null,
+  option: Flag,
+  currentFlag: Flag,
+  isLoser: boolean,
+): OptionState {
   if (!selected) return 'default';
-  if (option.name === currentFlag.name) return 'correct';
+  if (option.name === currentFlag.name) return isLoser ? 'revealed' : 'correct';
   return selected.name === option.name ? 'wrong' : 'dimmed';
 }
 
@@ -32,6 +42,8 @@ function getStateClassName(state: OptionState): string {
       return styles.correct;
     case 'wrong':
       return styles.wrong;
+    case 'revealed':
+      return styles.revealed;
     case 'dimmed':
       return styles.dimmed;
     default:
@@ -41,7 +53,7 @@ function getStateClassName(state: OptionState): string {
 
 function getBadgeLabel(state: OptionState, index: number): string {
   if (state === 'correct') return '✓';
-  if (state === 'wrong') return '✗';
+  if (state === 'wrong' || state === 'revealed') return '✗';
   return String.fromCharCode(CHAR_CODE_A + index);
 }
 
@@ -51,14 +63,15 @@ export function OptionButton({
   selected,
   currentFlag,
   onAnswer,
-}: OptionButtonProps): React.JSX.Element {
-  const state = getOptionState(selected, opt, currentFlag);
+  isLoser = false,
+}: OptionButtonInputProps): React.JSX.Element {
+  const state = getOptionState(selected, opt, currentFlag, isLoser);
   const stateClassName = getStateClassName(state);
   const buttonClassName = ['btn', styles.button, stateClassName].filter(Boolean).join(' ');
   const badgeClassName = [
     styles.badge,
     state === 'correct' ? styles.badgeCorrect : '',
-    state === 'wrong' ? styles.badgeWrong : '',
+    state === 'wrong' || state === 'revealed' ? styles.badgeWrong : '',
   ]
     .filter(Boolean)
     .join(' ');

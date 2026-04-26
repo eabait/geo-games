@@ -34,6 +34,11 @@
   opacity: var(--option-fade-opacity);
 }
 
+.revealed {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+}
+
 .badge {
   width: 28px;
   height: 28px;
