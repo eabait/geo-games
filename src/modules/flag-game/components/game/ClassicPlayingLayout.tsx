@@ -3,26 +3,6 @@ import React from 'react';
 import { OptionButton } from '../OptionButton';
 import type { Flag } from '../../types';
 
-interface ClassicPlayingLayoutStyles {
-  answerSection: string;
-  continentPill: string;
-  feedbackCorrect: string;
-  feedbackPanel: string;
-  feedbackWrong: string;
-  flagCard: string;
-  flagEmoji: string;
-  header: string;
-  headerLeft: string;
-  headerRight: string;
-  hintButton: string;
-  hintNav: string;
-  hintText: string;
-  screen: string;
-  timerFill: string;
-  timerTrack: string;
-  timerUrgent: string;
-}
-
 interface ClassicPlayingLayoutProps {
   currentFlag: Flag;
   feedbackText: string | null;
@@ -35,7 +15,7 @@ interface ClassicPlayingLayoutProps {
   rootStyle?: React.CSSProperties;
   selected: Flag | null;
   showHint: boolean;
-  styles: ClassicPlayingLayoutStyles;
+  styles: Record<string, string>;
   timerColor: string;
   timerPct: number;
   timerUrgent: boolean;
@@ -47,7 +27,7 @@ function renderHintSection(
   onRevealHint: () => void,
   selected: Flag | null,
   showHint: boolean,
-  styles: ClassicPlayingLayoutStyles,
+  styles: Record<string, string>,
 ): React.JSX.Element {
   if (!showHint && !selected) {
     return (
@@ -66,7 +46,7 @@ function renderFeedbackBanner(
   currentFlag: Flag,
   feedbackText: string | null,
   selected: Flag | null,
-  styles: ClassicPlayingLayoutStyles,
+  styles: Record<string, string>,
 ): React.JSX.Element {
   if (!feedbackText) return <></>;
 

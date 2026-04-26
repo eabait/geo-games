@@ -13,7 +13,7 @@ import {
 import { buildNextRound } from '../data/rounds';
 import { useGameStore } from '../store/gameStore';
 import { useSettingsStore } from '../store/settingsStore';
-import type { DuelRoundResolution, Flag, Player } from '../types';
+import type { Continent, DuelRoundResolution, Flag, Player } from '../types';
 
 import { useGameSfx } from './useGameSfx';
 import { usePlayingTimer } from './usePlayingTimer';
@@ -112,7 +112,7 @@ function getVisualEffects(resolution: DuelRoundResolution | null): DuelVisualEff
 }
 
 function useDuelRoundSetup(
-  continent: string,
+  continent: Continent | 'Todos',
   currentFlag: Flag | null,
   difficulty: keyof typeof DIFFICULTY | null,
   duelPlayersLength: number,

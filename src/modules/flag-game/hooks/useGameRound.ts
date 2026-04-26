@@ -15,6 +15,8 @@ import {
 } from '../data/constants';
 import type { Flag, Player } from '../types';
 
+import type { SoundName } from './useSoundEngine';
+
 interface UseGameRoundResult {
   handleAnswer: (option: Flag | null) => void;
 }
@@ -46,7 +48,7 @@ function getFamilyPoints(config: AnswerConfig, streak: number): number {
   return basePoints + bonus;
 }
 
-function playCorrectSound(correct: boolean, streak: number, sfx: (name: string) => void): void {
+function playCorrectSound(correct: boolean, streak: number, sfx: (name: SoundName) => void): void {
   if (!correct) {
     sfx('wrong');
     return;
@@ -58,7 +60,7 @@ function playCorrectSound(correct: boolean, streak: number, sfx: (name: string) 
 function queueSoloTransition(
   round: number,
   navigate: ReturnType<typeof useNavigate>,
-  sfx: (name: string) => void,
+  sfx: (name: SoundName) => void,
 ): void {
   setTimeout(() => {
     if (round + 1 >= SOLO_R) {
@@ -80,7 +82,7 @@ function queueFamilyTransition(
   players: Player[],
   advancePlayerTurn: () => void,
   navigate: ReturnType<typeof useNavigate>,
-  sfx: (name: string) => void,
+  sfx: (name: SoundName) => void,
 ): void {
   setTimeout(() => {
     if (playerRound + 1 >= RPP) {
@@ -116,7 +118,7 @@ function useRoundBootstrap(): void {
 
 function useSoloAnswerHandler(
   navigate: ReturnType<typeof useNavigate>,
-  sfx: (name: string) => void,
+  sfx: (name: SoundName) => void,
 ): (option: Flag | null, correct: boolean) => void {
   const { difficulty, showHint, round, streak, recordAnswer } = useGameStore();
 
@@ -135,7 +137,7 @@ function useSoloAnswerHandler(
 
 function useFamilyAnswerHandler(
   navigate: ReturnType<typeof useNavigate>,
-  sfx: (name: string) => void,
+  sfx: (name: SoundName) => void,
 ): (option: Flag | null, correct: boolean) => void {
   const {
     difficulty,
@@ -191,7 +193,7 @@ function useFamilyAnswerHandler(
   );
 }
 
-export function useGameRound(sfx: (name: string) => void): UseGameRoundResult {
+export function useGameRound(sfx: (name: SoundName) => void): UseGameRoundResult {
   const navigate = useNavigate();
   const { mode, difficulty, currentFlag } = useGameStore();
   const handleSoloAnswer = useSoloAnswerHandler(navigate, sfx);

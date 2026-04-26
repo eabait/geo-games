@@ -3,29 +3,6 @@ import React from 'react';
 import { OptionButton } from '../OptionButton';
 import type { Flag, Player } from '../../types';
 
-interface DuelPlayingLayoutStyles {
-  answerGrid: string;
-  feedback: string;
-  flagCard: string;
-  flagEmoji: string;
-  flagMeta: string;
-  flagPrompt: string;
-  header: string;
-  panels: string;
-  playerAvatar: string;
-  playerHeader: string;
-  playerMeta: string;
-  playerName: string;
-  playerPanel: string;
-  playerScore: string;
-  roundLabel: string;
-  screen: string;
-  timerFill: string;
-  timerTrack: string;
-  timerUrgent: string;
-  timerValue: string;
-}
-
 interface DuelPlayerPanelState {
   feedbackText: string | null;
   onAnswer: (flag: Flag) => void;
@@ -39,7 +16,7 @@ interface DuelPlayingLayoutProps {
   options: Flag[];
   playerPanels: DuelPlayerPanelState[];
   roundLabel: string;
-  styles: DuelPlayingLayoutStyles;
+  styles: Record<string, string>;
   timeLeft: number;
   timerColor: string;
   timerPct: number;
@@ -50,7 +27,7 @@ function renderPlayerPanel(
   currentFlag: Flag,
   options: Flag[],
   panel: DuelPlayerPanelState,
-  styles: DuelPlayingLayoutStyles,
+  styles: Record<string, string>,
 ): React.JSX.Element {
   return (
     <section
