@@ -22,6 +22,49 @@
   - SVG coordinates such as `cx`, `cy`, `points`, and similar runtime geometry
 - Inline `style` must not contain static layout, spacing, typography, border, or background declarations that belong in CSS Modules.
 
+## Token Reference
+
+| Token | Value | Usage |
+|---|---|---|
+| `--color-bg` | `#0f172a` | Page background |
+| `--color-bg-mid` | `#1e293b` | Gradient midpoint |
+| `--color-text` | `#f1f5f9` | Primary text |
+| `--color-text-muted` | `#94a3b8` | Secondary text |
+| `--color-text-dim` | `#64748b` | Tertiary / label text |
+| `--color-accent` | `#fbbf24` | Highlight, arrows, CTAs |
+| `--card-bg` | `rgba(255,255,255,0.06)` | Glassmorphism card background |
+| `--card-border` | `rgba(255,255,255,0.10)` | Glassmorphism card border |
+| `--card-radius` | `20px` | Card border radius |
+| `--card-blur` | `12px` | Card backdrop blur |
+| `--font-body` | `'Nunito', sans-serif` | Body text |
+| `--font-display` | `'Fredoka', sans-serif` | Headings |
+| `--z-overlay` | `50` | Overlays (confetti, flash) |
+| `--z-fixed` | `100` | Fixed UI elements (sound button) |
+
+## File Structure
+
+```
+src/
+  styles/
+    tokens.css        # CSS custom properties
+    animations.css    # @keyframes + .btn class
+    index.css         # imports tokens + animations
+  modules/
+    <game>/
+      styles/
+        theme.css     # token overrides for this game
+      components/
+        Foo.tsx
+        Foo.module.css
+      screens/
+        Bar.tsx
+        Bar.module.css
+  shared/
+    components/
+      Baz.tsx
+      Baz.module.css
+```
+
 ## Migration Heuristics
 
 - Prefer design tokens over repeating raw app colors when a matching token exists.
