@@ -19,10 +19,6 @@ interface OptionButtonProps {
   isLoser: boolean;
 }
 
-type OptionButtonInputProps = Omit<OptionButtonProps, 'isLoser'> & {
-  isLoser?: boolean;
-};
-
 type OptionState = 'correct' | 'wrong' | 'revealed' | 'dimmed' | 'default';
 
 function getOptionState(
@@ -63,8 +59,8 @@ export function OptionButton({
   selected,
   currentFlag,
   onAnswer,
-  isLoser = false,
-}: OptionButtonInputProps): React.JSX.Element {
+  isLoser,
+}: OptionButtonProps): React.JSX.Element {
   const state = getOptionState(selected, opt, currentFlag, isLoser);
   const stateClassName = getStateClassName(state);
   const buttonClassName = ['btn', styles.button, stateClassName].filter(Boolean).join(' ');
