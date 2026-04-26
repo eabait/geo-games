@@ -108,6 +108,7 @@ export function ClassicPlayingLayout({
             key={option.name}
             opt={option}
             index={index}
+            isLoser={false}
             selected={selected}
             currentFlag={currentFlag}
             onAnswer={onAnswer}

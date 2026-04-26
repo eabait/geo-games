@@ -62,6 +62,7 @@ function renderPlayerSection(
           key={`${panel.player.id}-${option.name}`}
           currentFlag={currentFlag}
           index={index}
+          isLoser={false}
           onAnswer={panel.onAnswer}
           opt={option}
           selected={panel.selected}
