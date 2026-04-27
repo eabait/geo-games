@@ -35,6 +35,15 @@ interface CenterProps {
   timerUrgent: boolean;
 }
 
+function renderFlagCard(currentFlag: Flag, styles: Record<string, string>): React.JSX.Element {
+  return (
+    <div className={styles.flagCard}>
+      <div className={styles.flagEmoji}>{currentFlag.code}</div>
+      <div className={styles.flagMeta}>{currentFlag.continent}</div>
+    </div>
+  );
+}
+
 // isTop=true → Player 2: DOM [header, flag, grid], rotated 180° so grid appears at physical top
 // isTop=false → Player 1: DOM [flag, grid, header], normal orientation
 function renderPlayerSection(
@@ -55,12 +64,7 @@ function renderPlayerSection(
     </header>
   );
 
-  const flagCard = (
-    <div className={styles.flagCard}>
-      <div className={styles.flagEmoji}>{currentFlag.code}</div>
-      <div className={styles.flagMeta}>{currentFlag.continent}</div>
-    </div>
-  );
+  const flagCard = renderFlagCard(currentFlag, styles);
 
   const grid = (
     <div className={styles.answerGrid}>
