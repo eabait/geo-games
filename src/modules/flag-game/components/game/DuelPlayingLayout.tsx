@@ -5,6 +5,7 @@ import type { Flag, Player } from '../../types';
 
 interface DuelPlayerPanelState {
   feedbackText: string | null;
+  isLoser: boolean;
   onAnswer: (flag: Flag) => void;
   player: Player;
   score: number;
@@ -25,7 +26,6 @@ interface DuelPlayingLayoutProps {
 }
 
 interface CenterProps {
-  currentFlag: Flag;
   onQuit: () => void;
   roundLabel: string;
   styles: Record<string, string>;
@@ -35,8 +35,8 @@ interface CenterProps {
   timerUrgent: boolean;
 }
 
-// isTop=true → Player 2: DOM [header, grid], rotated 180° so grid appears at physical top
-// isTop=false → Player 1: DOM [grid, header], normal orientation
+// isTop=true → Player 2: DOM [header, flag, grid], rotated 180° so grid appears at physical top
+// isTop=false → Player 1: DOM [flag, grid, header], normal orientation
 function renderPlayerSection(
   panel: DuelPlayerPanelState,
   options: Flag[],
@@ -55,6 +55,13 @@ function renderPlayerSection(
     </header>
   );
 
+  const flagCard = (
+    <div className={styles.flagCard}>
+      <div className={styles.flagEmoji}>{currentFlag.code}</div>
+      <div className={styles.flagMeta}>{currentFlag.continent}</div>
+    </div>
+  );
+
   const grid = (
     <div className={styles.answerGrid}>
       {options.map((option, index) => (
@@ -62,7 +69,7 @@ function renderPlayerSection(
           key={`${panel.player.id}-${option.name}`}
           currentFlag={currentFlag}
           index={index}
-          isLoser={false}
+          isLoser={panel.isLoser}
           onAnswer={panel.onAnswer}
           opt={option}
           selected={panel.selected}
@@ -84,10 +91,12 @@ function renderPlayerSection(
       {isTop ? (
         <>
           {header}
+          {flagCard}
           {grid}
         </>
       ) : (
         <>
+          {flagCard}
           {grid}
           {header}
         </>
@@ -97,7 +106,6 @@ function renderPlayerSection(
 }
 
 function renderCenterSection({
-  currentFlag,
   onQuit,
   roundLabel,
   styles,
@@ -114,10 +122,6 @@ function renderCenterSection({
         <button className={styles.quitBtn} onClick={onQuit} type="button">
           ✕
         </button>
-      </div>
-      <div className={styles.flagCard}>
-        <div className={styles.flagEmoji}>{currentFlag.code}</div>
-        <div className={styles.flagMeta}>{currentFlag.continent}</div>
       </div>
       <div className={styles.timerTrack}>
         <div
@@ -151,7 +155,6 @@ export function DuelPlayingLayout({
     <div className={styles.screen}>
       {renderPlayerSection(p2, options, currentFlag, true, styles)}
       {renderCenterSection({
-        currentFlag,
         onQuit,
         roundLabel,
         styles,
