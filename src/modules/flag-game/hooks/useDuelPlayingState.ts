@@ -48,6 +48,7 @@ interface DuelPlayerPanelsOptions {
 
 interface DuelPlayerPanelState {
   feedbackText: string | null;
+  isLoser: boolean;
   onAnswer: (flag: Flag) => void;
   player: Player;
   score: number;
@@ -204,6 +205,8 @@ function buildDuelPlayerPanels({
       duelAnsweringPlayerId,
       duelResolvedBy,
     ),
+    isLoser:
+      duelResolution !== null && duelResolution !== 'timeout' && player.id !== duelResolvedBy,
     onAnswer: (flag: Flag) => {
       if (!currentFlag || useGameStore.getState().duelResolution !== null) {
         return;
