@@ -68,7 +68,12 @@ describe('SoloPlayingScreen rendering', () => {
     expect(screen.queryByText(FLAGS[0].code)).not.toBeInTheDocument();
   });
 
-  it('renders the current flag and one button per option during play', () => {
+  it('renders the current flag and answers with the matching option', async () => {
+    const user = userEvent.setup();
+    const onAnswer = vi.fn();
+
+    vi.mocked(useSoloPlayingState).mockReturnValue(buildSoloPlayingState({ onAnswer }));
+
     render(
       <MemoryRouter>
         <SoloPlayingScreen />
@@ -76,7 +81,12 @@ describe('SoloPlayingScreen rendering', () => {
     );
 
     expect(screen.getByText(FLAGS[0].code)).toBeInTheDocument();
-    expect(screen.getAllByRole('button').filter((b) => !b.closest('nav'))).toHaveLength(2);
+    expect(screen.getByText(FLAGS[0].name)).toBeInTheDocument();
+    expect(screen.getByText(FLAGS[1].name)).toBeInTheDocument();
+
+    await user.click(screen.getByText(FLAGS[1].name));
+
+    expect(onAnswer).toHaveBeenCalledWith(FLAGS[1]);
   });
 });
 
