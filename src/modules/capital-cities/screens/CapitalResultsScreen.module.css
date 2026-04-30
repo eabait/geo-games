@@ -1,0 +1,38 @@
+.screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 2rem 1rem;
+}
+
+.trophy {
+  font-size: 5rem;
+  line-height: 1;
+}
+
+.score {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+.actions {
+  width: 100%;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.primary {
+  padding: 0.9rem;
+}
+
+.secondary {
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+}
