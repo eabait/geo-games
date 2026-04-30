@@ -1,0 +1,343 @@
+.screen {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  min-height: 100vh;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 72px 20px 32px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 8vw, 52px);
+  font-weight: 800;
+  line-height: 1;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.profileBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  backdrop-filter: blur(var(--card-blur));
+}
+
+.activeAvatar {
+  flex: 0 0 auto;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.activeName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.switchButton {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-text);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+
+.switchButton:hover,
+.switchButton:focus-visible {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.gameList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.gameCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(var(--card-blur));
+}
+
+.gameIcon {
+  display: grid;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  font-size: 32px;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+}
+
+.gameInfo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.gameTitle,
+.gameDesc,
+.gameBest {
+  margin: 0;
+}
+
+.gameTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.gameDesc {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.gameBest {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--color-accent);
+}
+
+.playButton {
+  flex: 0 0 auto;
+  min-width: 76px;
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 12px;
+}
+
+.creatorOverlay,
+.switcherOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.creatorCard,
+.switcherCard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 380px;
+  padding: 24px;
+  color: var(--color-text);
+  background: rgba(30, 41, 59, 0.96);
+  border: 1px solid var(--card-border);
+  border-radius: var(--card-radius);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+}
+
+.creatorTitle,
+.switcherTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.creatorForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.nameInput {
+  width: 100%;
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  outline: none;
+}
+
+.nameInput::placeholder {
+  color: var(--color-text-dim);
+}
+
+.nameInput:focus {
+  border-color: var(--color-accent);
+}
+
+.avatarLabel {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.avatarGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.avatarOption {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 4px;
+  place-items: center;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid transparent;
+  border-radius: 12px;
+}
+
+.avatarOption:hover,
+.avatarOption:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.avatarSelected {
+  background: rgba(251, 191, 36, 0.18);
+  border-color: var(--color-accent);
+}
+
+.doneButton {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 14px;
+}
+
+.doneButton:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+  opacity: 0.5;
+}
+
+.profileList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profileItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+}
+
+.profileItem:hover,
+.profileItem:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.profileAvatar {
+  flex: 0 0 auto;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.profileName {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.addProfile {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  background: transparent;
+  border: 2px dashed rgba(255, 255, 255, 0.24);
+  border-radius: 14px;
+}
+
+.addProfile:hover,
+.addProfile:focus-visible {
+  color: var(--color-text);
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 520px) {
+  .screen {
+    padding: 72px 14px 24px;
+  }
+
+  .gameCard {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .gameIcon {
+    flex-basis: 46px;
+    width: 46px;
+    height: 46px;
+    font-size: 28px;
+    border-radius: 14px;
+  }
+
+  .playButton {
+    min-width: 68px;
+    padding: 9px 12px;
+  }
+
+  .avatarGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
