@@ -7,6 +7,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Celeste y blanca con sol',
     tier: 1,
+    capital: 'Buenos Aires',
     pos: [-34.6, -58.4],
   },
   {
@@ -15,6 +16,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja, amarilla y verde',
     tier: 2,
+    capital: 'Sucre',
     pos: [-17, -65],
   },
   {
@@ -23,6 +25,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Verde y amarilla con disco azul',
     tier: 1,
+    capital: 'Brasilia',
     pos: [-14.2, -51.9],
   },
   {
@@ -31,6 +34,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Hoja de arce roja',
     tier: 1,
+    capital: 'Ottawa',
     pos: [56.1, -106.3],
   },
   {
@@ -39,6 +43,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja, blanca y azul con estrella',
     tier: 1,
+    capital: 'Santiago',
     pos: [-35.7, -71.5],
   },
   {
@@ -47,6 +52,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Amarillo grande, azul y rojo',
     tier: 1,
+    capital: 'Bogotá',
     pos: [4.6, -74.1],
   },
   {
@@ -55,6 +61,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul, blanca y roja',
     tier: 2,
+    capital: 'San José',
     pos: [9.7, -83.7],
   },
   {
@@ -63,6 +70,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Franjas azules, triángulo rojo',
     tier: 1,
+    capital: 'La Habana',
     pos: [21.5, -79.9],
   },
   {
@@ -71,6 +79,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Cruz blanca con cuartos',
     tier: 2,
+    capital: 'Santo Domingo',
     pos: [18.7, -70.2],
   },
   {
@@ -79,6 +88,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Amarillo, azul y rojo con escudo',
     tier: 2,
+    capital: 'Quito',
     pos: [-1.8, -78.2],
   },
   {
@@ -87,6 +97,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul y blanca con escudo',
     tier: 2,
+    capital: 'San Salvador',
     pos: [13.8, -88.9],
   },
   {
@@ -95,6 +106,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Celeste y blanca con quetzal',
     tier: 2,
+    capital: 'Ciudad de Guatemala',
     pos: [15.8, -90.2],
   },
   {
@@ -103,6 +115,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Triángulo verde con flecha',
     tier: 3,
+    capital: 'Georgetown',
     pos: [5, -59],
   },
   {
@@ -111,6 +124,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul y roja con escudo',
     tier: 2,
+    capital: 'Puerto Príncipe',
     pos: [19, -72.1],
   },
   {
@@ -119,6 +133,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul y blanca con estrellas',
     tier: 3,
+    capital: 'Tegucigalpa',
     pos: [15.2, -86.2],
   },
   {
@@ -127,6 +142,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Cruz diagonal dorada',
     tier: 1,
+    capital: 'Kingston',
     pos: [18.1, -77.3],
   },
   {
@@ -135,6 +151,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Verde, blanca y roja con águila',
     tier: 1,
+    capital: 'Ciudad de México',
     pos: [23.6, -102.5],
   },
   {
@@ -143,6 +160,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul y blanca con triángulo',
     tier: 3,
+    capital: 'Managua',
     pos: [12.9, -85.2],
   },
   {
@@ -151,6 +169,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Cuartos con estrellas',
     tier: 2,
+    capital: 'Ciudad de Panamá',
     pos: [8.5, -80.8],
   },
   {
@@ -159,6 +178,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja, blanca y azul con escudos',
     tier: 2,
+    capital: 'Asunción',
     pos: [-23.4, -58.4],
   },
   {
@@ -167,6 +187,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja y blanca vertical',
     tier: 1,
+    capital: 'Lima',
     pos: [-9.2, -75],
   },
   {
@@ -175,6 +196,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Verde, blanca, roja con estrella',
     tier: 3,
+    capital: 'Paramaribo',
     pos: [3.9, -56],
   },
   {
@@ -183,6 +205,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja con diagonal negra',
     tier: 3,
+    capital: 'Puerto España',
     pos: [10.7, -61.2],
   },
   {
@@ -191,6 +214,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Estrellas y franjas',
     tier: 1,
+    capital: 'Washington D.C.',
     pos: [37.1, -95.7],
   },
   {
@@ -199,6 +223,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Franjas celestes con sol',
     tier: 1,
+    capital: 'Montevideo',
     pos: [-32.5, -55.8],
   },
   {
@@ -207,6 +232,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Amarillo, azul y rojo',
     tier: 2,
+    capital: 'Caracas',
     pos: [6.4, -66.6],
   },
   {
@@ -215,6 +241,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Aguamarina con triángulo negro',
     tier: 3,
+    capital: 'Nasáu',
     pos: [25, -77.4],
   },
   {
@@ -223,6 +250,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul con tridente negro',
     tier: 3,
+    capital: 'Bridgetown',
     pos: [13.2, -59.5],
   },
   {
@@ -231,6 +259,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul con franjas rojas',
     tier: 3,
+    capital: 'Belmopán',
     pos: [17.2, -88.5],
   },
   {
@@ -239,6 +268,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Verde con loro morado',
     tier: 3,
+    capital: 'Roseau',
     pos: [15.4, -61.4],
   },
   {
@@ -247,6 +277,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja con nuez moscada',
     tier: 3,
+    capital: "Saint George's",
     pos: [12.1, -61.7],
   },
   {
@@ -255,6 +286,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Diagonal con estrellas',
     tier: 3,
+    capital: 'Basseterre',
     pos: [17.4, -62.8],
   },
   {
@@ -263,6 +295,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Azul, dorada y verde',
     tier: 3,
+    capital: 'Kingstown',
     pos: [13.3, -61.2],
   },
   {
@@ -271,6 +304,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Celeste con triángulos',
     tier: 3,
+    capital: 'Castries',
     pos: [14, -61],
   },
   {
@@ -279,6 +313,7 @@ export const FLAGS: Flag[] = [
     continent: 'América',
     hint: 'Roja con sol naciente',
     tier: 3,
+    capital: "Saint John's",
     pos: [17.1, -61.8],
   },
   {
@@ -287,6 +322,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con águila negra',
     tier: 2,
+    capital: 'Tirana',
     pos: [41.2, 20.2],
   },
   {
@@ -295,6 +331,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Negra, roja y dorada',
     tier: 1,
+    capital: 'Berlín',
     pos: [51.2, 10.4],
   },
   {
@@ -303,6 +340,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul, amarilla y roja',
     tier: 3,
+    capital: 'Andorra la Vieja',
     pos: [42.5, 1.5],
   },
   {
@@ -311,6 +349,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja, blanca y roja',
     tier: 2,
+    capital: 'Viena',
     pos: [47.5, 14.6],
   },
   {
@@ -319,6 +358,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Negra, amarilla y roja',
     tier: 2,
+    capital: 'Bruselas',
     pos: [50.5, 4.5],
   },
   {
@@ -327,6 +367,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja y verde con bordado',
     tier: 3,
+    capital: 'Minsk',
     pos: [53.7, 27.9],
   },
   {
@@ -335,6 +376,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul con triángulo amarillo',
     tier: 3,
+    capital: 'Sarajevo',
     pos: [43.9, 17.7],
   },
   {
@@ -343,6 +385,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca, verde y roja',
     tier: 2,
+    capital: 'Sofía',
     pos: [42.7, 25.5],
   },
   {
@@ -351,6 +394,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Con escudo ajedrezado',
     tier: 2,
+    capital: 'Zagreb',
     pos: [45.1, 15.2],
   },
   {
@@ -359,6 +403,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca con silueta',
     tier: 3,
+    capital: 'Nicosia',
     pos: [35.1, 33.4],
   },
   {
@@ -367,6 +412,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca y roja con triángulo azul',
     tier: 2,
+    capital: 'Praga',
     pos: [49.8, 15.5],
   },
   {
@@ -375,6 +421,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con cruz blanca',
     tier: 2,
+    capital: 'Copenhague',
     pos: [56.3, 9.5],
   },
   {
@@ -383,6 +430,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Con cruz doble',
     tier: 3,
+    capital: 'Bratislava',
     pos: [48.7, 19.7],
   },
   {
@@ -391,6 +439,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Con montaña',
     tier: 3,
+    capital: 'Liubliana',
     pos: [46.2, 14.9],
   },
   {
@@ -399,6 +448,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja y amarilla con escudo',
     tier: 1,
+    capital: 'Madrid',
     pos: [40.5, -3.7],
   },
   {
@@ -407,6 +457,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul, negra y blanca',
     tier: 3,
+    capital: 'Tallin',
     pos: [58.6, 25],
   },
   {
@@ -415,6 +466,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca con cruz azul',
     tier: 2,
+    capital: 'Helsinki',
     pos: [61.9, 25.7],
   },
   {
@@ -423,6 +475,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul, blanca y roja vertical',
     tier: 1,
+    capital: 'París',
     pos: [46.2, 2.2],
   },
   {
@@ -431,6 +484,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca con cruces rojas',
     tier: 3,
+    capital: 'Tiflis',
     pos: [42.3, 43.4],
   },
   {
@@ -439,6 +493,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Franjas azules y blancas',
     tier: 1,
+    capital: 'Atenas',
     pos: [39.1, 21.8],
   },
   {
@@ -447,6 +502,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja, blanca y verde',
     tier: 2,
+    capital: 'Budapest',
     pos: [47.2, 19.5],
   },
   {
@@ -455,6 +511,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul con cruz roja',
     tier: 2,
+    capital: 'Reikiavik',
     pos: [65, -18.9],
   },
   {
@@ -463,6 +520,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Verde, blanca y naranja',
     tier: 1,
+    capital: 'Dublín',
     pos: [53.4, -8.2],
   },
   {
@@ -471,6 +529,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Verde, blanca y roja vertical',
     tier: 1,
+    capital: 'Roma',
     pos: [41.9, 12.6],
   },
   {
@@ -479,6 +538,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Granate con franja blanca',
     tier: 3,
+    capital: 'Riga',
     pos: [56.9, 24.1],
   },
   {
@@ -487,6 +547,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul y roja con corona',
     tier: 3,
+    capital: 'Vaduz',
     pos: [47.2, 9.6],
   },
   {
@@ -495,6 +556,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Amarilla, verde y roja',
     tier: 3,
+    capital: 'Vilna',
     pos: [55.2, 23.9],
   },
   {
@@ -503,6 +565,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja, blanca y celeste',
     tier: 3,
+    capital: 'Luxemburgo',
     pos: [49.8, 6.1],
   },
   {
@@ -511,6 +574,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con sol amarillo',
     tier: 3,
+    capital: 'Skopie',
     pos: [41.5, 21.7],
   },
   {
@@ -519,6 +583,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca y roja',
     tier: 3,
+    capital: 'La Valeta',
     pos: [35.9, 14.4],
   },
   {
@@ -527,6 +592,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul, amarilla y roja',
     tier: 3,
+    capital: 'Chisináu',
     pos: [47, 28.9],
   },
   {
@@ -535,6 +601,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja y blanca',
     tier: 3,
+    capital: 'Mónaco',
     pos: [43.7, 7.4],
   },
   {
@@ -543,6 +610,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con borde dorado',
     tier: 3,
+    capital: 'Podgorica',
     pos: [42.7, 19.4],
   },
   {
@@ -551,6 +619,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja, blanca y azul',
     tier: 1,
+    capital: 'Ámsterdam',
     pos: [52.1, 5.3],
   },
   {
@@ -559,6 +628,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con cruz azul',
     tier: 2,
+    capital: 'Oslo',
     pos: [60.5, 8.5],
   },
   {
@@ -567,6 +637,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca y roja',
     tier: 2,
+    capital: 'Varsovia',
     pos: [51.9, 19.1],
   },
   {
@@ -575,6 +646,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Verde y roja con escudo',
     tier: 1,
+    capital: 'Lisboa',
     pos: [39.4, -8.2],
   },
   {
@@ -583,6 +655,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Cruces superpuestas',
     tier: 1,
+    capital: 'Londres',
     pos: [55.4, -3.4],
   },
   {
@@ -591,6 +664,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul, amarilla y roja',
     tier: 2,
+    capital: 'Bucarest',
     pos: [45.9, 25],
   },
   {
@@ -599,6 +673,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca, azul y roja',
     tier: 1,
+    capital: 'Moscú',
     pos: [61.5, 105],
   },
   {
@@ -607,6 +682,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Blanca y celeste',
     tier: 3,
+    capital: 'San Marino',
     pos: [43.9, 12.5],
   },
   {
@@ -615,6 +691,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja, azul y blanca',
     tier: 2,
+    capital: 'Belgrado',
     pos: [44.2, 20.9],
   },
   {
@@ -623,6 +700,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul con cruz amarilla',
     tier: 1,
+    capital: 'Estocolmo',
     pos: [60.1, 18.6],
   },
   {
@@ -631,6 +709,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Roja con cruz blanca',
     tier: 1,
+    capital: 'Berna',
     pos: [46.8, 8.2],
   },
   {
@@ -639,6 +718,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Azul y amarilla',
     tier: 1,
+    capital: 'Kiev',
     pos: [48.4, 31.2],
   },
   {
@@ -647,6 +727,7 @@ export const FLAGS: Flag[] = [
     continent: 'Europa',
     hint: 'Amarilla y blanca con llaves',
     tier: 2,
+    capital: 'Ciudad del Vaticano',
     pos: [41.9, 12.5],
   },
   {
@@ -655,6 +736,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Negra, roja y verde',
     tier: 2,
+    capital: 'Kabul',
     pos: [33.9, 67.7],
   },
   {
@@ -663,6 +745,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde con espada',
     tier: 2,
+    capital: 'Riad',
     pos: [23.9, 45],
   },
   {
@@ -671,6 +754,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, azul y naranja',
     tier: 3,
+    capital: 'Ereván',
     pos: [40.1, 45],
   },
   {
@@ -679,6 +763,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Azul, roja y verde',
     tier: 3,
+    capital: 'Bakú',
     pos: [40.1, 47.6],
   },
   {
@@ -687,6 +772,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y blanca con zigzag',
     tier: 3,
+    capital: 'Manama',
     pos: [26, 50.6],
   },
   {
@@ -695,6 +781,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde con círculo rojo',
     tier: 2,
+    capital: 'Daca',
     pos: [23.7, 90.4],
   },
   {
@@ -703,6 +790,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Amarilla con franjas',
     tier: 3,
+    capital: 'Bandar Seri Begawan',
     pos: [4.5, 114.7],
   },
   {
@@ -711,6 +799,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Naranja con dragón',
     tier: 3,
+    capital: 'Timbu',
     pos: [27.5, 90.4],
   },
   {
@@ -719,6 +808,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Con Angkor Wat',
     tier: 2,
+    capital: 'Nom Pen',
     pos: [12.6, 105],
   },
   {
@@ -727,6 +817,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con estrellas',
     tier: 1,
+    capital: 'Pekín',
     pos: [35.9, 104.2],
   },
   {
@@ -735,6 +826,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y azul con estrella',
     tier: 2,
+    capital: 'Pionyang',
     pos: [40.3, 127.5],
   },
   {
@@ -743,6 +835,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Blanca con yin-yang',
     tier: 1,
+    capital: 'Seúl',
     pos: [35.9, 127.8],
   },
   {
@@ -751,6 +844,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde, blanca, negra',
     tier: 2,
+    capital: 'Abu Dabi',
     pos: [23.4, 53.8],
   },
   {
@@ -759,6 +853,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Azul y roja con sol',
     tier: 2,
+    capital: 'Manila',
     pos: [12.9, 121.8],
   },
   {
@@ -767,6 +862,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Naranja, blanca y verde',
     tier: 1,
+    capital: 'Nueva Delhi',
     pos: [20.6, 79],
   },
   {
@@ -775,6 +871,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y blanca',
     tier: 2,
+    capital: 'Yakarta',
     pos: [-0.8, 113.9],
   },
   {
@@ -783,6 +880,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y negra',
     tier: 2,
+    capital: 'Bagdad',
     pos: [33.2, 43.7],
   },
   {
@@ -791,6 +889,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde, blanca y roja',
     tier: 2,
+    capital: 'Teherán',
     pos: [32.4, 53.7],
   },
   {
@@ -799,6 +898,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Blanca con estrella azul',
     tier: 1,
+    capital: 'Jerusalén',
     pos: [31.1, 34.9],
   },
   {
@@ -807,6 +907,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Blanca con círculo rojo',
     tier: 1,
+    capital: 'Tokio',
     pos: [36.2, 138.3],
   },
   {
@@ -815,6 +916,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Negra, blanca y verde',
     tier: 2,
+    capital: 'Amán',
     pos: [30.6, 36.2],
   },
   {
@@ -823,6 +925,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Celeste con sol dorado',
     tier: 3,
+    capital: 'Astaná',
     pos: [48, 68],
   },
   {
@@ -831,6 +934,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con sol y yurta',
     tier: 3,
+    capital: 'Biskek',
     pos: [41.2, 74.8],
   },
   {
@@ -839,6 +943,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde, blanca y roja',
     tier: 3,
+    capital: 'Ciudad de Kuwait',
     pos: [29.3, 47.5],
   },
   {
@@ -847,6 +952,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y azul con círculo',
     tier: 3,
+    capital: 'Vientián',
     pos: [19.9, 102.5],
   },
   {
@@ -855,6 +961,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Con cedro verde',
     tier: 2,
+    capital: 'Beirut',
     pos: [33.9, 35.9],
   },
   {
@@ -863,6 +970,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Franjas con cuadro azul',
     tier: 2,
+    capital: 'Kuala Lumpur',
     pos: [4.2, 101.9],
   },
   {
@@ -871,6 +979,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con luna verde',
     tier: 3,
+    capital: 'Malé',
     pos: [3.2, 73.2],
   },
   {
@@ -879,6 +988,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y azul con soyombo',
     tier: 3,
+    capital: 'Ulán Bator',
     pos: [46.9, 103.8],
   },
   {
@@ -887,6 +997,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Amarilla, verde y roja',
     tier: 3,
+    capital: 'Naipyidó',
     pos: [21.9, 96],
   },
   {
@@ -895,6 +1006,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Única no rectangular',
     tier: 2,
+    capital: 'Katmandú',
     pos: [28.4, 84.1],
   },
   {
@@ -903,6 +1015,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y verde',
     tier: 3,
+    capital: 'Mascate',
     pos: [21.5, 55.9],
   },
   {
@@ -911,6 +1024,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde con luna y estrella',
     tier: 2,
+    capital: 'Islamabad',
     pos: [30.4, 69.3],
   },
   {
@@ -919,6 +1033,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Granate con zigzag',
     tier: 2,
+    capital: 'Doha',
     pos: [25.4, 51.2],
   },
   {
@@ -927,6 +1042,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja y blanca con luna',
     tier: 2,
+    capital: 'Singapur',
     pos: [1.4, 103.8],
   },
   {
@@ -935,6 +1051,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y negra',
     tier: 2,
+    capital: 'Damasco',
     pos: [35, 38],
   },
   {
@@ -943,6 +1060,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Granate con león',
     tier: 2,
+    capital: 'Sri Jayawardenepura Kotte',
     pos: [7.9, 80.8],
   },
   {
@@ -951,6 +1069,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y azul',
     tier: 2,
+    capital: 'Bangkok',
     pos: [15.9, 100.9],
   },
   {
@@ -959,6 +1078,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y verde',
     tier: 3,
+    capital: 'Dusambé',
     pos: [38.9, 71.3],
   },
   {
@@ -967,6 +1087,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con triángulos',
     tier: 3,
+    capital: 'Dili',
     pos: [-8.9, 126],
   },
   {
@@ -975,6 +1096,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Verde con alfombras',
     tier: 3,
+    capital: 'Asjabad',
     pos: [39, 59.6],
   },
   {
@@ -983,6 +1105,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con media luna',
     tier: 1,
+    capital: 'Ankara',
     pos: [39, 35.2],
   },
   {
@@ -991,6 +1114,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Azul, blanca y verde',
     tier: 3,
+    capital: 'Taskent',
     pos: [41.4, 64.6],
   },
   {
@@ -999,6 +1123,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja con estrella amarilla',
     tier: 2,
+    capital: 'Hanói',
     pos: [14.1, 108.3],
   },
   {
@@ -1007,6 +1132,7 @@ export const FLAGS: Flag[] = [
     continent: 'Asia',
     hint: 'Roja, blanca y negra',
     tier: 3,
+    capital: 'Saná',
     pos: [15.6, 48.5],
   },
   {
@@ -1015,6 +1141,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde y blanca con luna roja',
     tier: 2,
+    capital: 'Argel',
     pos: [28, 1.7],
   },
   {
@@ -1023,6 +1150,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja y negra con machete',
     tier: 3,
+    capital: 'Luanda',
     pos: [-11.2, 17.9],
   },
   {
@@ -1031,6 +1159,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde con franjas',
     tier: 3,
+    capital: 'Porto Novo',
     pos: [9.3, 2.3],
   },
   {
@@ -1039,6 +1168,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Celeste con franja negra',
     tier: 3,
+    capital: 'Gaborone',
     pos: [-22.3, 24.7],
   },
   {
@@ -1047,6 +1177,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja y verde con estrella',
     tier: 3,
+    capital: 'Uagadugú',
     pos: [12.3, -1.6],
   },
   {
@@ -1055,6 +1186,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Cruz con cuartos',
     tier: 3,
+    capital: 'Gitega',
     pos: [-3.4, 29.9],
   },
   {
@@ -1063,6 +1195,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul con estrellas',
     tier: 3,
+    capital: 'Praia',
     pos: [16, -24],
   },
   {
@@ -1071,6 +1204,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, roja y amarilla',
     tier: 3,
+    capital: 'Yaundé',
     pos: [7.4, 12.4],
   },
   {
@@ -1079,6 +1213,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul, amarilla y roja',
     tier: 3,
+    capital: 'Yamena',
     pos: [15.5, 18.7],
   },
   {
@@ -1087,6 +1222,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Franjas con triángulo',
     tier: 3,
+    capital: 'Moroni',
     pos: [-11.9, 43.9],
   },
   {
@@ -1095,6 +1231,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Naranja, blanca y verde',
     tier: 2,
+    capital: 'Yamusukro',
     pos: [7.5, -5.5],
   },
   {
@@ -1103,6 +1240,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, amarilla y roja',
     tier: 3,
+    capital: 'Brazzaville',
     pos: [-0.2, 15.8],
   },
   {
@@ -1111,6 +1249,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul con franja roja',
     tier: 3,
+    capital: 'Kinshasa',
     pos: [-4.1, 21.8],
   },
   {
@@ -1119,6 +1258,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, blanca y negra con águila',
     tier: 1,
+    capital: 'El Cairo',
     pos: [26.8, 30.8],
   },
   {
@@ -1127,6 +1267,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, verde y azul',
     tier: 3,
+    capital: 'Asmara',
     pos: [15.2, 39.8],
   },
   {
@@ -1135,6 +1276,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, amarilla y roja con estrella',
     tier: 2,
+    capital: 'Adís Abeba',
     pos: [9.1, 40.5],
   },
   {
@@ -1143,6 +1285,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, amarilla y azul',
     tier: 3,
+    capital: 'Libreville',
     pos: [-0.8, 11.6],
   },
   {
@@ -1151,6 +1294,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, azul y verde',
     tier: 3,
+    capital: 'Banjul',
     pos: [13.4, -16.6],
   },
   {
@@ -1159,6 +1303,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, dorada y verde',
     tier: 2,
+    capital: 'Acra',
     pos: [7.9, -1],
   },
   {
@@ -1167,6 +1312,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, amarilla y verde',
     tier: 3,
+    capital: 'Conakri',
     pos: [9.9, -9.7],
   },
   {
@@ -1175,6 +1321,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Con estrella roja',
     tier: 3,
+    capital: 'Bisáu',
     pos: [12, -15],
   },
   {
@@ -1183,6 +1330,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Con triángulo azul',
     tier: 3,
+    capital: 'Malabo',
     pos: [1.6, 10.3],
   },
   {
@@ -1191,6 +1339,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Negra, roja y verde con escudo',
     tier: 2,
+    capital: 'Nairobi',
     pos: [-0.02, 37.9],
   },
   {
@@ -1199,6 +1348,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul, blanca y verde',
     tier: 3,
+    capital: 'Maseru',
     pos: [-29.6, 28.2],
   },
   {
@@ -1207,6 +1357,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Franjas con cuadro azul',
     tier: 3,
+    capital: 'Monrovia',
     pos: [6.4, -9.4],
   },
   {
@@ -1215,6 +1366,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, negra y verde',
     tier: 3,
+    capital: 'Trípoli',
     pos: [26.3, 17.2],
   },
   {
@@ -1223,6 +1375,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Blanca, roja y verde',
     tier: 3,
+    capital: 'Antananarivo',
     pos: [-18.8, 46.9],
   },
   {
@@ -1231,6 +1384,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Negra, roja y verde',
     tier: 3,
+    capital: 'Lilongüe',
     pos: [-13.3, 34.3],
   },
   {
@@ -1239,6 +1393,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, dorada y roja',
     tier: 3,
+    capital: 'Bamako',
     pos: [17.6, -4],
   },
   {
@@ -1247,6 +1402,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja con estrella verde',
     tier: 2,
+    capital: 'Rabat',
     pos: [31.8, -7.1],
   },
   {
@@ -1255,6 +1411,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Cuatro franjas de colores',
     tier: 3,
+    capital: 'Port Louis',
     pos: [-20.3, 57.6],
   },
   {
@@ -1263,6 +1420,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde con luna dorada',
     tier: 3,
+    capital: 'Nuakchot',
     pos: [21, -11],
   },
   {
@@ -1271,6 +1429,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Con rifle y azada',
     tier: 3,
+    capital: 'Maputo',
     pos: [-18.7, 35.5],
   },
   {
@@ -1279,6 +1438,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul y verde con sol',
     tier: 3,
+    capital: 'Windhoek',
     pos: [-22.9, 18.5],
   },
   {
@@ -1287,6 +1447,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Naranja, blanca y verde',
     tier: 3,
+    capital: 'Niamey',
     pos: [17.6, 8],
   },
   {
@@ -1295,6 +1456,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, blanca y verde',
     tier: 2,
+    capital: 'Abuya',
     pos: [9.1, 8.7],
   },
   {
@@ -1303,6 +1465,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Cuatro franjas con roja',
     tier: 3,
+    capital: 'Bangui',
     pos: [6.6, 20.9],
   },
   {
@@ -1311,6 +1474,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul, amarilla y verde',
     tier: 3,
+    capital: 'Kigali',
     pos: [-1.9, 29.9],
   },
   {
@@ -1319,6 +1483,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde y amarilla',
     tier: 3,
+    capital: 'Santo Tomé',
     pos: [0.2, 6.6],
   },
   {
@@ -1327,6 +1492,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, dorada y roja',
     tier: 3,
+    capital: 'Dakar',
     pos: [14.5, -14.5],
   },
   {
@@ -1335,6 +1501,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Rayos de colores',
     tier: 3,
+    capital: 'Victoria',
     pos: [-4.7, 55.5],
   },
   {
@@ -1343,6 +1510,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde, blanca y azul',
     tier: 3,
+    capital: 'Freetown',
     pos: [8.5, -11.8],
   },
   {
@@ -1351,6 +1519,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Celeste con estrella',
     tier: 3,
+    capital: 'Mogadiscio',
     pos: [5.2, 46.2],
   },
   {
@@ -1359,6 +1528,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Seis colores con Y',
     tier: 1,
+    capital: 'Pretoria',
     pos: [-30.6, 22.9],
   },
   {
@@ -1367,6 +1537,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja, blanca y negra',
     tier: 3,
+    capital: 'Jartum',
     pos: [12.9, 30.2],
   },
   {
@@ -1375,6 +1546,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Negra, roja y verde',
     tier: 3,
+    capital: 'Yuba',
     pos: [6.9, 31.3],
   },
   {
@@ -1383,6 +1555,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Azul y amarilla con escudo',
     tier: 3,
+    capital: 'Mbabane',
     pos: [-26.5, 31.5],
   },
   {
@@ -1391,6 +1564,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde y azul diagonal',
     tier: 3,
+    capital: 'Dodoma',
     pos: [-6.4, 34.9],
   },
   {
@@ -1399,6 +1573,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Franjas verdes y amarillas',
     tier: 3,
+    capital: 'Lomé',
     pos: [8.6, 0.8],
   },
   {
@@ -1407,6 +1582,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Roja con luna y estrella',
     tier: 2,
+    capital: 'Túnez',
     pos: [33.9, 9.5],
   },
   {
@@ -1415,6 +1591,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Franjas con grulla',
     tier: 3,
+    capital: 'Kampala',
     pos: [1.4, 32.3],
   },
   {
@@ -1423,6 +1600,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Celeste y verde',
     tier: 3,
+    capital: 'Yibuti',
     pos: [11.6, 43.1],
   },
   {
@@ -1431,6 +1609,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Verde con águila naranja',
     tier: 3,
+    capital: 'Lusaka',
     pos: [-13.1, 27.8],
   },
   {
@@ -1439,6 +1618,7 @@ export const FLAGS: Flag[] = [
     continent: 'África',
     hint: 'Siete franjas',
     tier: 3,
+    capital: 'Harare',
     pos: [-19, 29.2],
   },
   {
@@ -1447,6 +1627,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Azul con estrellas',
     tier: 1,
+    capital: 'Canberra',
     pos: [-25.3, 133.8],
   },
   {
@@ -1455,6 +1636,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Celeste con Union Jack',
     tier: 3,
+    capital: 'Suva',
     pos: [-18, -175],
   },
   {
@@ -1463,6 +1645,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Azul con franjas',
     tier: 3,
+    capital: 'Majuro',
     pos: [7.1, 171.2],
   },
   {
@@ -1471,6 +1654,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Azul y verde diagonal',
     tier: 3,
+    capital: 'Honiara',
     pos: [-9.6, 160.2],
   },
   {
@@ -1479,6 +1663,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Roja y azul con ave',
     tier: 3,
+    capital: 'Tarawa Sur',
     pos: [1.9, -157.4],
   },
   {
@@ -1487,6 +1672,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Celeste con estrellas',
     tier: 3,
+    capital: 'Palikir',
     pos: [7.4, 150.6],
   },
   {
@@ -1495,6 +1681,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Azul con franja amarilla',
     tier: 3,
+    capital: 'Yaren',
     pos: [-0.5, 166.9],
   },
   {
@@ -1503,6 +1690,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Azul con estrellas rojas',
     tier: 1,
+    capital: 'Wellington',
     pos: [-40.9, 174.9],
   },
   {
@@ -1511,6 +1699,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Celeste con círculo',
     tier: 3,
+    capital: 'Ngerulmud',
     pos: [7.5, 134.6],
   },
   {
@@ -1519,6 +1708,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Roja y negra con ave',
     tier: 3,
+    capital: 'Port Moresby',
     pos: [-6.3, 143.9],
   },
   {
@@ -1527,6 +1717,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Roja con cuadro azul',
     tier: 3,
+    capital: 'Apia',
     pos: [-13.8, -172],
   },
   {
@@ -1535,6 +1726,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Roja con cruz blanca',
     tier: 3,
+    capital: 'Nukualofa',
     pos: [-21.2, -175.2],
   },
   {
@@ -1543,6 +1735,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Celeste con estrellas',
     tier: 3,
+    capital: 'Funafuti',
     pos: [-7.1, 177.6],
   },
   {
@@ -1551,6 +1744,7 @@ export const FLAGS: Flag[] = [
     continent: 'Oceanía',
     hint: 'Roja y verde con Y',
     tier: 3,
+    capital: 'Port Vila',
     pos: [-15.4, 166.9],
   },
 ];

@@ -10,6 +10,7 @@ export interface Flag {
   continent: Continent;
   hint: string;
   tier: Tier;
+  capital: string;
   pos: [lat: number, lng: number];
 }
 
