@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { generateCapitalOptions, getCapitalItems } from '../data/capitals';
@@ -62,6 +63,26 @@ export function useCapitalQuiz(difficulty: DifficultyKey): CapitalQuizResult {
       session.nextRound();
     }, RESULT_DELAY_MS);
   }
+
+  useEffect(() => {
+    if (!session.answered || session.selectedId !== null) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      const nextRound = session.round + 1;
+
+      if (nextRound >= ROUND_COUNT) {
+        sessionStorage.setItem('capital-final-score', String(session.score));
+        navigate('/capital-cities/solo/results');
+        return;
+      }
+
+      session.nextRound();
+    }, RESULT_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [navigate, session]);
 
   return {
     ...session,

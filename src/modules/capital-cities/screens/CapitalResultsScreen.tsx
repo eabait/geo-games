@@ -22,8 +22,14 @@ export function CapitalResultsScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const recordScore = useProfileStore((state) => state.recordScore);
   const score = getStoredScore();
+  const hasRecordedScore = React.useRef(false);
 
   React.useEffect(() => {
+    if (hasRecordedScore.current) {
+      return;
+    }
+
+    hasRecordedScore.current = true;
     recordScore('capital-cities', score);
   }, [recordScore, score]);
 

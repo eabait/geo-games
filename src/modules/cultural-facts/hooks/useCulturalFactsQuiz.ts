@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { generateFactOptions, getFactItems } from '../data/facts';
@@ -60,6 +61,26 @@ export function useCulturalFactsQuiz(difficulty: FactsDifficulty): CulturalFacts
       session.nextRound();
     }, RESULT_DELAY_MS);
   }
+
+  useEffect(() => {
+    if (!session.answered || session.selectedId !== null) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      const nextRound = session.round + 1;
+
+      if (nextRound >= ROUND_COUNT) {
+        sessionStorage.setItem('facts-final-score', String(session.score));
+        navigate('/cultural-facts/solo/results');
+        return;
+      }
+
+      session.nextRound();
+    }, RESULT_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [navigate, session]);
 
   return {
     ...session,
