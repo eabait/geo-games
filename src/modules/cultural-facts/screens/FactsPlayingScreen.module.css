@@ -1,0 +1,44 @@
+.loadingState {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  color: var(--color-text);
+}
+
+.question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.flagEmoji {
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.questionText {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+
+.homeButton {
+  border: none;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.roundMeta {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.scoreValue {
+  color: var(--color-accent);
+  font-weight: 700;
+}
