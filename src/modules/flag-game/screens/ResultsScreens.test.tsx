@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -10,6 +11,8 @@ import { DuelResultsScreen } from './DuelResultsScreen';
 import { ExplorerResultsScreen } from './ExplorerResultsScreen';
 import { FamilyResultsScreen } from './FamilyResultsScreen';
 import { ResultsScreen } from './ResultsScreen';
+
+import { useProfileStore } from '@/shared/store/profileStore';
 
 const navigateMock = vi.fn();
 
@@ -56,7 +59,13 @@ function renderFamilyResultsScreen(): void {
 
 beforeEach(() => {
   navigateMock.mockReset();
+  localStorage.clear();
   useGameStore.getState().reset();
+  useProfileStore.persist.clearStorage();
+  useProfileStore.setState({
+    profiles: [],
+    activeProfileId: null,
+  });
 });
 
 describe('ResultsScreen', () => {
@@ -75,7 +84,7 @@ describe('ResultsScreen', () => {
 
     const heading = screen.getByRole('heading', { level: 2, name: /120 pts/i });
     const restartButton = screen.getByRole('button', { name: /de nuevo/i });
-    const menuButton = screen.getByRole('button', { name: /menú/i });
+    const menuButton = screen.getByRole('button', { name: /inicio/i });
 
     expect(heading.parentElement).not.toBeNull();
     expect(heading.parentElement).not.toHaveAttribute('style');
@@ -104,6 +113,26 @@ describe('ResultsScreen trophies', () => {
     renderResultsScreen();
 
     expect(screen.getByText(trophy)).toBeInTheDocument();
+  });
+});
+
+describe('ResultsScreen profile scoring', () => {
+  it('records the solo score for the active profile', () => {
+    useProfileStore.getState().addProfile('Ana', 'fox');
+    useGameStore.getState().startSolo('easy');
+    useGameStore.setState({
+      score: 120,
+      roundHistory: [{ flag: FLAGS[0], correct: true }],
+    });
+
+    renderResultsScreen();
+
+    const profile = useProfileStore.getState().profiles[0];
+    expect(profile.scores['flag-game']).toEqual({
+      gamesPlayed: 1,
+      bestScore: 120,
+      totalScore: 120,
+    });
   });
 });
 

@@ -12,9 +12,26 @@ import {
 
 import styles from './ResultsScreen.module.css';
 
+import { useProfileStore } from '@/shared/store/profileStore';
+
+function useRecordFlagScore(score: number): void {
+  const recordScore = useProfileStore((state) => state.recordScore);
+  const hasRecordedScore = React.useRef(false);
+
+  React.useEffect(() => {
+    if (hasRecordedScore.current) {
+      return;
+    }
+
+    hasRecordedScore.current = true;
+    recordScore('flag-game', score);
+  }, [recordScore, score]);
+}
+
 export function ResultsScreen(): React.JSX.Element {
   const navigate = useNavigate();
   const { score, roundHistory, bestStreak, difficulty, startSolo } = useGameStore();
+  useRecordFlagScore(score);
 
   function handleRestart(): void {
     if (difficulty) {
@@ -61,10 +78,10 @@ export function ResultsScreen(): React.JSX.Element {
         </button>
         <button
           className={['btn', styles.secondaryButton].join(' ')}
-          onClick={() => navigate('/flag-game')}
+          onClick={() => navigate('/')}
           type="button"
         >
-          🏠 Menú
+          🏠 Inicio
         </button>
       </div>
     </div>
