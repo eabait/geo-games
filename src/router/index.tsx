@@ -4,7 +4,7 @@ import { App } from '@/App';
 import { capitalCitiesRoutes } from '@/modules/capital-cities/routes';
 import { culturalFactsRoutes } from '@/modules/cultural-facts/routes';
 import { flagGameRoutes } from '@/modules/flag-game/routes';
-import { HubScreen } from '@/screens/HubScreen';
+import { HubScreen } from '@/modules/hub/screens/HubScreen';
 
 export const router = createBrowserRouter([
   {
